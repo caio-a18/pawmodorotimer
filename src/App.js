@@ -7,13 +7,17 @@ function App() {
     const [numClicks, setNumClicks] = useState(0)
 
     const clickHandler = () => {
-      setNumClicks(numClicks + 1); 
+      
+      if (numClicks < 4) {
+        setNumClicks(numClicks + 1); 
+      }
     };
-
+console.log(numClicks)
   return (
     <div className="App">
     <div className={`dot larger-${numClicks}`}></div>   
     <span className = "foodbowl" onClick={clickHandler}></span>
+    <div className = "timeset">The Time Is: {numClicks*5}</div>
     </div>
   );
 }
