@@ -48,10 +48,12 @@ function App() {
     <span className = "foodbowl" onClick={clickHandler}></span>
     <div className = "timeset">The Time You Want to Set Is: {numClicks*5}</div>
     <div className = "timer">{timeElapsed}</div>
+    <Box>
     <ButtonGroup>
     <Button sx={{ justifyContent: "flex-end" }}>Start Timer</Button>
     <Button sx={{ justifyContent: "flex-end" }}>Pause Timer</Button>
     </ButtonGroup>
+    </Box>
     </div>
   );
 }
