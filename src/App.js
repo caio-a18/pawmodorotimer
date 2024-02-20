@@ -53,6 +53,18 @@ function App() {
         setNumClicks(numClicks + 1); 
       }
     };
+
+    const howMuchTime = (minutes) => {
+      if (!isCounting) {
+        handleStart(minutes); 
+      }
+    };
+
+    const timeGUI = (ms) => {
+      const minutes = Math.floor(ms/60000); 
+      const seconds = Math.floor((ms % 60000) / 1000); 
+      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; 
+    }; 
   
   return (
     <div className="App">
@@ -62,13 +74,25 @@ function App() {
       <br></br>
       <br></br>
       <br></br>
+      <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
+      <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
+      <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
       <div className = "timeset">The Time You Want to Set Is: {numClicks*5}</div>
       <div>
-      <Box>
-      <Button onClick = {handleStart}>Start</Button>
-      <Button onClick = {handlePause}>Stop</Button>
-      <Button onClick = {resetHandler}>Reset</Button>
-      </Box>
+      {selectedTime > 0 && (
+                    <>
+                        <div>Selected Time: {timeGUI(selectedTime)}</div>
+                        <div>Time Remaining: {timeGUI(time)}</div>
+                        <Box>
+                            {isPaused ? (
+                                <Button onClick={handleStart}>Start</Button>
+                            ) : (
+                                <Button onClick={handlePause}>Pause</Button>
+                            )}
+                            <Button onClick={resetHandler}>Reset</Button>
+                        </Box>
+                    </>
+                )}
       </div>
     </div>
   );
