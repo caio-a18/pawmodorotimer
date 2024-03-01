@@ -77,6 +77,7 @@ function App() {
       <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
       <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
       <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
+      <Button onClick = {() => howMuchTime(5)}>2 Minutes</Button>
       <div className = "timeset">The Time You Want to Set Is: {numClicks*5}</div>
       <div>
       {selectedTime > 0 && (
