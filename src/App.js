@@ -12,7 +12,7 @@ function App() {
     const [isPaused, setIsPaused] = useState(true);
     const [time, setTime] = useState(0);
     const [numClicks, setNumClicks] = useState(1);
-    const [level, setLevel] = useState(0);
+    const [levelTracker, setLevelTracker] = useState(1);
 
 
     useEffect(() => {
@@ -72,9 +72,9 @@ function App() {
     const handleTimerIsDone = (duration) => {
       if (time === 0 && selectedTime === duration * 60 * 1000) {
         // Timer is over for the specified duration
-        console.log('Timer for ${duration} minutes is over!');
-        setLevel(prevLevel => prevLevel + 1);
-        alert('You now hit level  ${Math.floor(prevLevel) + 1}');
+        // Increases levelTracker
+        setLevelTracker(prevLevel => prevLevel + 1);
+        alert("Congratulations. You are now level " + (levelTracker + 1) + "!");
       }
     };
 
