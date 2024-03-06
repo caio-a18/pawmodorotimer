@@ -12,6 +12,8 @@ function App() {
     const [isPaused, setIsPaused] = useState(true);
     const [time, setTime] = useState(0);
     const [numClicks, setNumClicks] = useState(1);
+    const [level, setLevel] = useState(0);
+
 
     useEffect(() => {
       let interval = null; 
@@ -26,7 +28,7 @@ function App() {
       return () => {
         clearInterval(interval); 
       }; 
-    }, [isCounting, isPaused, time]); 
+    }, [isCounting, isPaused, time]);
 
     const handleStart = (duration) => {
       setSelectedTime(duration * 60 * 1000); 
@@ -65,6 +67,23 @@ function App() {
       const seconds = Math.floor((ms % 60000) / 1000); 
       return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; 
     }; 
+
+    // Handler to check when time is over
+    const handleTimerIsDone = (duration) => {
+      if (time === 0 && selectedTime === duration * 60 * 1000) {
+        // Timer is over for the specified duration
+        console.log('Timer for ${duration} minutes is over!');
+        setLevel(prevLevel => prevLevel + 1);
+        alert('You now hit level  ${Math.floor(prevLevel) + 1}');
+      }
+    };
+
+    // UseEffect for HandleTimer
+    useEffect(() => {
+      handleTimerIsDone(5);
+      handleTimerIsDone(20);
+      handleTimerIsDone(60);
+    }, [time]);
   
   return (
     <div className="App">
@@ -77,7 +96,6 @@ function App() {
       <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
       <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
       <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
-      <Button onClick = {() => howMuchTime(5)}>2 Minutes</Button>
       <div className = "timeset">The Time You Want to Set Is: {numClicks*5}</div>
       <div>
       {selectedTime > 0 && (
@@ -97,6 +115,7 @@ function App() {
       </div>
     </div>
   );
+
 }
 
 export default App;
