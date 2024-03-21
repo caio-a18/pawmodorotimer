@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import React from 'react'; 
-import Dashboard from 'src/components/Dashboard';
-import Preferences from 'src/components/Preferences';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
+import Dashboard from './components/Dashboard';
+import Login from './components/Login/Login';
+import Preferences from './components/Preferences';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'; 
 
 function App() {
     //variables that control the stopwatch 
+    const [token, setToken] = useState();
     const [isCounting, setIsCounting] = useState(false); 
     const [selectedTime, setSelectedTime] = useState(0)
     const [isPaused, setIsPaused] = useState(true);
@@ -87,6 +88,10 @@ function App() {
       handleTimerIsDone(20);
       handleTimerIsDone(60);
     }, [time]);
+
+    if(!token) {
+      return <Login setToken={setToken} />
+    }
   
   return (
     <div className="App">
@@ -95,10 +100,10 @@ function App() {
       <h1>Application</h1>
       <BrowserRouter>
         <Switch>
-          <Route path="/dashboard">
+          <Route path="/Dashboard">
             <Dashboard />
           </Route>
-          <Route path="/preferences">
+          <Route path="/Preferences">
             <Preferences />
           </Route>
         </Switch>
