@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import React from 'react'; 
+import Dashboard from 'src/components/Dashboard';
+import Preferences from 'src/components/Preferences';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 
 function App() {
@@ -13,7 +16,6 @@ function App() {
     const [time, setTime] = useState(0);
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
-
 
     useEffect(() => {
       let interval = null; 
@@ -88,6 +90,20 @@ function App() {
   
   return (
     <div className="App">
+      //stuff for dom 
+      <div className="wrapper">
+      <h1>Application</h1>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/dashboard">
+            <Dashboard />
+          </Route>
+          <Route path="/preferences">
+            <Preferences />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </div>
       <div className={`dot larger-${numClicks}`}></div>   
       <span className = "foodbowl" onClick={clickHandler}></span>
       <br></br>
