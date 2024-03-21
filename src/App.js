@@ -7,16 +7,31 @@ import Dashboard from './components/Dashboard';
 import Login from './components/Login/Login';
 import Preferences from './components/Preferences';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'; 
+import useToken from './components/UseToken';
+
+
+function setToken(userToken) {
+  sessionStorage.setItem('token', JSON.stringify(userToken));
+}
+
+function getToken() {
+  const tokenString = sessionStorage.getItem('token');
+  const userToken = JSON.parse(tokenString);
+  return userToken?.token
+}
 
 function App() {
     //variables that control the stopwatch 
-    const [token, setToken] = useState();
+    const { token, setToken } = useToken();
+    //const token = getToken(); 
     const [isCounting, setIsCounting] = useState(false); 
     const [selectedTime, setSelectedTime] = useState(0)
     const [isPaused, setIsPaused] = useState(true);
     const [time, setTime] = useState(0);
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
+
+    //const token = getToken();
 
     useEffect(() => {
       let interval = null; 
