@@ -7,10 +7,12 @@ import Dashboard from './components/Dashboard';
 import Login from './components/Login/Login';
 import Preferences from './components/Preferences';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'; 
+import useToken from './components/App/useToken';
+
 
 function App() {
     //variables that control the stopwatch 
-    const [token, setToken] = useState();
+    const { token, setToken } = useToken();
     const [isCounting, setIsCounting] = useState(false); 
     const [selectedTime, setSelectedTime] = useState(0)
     const [isPaused, setIsPaused] = useState(true);
