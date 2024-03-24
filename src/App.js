@@ -20,6 +20,8 @@ function App() {
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
 
+    //const token = getToken();
+
     useEffect(() => {
       let interval = null; 
 
