@@ -104,7 +104,7 @@ function App() {
   return (
     <div className="App">
       <div className="wrapper">
-      <h1>Application</h1>
+      <h1>Tomato Paws Timer</h1>
       <BrowserRouter>
         <Switch>
           <Route path="/Dashboard">
@@ -120,23 +120,45 @@ function App() {
       
   <span className = "foodbowl" onClick={clickHandler}></span>*/}
       <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-    
       <Chip label = "please select one of the times below or start your own.">
       </Chip>
-      <br></br>
+      <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '5vh',
+                    }}>
       <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
       <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
       <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
       <Button onClick = {() => howMuchTime(1)}>1 Minute</Button>
+      </Box>
       <div>
-      {selectedTime > 0 && (
+      { (
                     <>
+                    <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '5vh',
+                    }}>
                         <div>Selected Time: {timeGUI(selectedTime)}</div>
+                        </Box>
+                        <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '5vh', 
+                    }}>
                         <div>Time Remaining: {timeGUI(time)}</div>
-                        <Box>
+                        </Box>
+                        <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '5vh', // Adjust the height as needed
+                    }}>
                             {isPaused ? (
                                <Button onClick={handleStart}>Start</Button>
                             ) : (
