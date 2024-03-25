@@ -4,7 +4,9 @@ This project is a pomodoro timer with some fun twists targeted towards cat lover
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can run: npm start to start the application and 
+node C:\yourdirectory\hungry-cat\public\server.js to start the server to see the login
+page. 
 
 ### `npm start`
 
