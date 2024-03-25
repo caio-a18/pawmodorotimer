@@ -8,10 +8,11 @@ import Login from './components/Login/Login';
 import Preferences from './components/Preferences';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'; 
 import useToken from './components/App/useToken';
+import Stack from '@mui/material/Stack';
+import Chip from '@mui/material/Chip';
 
 
 function App() {
-    //variables that control the stopwatch 
     const { token, setToken } = useToken();
     const [isCounting, setIsCounting] = useState(false); 
     const [selectedTime, setSelectedTime] = useState(0)
@@ -19,8 +20,6 @@ function App() {
     const [time, setTime] = useState(0);
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
-
-    //const token = getToken();
 
     useEffect(() => {
       let interval = null; 
@@ -37,24 +36,28 @@ function App() {
       }; 
     }, [isCounting, isPaused, time]);
 
-    const handleStart = (duration) => {
-      setSelectedTime(duration * 60 * 1000); 
-      setTime(duration * 60 * 1000); 
-      setIsCounting(true); 
-      setIsPaused(false); 
-    }; 
+    const handleStart = () => {
+      let timeToSet;
+      if (isPaused) {
+        timeToSet = time; // Set to remaining time if paused
+      } else {
+        timeToSet = selectedTime; // Set to selected time if not paused
+      }
+      setTime(timeToSet);
+      setIsCounting(true);
+      setIsPaused(false);
+    };
+    
     
     const handlePause = () => {
       setIsPaused(!isPaused); 
     }; 
 
     const resetHandler = () => {
-      setIsCounting(false); 
-      setIsPaused(true); 
-      setTime(0); 
-      setSelectedTime(0); 
-      
-    }; 
+      setIsCounting(false);
+      setIsPaused(true);
+      setTime(selectedTime); // Reset time to the selected time
+    };
 
     //handles the gui portion that counts up 20 mins 
     const clickHandler = () => {
@@ -65,7 +68,8 @@ function App() {
 
     const howMuchTime = (minutes) => {
       if (!isCounting) {
-        handleStart(minutes); 
+        setSelectedTime(minutes * 60 * 1000); // Set selected time in milliseconds
+        handleStart(); // Start the timer
       }
     };
 
@@ -99,7 +103,6 @@ function App() {
   
   return (
     <div className="App">
-      //stuff for dom 
       <div className="wrapper">
       <h1>Application</h1>
       <BrowserRouter>
@@ -113,17 +116,21 @@ function App() {
         </Switch>
       </BrowserRouter>
     </div>
-      <div className={`dot larger-${numClicks}`}></div>   
-      <span className = "foodbowl" onClick={clickHandler}></span>
+     {/*} <div className={`dot larger-${numClicks}`}></div>   
+      
+  <span className = "foodbowl" onClick={clickHandler}></span>*/}
       <br></br>
       <br></br>
       <br></br>
+      <br></br>
+    
+      <Chip label = "please select one of the times below or start your own.">
+      </Chip>
       <br></br>
       <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
       <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
       <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
       <Button onClick = {() => howMuchTime(1)}>1 Minute</Button>
-      <div className = "timeset">The Time You Want to Set Is: {numClicks*5}</div>
       <div>
       {selectedTime > 0 && (
                     <>
@@ -131,7 +138,7 @@ function App() {
                         <div>Time Remaining: {timeGUI(time)}</div>
                         <Box>
                             {isPaused ? (
-                                <Button onClick={handleStart}>Start</Button>
+                               <Button onClick={handleStart}>Start</Button>
                             ) : (
                                 <Button onClick={handlePause}>Pause</Button>
                             )}
