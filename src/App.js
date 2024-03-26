@@ -10,7 +10,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import useToken from './components/App/useToken';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
-
+import TextField from '@mui/material/TextField';
 
 function App() {
     const { token, setToken } = useToken();
@@ -122,12 +122,15 @@ function App() {
       <br></br>
       <Chip label = "please select one of the times below or start your own.">
       </Chip>
+      <br></br>
+      <TextField id="custom-time" label="Your Custom Time..." variant="outlined" />
       <Box sx={{
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
                       height: '5vh',
                     }}>
+      <Button onClick = {() => howMuchTime(`$custom-time`)}>Custom Time</Button>
       <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
       <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
       <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
