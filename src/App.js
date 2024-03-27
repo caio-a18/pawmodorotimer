@@ -20,6 +20,11 @@ function App() {
     const [time, setTime] = useState(0);
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
+    const [customTime, setCustomTime] = useState(0); 
+
+    const handleChange = e => {
+      setCustomTime(e.target.value);
+    };
 
     useEffect(() => {
       let interval = null; 
@@ -123,7 +128,7 @@ function App() {
       <Chip label = "please select one of the times below or start your own.">
       </Chip>
       <br></br>
-      <TextField id="custom-time" label="Your Custom Time..." variant="outlined" />
+      <TextField id="custom-time" value = {customTime} label="Your Custom Time..." variant="outlined" onChange={handleChange} />
       <Box sx={{
                       display: 'flex',
                       justifyContent: 'center',
