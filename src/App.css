@@ -1,6 +1,6 @@
 .dot {
-  height: 300px;
-  width: 300px;
+  height: 20px;
+  width: 20px;
   background-color: #3a1a1a;
   border-radius: 50%;
   display:flex;
@@ -42,4 +42,8 @@
 	border-right: 25px solid transparent;
 	height: 4;
 	width: 125px;
+}
+
+.wrapper {
+  padding: 20px;
 }

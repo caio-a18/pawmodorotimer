@@ -3,17 +3,28 @@ import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import React from 'react'; 
-
+import Dashboard from './components/Dashboard';
+import Login from './components/Login/Login';
+import Preferences from './components/Preferences';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'; 
+import useToken from './components/App/useToken';
+import Stack from '@mui/material/Stack';
+import Chip from '@mui/material/Chip';
+import TextField from '@mui/material/TextField';
 
 function App() {
-    //variables that control the stopwatch 
+    const { token, setToken } = useToken();
     const [isCounting, setIsCounting] = useState(false); 
     const [selectedTime, setSelectedTime] = useState(0)
     const [isPaused, setIsPaused] = useState(true);
     const [time, setTime] = useState(0);
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
+    const [customTime, setCustomTime] = useState(0); 
 
+    const handleChange = e => {
+      setCustomTime(e.target.value);
+    };
 
     useEffect(() => {
       let interval = null; 
@@ -30,24 +41,28 @@ function App() {
       }; 
     }, [isCounting, isPaused, time]);
 
-    const handleStart = (duration) => {
-      setSelectedTime(duration * 60 * 1000); 
-      setTime(duration * 60 * 1000); 
-      setIsCounting(true); 
-      setIsPaused(false); 
-    }; 
+    const handleStart = () => {
+      let timeToSet;
+      if (isPaused) {
+        timeToSet = time; // Set to remaining time if paused
+      } else {
+        timeToSet = selectedTime; // Set to selected time if not paused
+      }
+      setTime(timeToSet);
+      setIsCounting(true);
+      setIsPaused(false);
+    };
+    
     
     const handlePause = () => {
       setIsPaused(!isPaused); 
     }; 
 
     const resetHandler = () => {
-      setIsCounting(false); 
-      setIsPaused(true); 
-      setTime(0); 
-      setSelectedTime(0); 
-      
-    }; 
+      setIsCounting(false);
+      setIsPaused(true);
+      setTime(selectedTime); // Reset time to the selected time
+    };
 
     //handles the gui portion that counts up 20 mins 
     const clickHandler = () => {
@@ -58,7 +73,8 @@ function App() {
 
     const howMuchTime = (minutes) => {
       if (!isCounting) {
-        handleStart(minutes); 
+        setSelectedTime(minutes * 60 * 1000); // Set selected time in milliseconds
+        handleStart(); // Start the timer
       }
     };
 
@@ -85,28 +101,74 @@ function App() {
       handleTimerIsDone(20);
       handleTimerIsDone(60);
     }, [time]);
+
+    if(!token) {
+      return <Login setToken={setToken} />
+    }
   
   return (
     <div className="App">
-      <div className={`dot larger-${numClicks}`}></div>   
-      <span className = "foodbowl" onClick={clickHandler}></span>
+      <div className="wrapper">
+      <h1>Tomato Paws Timer</h1>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/Dashboard">
+            <Dashboard />
+          </Route>
+          <Route path="/Preferences">
+            <Preferences />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </div>
+     {/*} <div className={`dot larger-${numClicks}`}></div>   
+      
+  <span className = "foodbowl" onClick={clickHandler}></span>*/}
       <br></br>
+      <Chip label = "please select one of the times below or start your own.">
+      </Chip>
       <br></br>
-      <br></br>
-      <br></br>
+      <TextField id="custom-time" value = {customTime} label="Your Custom Time..." variant="outlined" onChange={handleChange} />
+      <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '5vh',
+                    }}>
+      <Button onClick = {() => howMuchTime(`$custom-time`)}>Custom Time</Button>
       <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
       <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
       <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
       <Button onClick = {() => howMuchTime(1)}>1 Minute</Button>
-      <div className = "timeset">The Time You Want to Set Is: {numClicks*5}</div>
+      </Box>
       <div>
-      {selectedTime > 0 && (
+      { (
                     <>
+                    <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '5vh',
+                    }}>
                         <div>Selected Time: {timeGUI(selectedTime)}</div>
+                        </Box>
+                        <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '5vh', 
+                    }}>
                         <div>Time Remaining: {timeGUI(time)}</div>
-                        <Box>
+                        </Box>
+                        <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '5vh', // Adjust the height as needed
+                    }}>
                             {isPaused ? (
-                                <Button onClick={handleStart}>Start</Button>
+                               <Button onClick={handleStart}>Start</Button>
                             ) : (
                                 <Button onClick={handlePause}>Pause</Button>
                             )}
