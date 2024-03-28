@@ -94,6 +94,8 @@ function App() {
       }
     };
 
+    //useEffect for cat noise 
+    
     // UseEffect for HandleTimer
     useEffect(() => {
       handleTimerIsDone(1);
