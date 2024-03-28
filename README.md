@@ -18,3 +18,7 @@ In order to run the project, please follow these steps.
 3. While the timer is running, you are able to start, pause, or reset it as needed using the buttons under the ```Time Remaining``` section of the application. 
 4. While the timer is running, you are able to see the countdown in the ```Time remaining``` section and you are able to see which time option you selected in the ```Selected Time``` section. 
 5. After each timer is up, a pop-up is displayed to ascertain and let you know what level you are currently at. The level you are at is saved to your user profile even if you choose to exit the application at any point. 
+
+# CI Testing 
+
+For the first sprint, rudimentary CI testing has been added. It runs after every person's individual commit. As with running the application, please make sure that the ```node C:\your\unique\directory\server.js```command in the ```node-js.yml``` file is run using your own computer's pathway to the server.js file. 
