@@ -124,18 +124,12 @@ function App() {
      {/*} <div className={`dot larger-${numClicks}`}></div>   
       
   <span className = "foodbowl" onClick={clickHandler}></span>*/}
-      <br></br>
-      <Chip label = "please select one of the times below or start your own.">
-      </Chip>
-      <br></br>
-      <TextField id="custom-time" value = {customTime} label="Your Custom Time..." variant="outlined" onChange={handleChange} />
       <Box sx={{
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
                       height: '5vh',
                     }}>
-      <Button onClick = {() => howMuchTime(`$custom-time`)}>Custom Time</Button>
       <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
       <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
       <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
