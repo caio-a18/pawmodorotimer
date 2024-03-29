@@ -42,26 +42,21 @@ function App() {
     }, [isCounting, isPaused, time]);
 
     const handleStart = () => {
-      let timeToSet;
-      if (isPaused) {
-        timeToSet = time; // Set to remaining time if paused
-      } else {
-        timeToSet = selectedTime; // Set to selected time if not paused
+      if (isPaused || !isCounting) {
+        setIsPaused(false);
+        setIsCounting(true);
       }
-      setTime(timeToSet);
-      setIsCounting(true);
-      setIsPaused(false);
+    };
+    
+    const handlePause = () => {
+      setIsPaused(!isPaused);
     };
     
     
-    const handlePause = () => {
-      setIsPaused(!isPaused); 
-    }; 
-
     const resetHandler = () => {
       setIsCounting(false);
       setIsPaused(true);
-      setTime(selectedTime); // Reset time to the selected time
+      setTime(selectedTime);
     };
 
     //handles the gui portion that counts up 20 mins 
@@ -72,9 +67,14 @@ function App() {
     };
 
     const howMuchTime = (minutes) => {
-      if (!isCounting) {
-        setSelectedTime(minutes * 60 * 1000); // Set selected time in milliseconds
-        handleStart(); // Start the timer
+      const newTime = minutes * 60 * 1000; // Convert minutes to milliseconds
+      if (newTime !== selectedTime || isPaused) { // Check if a new time is selected or if the timer is paused
+        setSelectedTime(newTime);
+        setTime(newTime);
+        setIsPaused(false); // Ensure timer is not paused
+        if (!isCounting) {
+          setIsCounting(true); // Start counting only if it wasn't already started
+        }
       }
     };
 
