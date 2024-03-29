@@ -118,17 +118,16 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <div className="top-bar">
-            {/* Empty div for flex spacing */}
             <div></div>
             
             <h1>Tomato Paws Timer</h1>
             
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              Level: {levelTracker + 1}
+            <Box className="level-box">
+            Level: {levelTracker + 1}
             </Box>
           </div>
           
-          {/* Time Information directly under the header */}
+          
           <div className="time-info">
             <div>Selected Time: {timeGUI(selectedTime)}</div>
             <div>Time Remaining: {timeGUI(time)}</div>
