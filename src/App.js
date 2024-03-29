@@ -114,91 +114,47 @@ function App() {
       return <Login setToken={setToken} />
     }
   
-  return (
-    <div className="App">
-      <div className="wrapper">
-      <h1>Tomato Paws Timer</h1>
+    return (
       <BrowserRouter>
-        <Switch>
-          <Route path="/Dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/Preferences">
-            <Preferences />
-          </Route>
-        </Switch>
+        <div className="App">
+          <div className="top-bar">
+            {/* Empty div for flex spacing */}
+            <div></div>
+            
+            <h1>Tomato Paws Timer</h1>
+            
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              Level: {levelTracker + 1}
+            </Box>
+          </div>
+          
+          {/* Time Information directly under the header */}
+          <div className="time-info">
+            <div>Selected Time: {timeGUI(selectedTime)}</div>
+            <div>Time Remaining: {timeGUI(time)}</div>
+          </div>
+    
+          <Switch>
+            <Route path="/Dashboard">
+              <Dashboard />
+            </Route>
+            <Route path="/Preferences">
+              <Preferences />
+            </Route>
+          </Switch>
+    
+          <div className="wrapper">
+            {/* Your time options and other content here */}
+            <div className="time-options">
+              <Box className="time-option-box"><Button onClick={() => howMuchTime(60)}>60 Minutes</Button></Box>
+              <Box className="time-option-box"><Button onClick={() => howMuchTime(20)}>20 Minutes</Button></Box>
+              <Box className="time-option-box"><Button onClick={() => howMuchTime(5)}>5 Minutes</Button></Box>
+              <Box className="time-option-box"><Button onClick={() => howMuchTime(1)}>1 Minute</Button></Box>
+            </div>
+          </div>
+        </div>
       </BrowserRouter>
-    </div>
-     {/*} <div className={`dot larger-${numClicks}`}></div>   
-      
-  <span className = "foodbowl" onClick={clickHandler}></span>*/}
-      <Box sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '5vh',
-                    }}>
-      <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
-      <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
-      <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
-      <Button onClick = {() => howMuchTime(1)}>1 Minute</Button>
-      </Box
-      >
-      
-      <Box
-      height={200}
-      width={200}
-      my={4}
-      display="flex"
-      alignItems="right"
-      gap={4}
-      p={2}
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'right',
-        height: '5vh',
-        border: '2px solid grey' }}>
-      Level: {levelTracker + 1}
-      </Box>
-      <div>
-      { (
-                    <>
-                    <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '5vh',
-                    }}>
-                        <div>Selected Time: {timeGUI(selectedTime)}</div>
-                        </Box>
-                        <Box sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '5vh', 
-                    }}>
-                        <div>Time Remaining: {timeGUI(time)}</div>
-                        </Box>
-                        <Box sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '5vh', // Adjust the height as needed
-                    }}>
-                            {isPaused ? (
-                               <Button onClick={handleStart}>Start</Button>
-                            ) : (
-                                <Button onClick={handlePause}>Pause</Button>
-                            )}
-                            <Button onClick={resetHandler}>Reset</Button>
-                        </Box>
-                    </>
-                )}
-      </div>
-    </div>
-  );
+    );
 
 }
 

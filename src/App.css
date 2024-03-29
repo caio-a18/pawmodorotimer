@@ -1,3 +1,46 @@
+.App {
+  text-align: center; /* Centers the content of the App */
+}
+
+.wrapper {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px; 
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.time-info {
+  display: flex;
+  justify-content: center;
+  gap: 50px; /* Adjust gap between Selected Time and Time Remaining */
+  margin-top: 20px; /* Margin above the time info for spacing */
+}
+
+.time-display {
+  text-align: center;
+}
+
+.time-options {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Adjust based on your preference */
+  padding: 20px;
+}
+
+.time-option-box {
+  border: 1px solid #ccc; /* Example styling, adjust as needed */
+  padding: 10px;
+}
+
+/* New styles */
 .dot {
   height: 20px;
   width: 20px;
@@ -7,43 +50,39 @@
 }
 
 .larger-0 {
-  height:350px; 
-  width:350px; 
+  height: 350px; 
+  width: 350px; 
 }
 
 .larger-1 {
-  height:400px; 
-  width:400px; 
+  height: 400px; 
+  width: 400px; 
 }
 
 .larger-2 {
-  height:450px; 
-  width:450px; 
+  height: 450px; 
+  width: 450px; 
 }
 
 .larger-3 {
-  height:500px; 
-  width:500px; 
+  height: 500px; 
+  width: 500px; 
 }
 
 .larger-4 {
-  height:550px; 
-  width:550px; 
+  height: 550px; 
+  width: 550px; 
 }
 
 .larger-5 {
-  height:600px; 
-  width:600px; 
+  height: 600px; 
+  width: 600px; 
 }
 
 .foodbowl {
   border-bottom: 50px solid #555;
-	border-left: 25px solid transparent;
-	border-right: 25px solid transparent;
-	height: 4;
-	width: 125px;
-}
-
-.wrapper {
-  padding: 20px;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  height: 0;
+  width: 125px;
 }
