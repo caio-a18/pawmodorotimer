@@ -45,26 +45,21 @@ function App() {
     }, [isCounting, isPaused, time]);
 
     const handleStart = () => {
-      let timeToSet;
-      if (isPaused) {
-        timeToSet = time; // Set to remaining time if paused
-      } else {
-        timeToSet = selectedTime; // Set to selected time if not paused
+      if (isPaused || !isCounting) {
+        setIsPaused(false);
+        setIsCounting(true);
       }
-      setTime(timeToSet);
-      setIsCounting(true);
-      setIsPaused(false);
+    };
+    
+    const handlePause = () => {
+      setIsPaused(!isPaused);
     };
     
     
-    const handlePause = () => {
-      setIsPaused(!isPaused); 
-    }; 
-
     const resetHandler = () => {
       setIsCounting(false);
       setIsPaused(true);
-      setTime(selectedTime); // Reset time to the selected time
+      setTime(selectedTime);
     };
 
     //handles the gui portion that counts up 20 mins 
@@ -75,9 +70,14 @@ function App() {
     };
 
     const howMuchTime = (minutes) => {
-      if (!isCounting) {
-        setSelectedTime(minutes * 60 * 1000); // Set selected time in milliseconds
-        handleStart(); // Start the timer
+      const newTime = minutes * 60 * 1000; // Convert minutes to milliseconds
+      if (newTime !== selectedTime || isPaused) { // Check if a new time is selected or if the timer is paused
+        setSelectedTime(newTime);
+        setTime(newTime);
+        setIsPaused(false); // Ensure timer is not paused
+        if (!isCounting) {
+          setIsCounting(true); // Start counting only if it wasn't already started
+        }
       }
     };
 
@@ -132,18 +132,12 @@ function App() {
      {/*} <div className={`dot larger-${numClicks}`}></div>   
       
   <span className = "foodbowl" onClick={clickHandler}></span>*/}
-      <br></br>
-      <Chip label = "please select one of the times below or start your own.">
-      </Chip>
-      <br></br>
-      <TextField id="custom-time" value = {customTime} label="Your Custom Time..." variant="outlined" onChange={handleChange} />
       <Box sx={{
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
                       height: '5vh',
                     }}>
-      <Button onClick = {() => howMuchTime(`$custom-time`)}>Custom Time</Button>
       <Button onClick = {() => howMuchTime(60)}>60 Minutes</Button>
       <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
       <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
