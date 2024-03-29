@@ -119,14 +119,19 @@ function App() {
         <div className="App">
           <div className="top-bar">
             <div></div>
-            
-            <h1>Tomato Paws Timer</h1>
-            
             <Box className="level-box">
-            Level: {levelTracker + 1}
+              Level: {levelTracker + 1}
             </Box>
-          </div>
+            <div className="title-container">
+          <h1>Tomato Paws Timer</h1>
+            </div>
           
+
+            <div className="control-buttons">
+          <Button variant="contained" onClick={handlePause}>{isPaused ? "Resume" : "Pause"}</Button>
+          <Button variant="contained" color="secondary" onClick={resetHandler}>Reset</Button>
+            </div>
+        </div>
           
           <div className="time-info">
             <div>Selected Time: {timeGUI(selectedTime)}</div>
