@@ -11,6 +11,7 @@ import useToken from './components/App/useToken';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
+import soundFile from './components/Domestic-cat-purring-and-meowing-sound-effect.mp3';
 
 function App() {
     const { token, setToken } = useToken();
@@ -21,6 +22,8 @@ function App() {
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
     const [customTime, setCustomTime] = useState(0); 
+
+    const sound = new Audio(soundFile);
 
     const handleChange = e => {
       setCustomTime(e.target.value);
@@ -87,10 +90,13 @@ function App() {
     // Handler to check when time is over
     const handleTimerIsDone = (duration) => {
       if (time === 0 && selectedTime === duration * 60 * 1000) {
+        sound.play(); 
         // Timer is over for the specified duration
         // Increases levelTracker
         setLevelTracker(prevLevel => prevLevel + 1);
-        alert("Congratulations. You are now level " + (levelTracker + 1) + "!");
+        
+        //alert("Congratulations. You are now level " + (levelTracker + 1) + "!");
+        
       }
     };
 
@@ -142,6 +148,24 @@ function App() {
       <Button onClick = {() => howMuchTime(20)}>20 Minutes</Button>
       <Button onClick = {() => howMuchTime(5)}>5 Minutes</Button>
       <Button onClick = {() => howMuchTime(1)}>1 Minute</Button>
+      </Box
+      >
+      
+      <Box
+      height={200}
+      width={200}
+      my={4}
+      display="flex"
+      alignItems="right"
+      gap={4}
+      p={2}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'right',
+        height: '5vh',
+        border: '2px solid grey' }}>
+      Level: {levelTracker + 1}
       </Box>
       <div>
       { (
