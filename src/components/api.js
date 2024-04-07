@@ -20,4 +20,17 @@ async function createUser(userData) {
   }
 }
 
+const updateUserLevel = async (userId, duration) => {
+  try {
+    const response = await axios.post(`/api/user/level/update/${userId}`, {
+      focusDuration: duration, // Duration in minutes
+    });
+
+    return response.data.newLevel; // Assuming the API returns the new level
+  } catch (error) {
+    console.error('Error updating user level:', error);
+    throw error; // Re-throw the error to be handled by the caller
+  }
+};
+
 export { loginUser, createUser };
