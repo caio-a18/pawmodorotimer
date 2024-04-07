@@ -10,4 +10,15 @@ async function loginUser(credentials) {
       .then(data => data.json());
 }
 
-export { loginUser };
+async function createUser(userData) {
+    return fetch('http://localhost:8080/create-user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userData)
+    })
+      .then(response => response.json());
+  }
+  
+export { loginUser, createUser };
