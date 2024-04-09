@@ -10,6 +10,10 @@ import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 import useToken from './components/App/useToken';
 import soundFile from './components/Domestic-cat-purring-and-meowing-sound-effect.mp3';
 import Challenges from './components/Login/Challenges'; 
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions'; 
 
 function App() {
     const { token, setToken } = useToken();
@@ -20,11 +24,20 @@ function App() {
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
     const [customTime, setCustomTime] = useState(0); 
+    const [userDialog, setUserDialog] = useState("false"); 
 
     const sound = new Audio(soundFile);
 
     const handleChange = e => {
       setCustomTime(e.target.value);
+    };
+
+    const handleOpenDialog = () => {
+      setUserDialog(true); 
+    }; 
+
+    const handleCloseDialog = () => {
+      setUserDialog(false); // Close the dialog
     };
 
     useEffect(() => {
@@ -140,7 +153,7 @@ function App() {
               </div>
             <div style = {{marginLeft: 'auto', marginRight: '1in'}} auto className = "profile-container">
               <Box>
-                <Button>Profile</Button>
+                <Button onClick={handleOpenDialog}>Profile</Button>
               </Box>
               </div>
             <div className="title-container">
@@ -177,6 +190,16 @@ function App() {
               <Box className="time-option-box"><Button onClick={() => howMuchTime(1)}>Start: 1 Minute</Button></Box>
             </div>
           </div>
+          <Dialog open={userDialog} onClose={handleCloseDialog}>
+          <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
+          <DialogContent sx={{ color: 'purple' }}>
+            <p>User: </p>
+            <p>Level: </p>
+          </DialogContent>
+          <DialogActions>
+            <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button> {/* Close the dialog */}
+          </DialogActions>
+        </Dialog>
         </div>
       </BrowserRouter>
     );
