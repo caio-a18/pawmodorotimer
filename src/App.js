@@ -46,7 +46,7 @@ function App() {
 
   // Example of setting the username on successful login
   const handleLoginSuccess = (username, token) => {
-  setUsername(username);  // Store the username
+  setUsername(username);  // Store the user's name 
   setToken(token);        // Set the authentication token
   };
 
@@ -186,7 +186,7 @@ function App() {
     }, [time]);
 
     if(!token) {
-      // Pass handleLoginSuccess as a prop to Login component
+      // Pass handleLoginSuccess as a prop to Login com
       return <Login setToken={setToken} handleLoginSuccess={handleLoginSuccess} />;
   }
   
