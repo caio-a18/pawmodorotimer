@@ -129,12 +129,18 @@ function App() {
     }; 
 
     // Handler to check when time is over
-    const handleTimerIsDone = (duration) => {
+    const handleTimerIsDone = async (duration) => {
       if (time === 0 && selectedTime === duration * 60 * 1000) {
         console.log(selectedTime); 
         sound.play(); 
-        // Timer is over for the specified duration
-        // Increases levelTracker
+        try {
+          const userId = 'theUserId'; 
+          const newLevel = await updateUserLevel(userId, duration);
+          setLevelTracker(newLevel); // Update levelTracker with the new level
+          alert(`Congratulations. You are now level ${newLevel}!`);
+        } catch (error) {
+          alert('There was a problem updating your level. Please try again.');
+        }
         setLevelTracker(prevLevel => prevLevel + 1);
         
       }
