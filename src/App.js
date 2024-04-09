@@ -93,9 +93,8 @@ function App() {
         console.log(selectedTime); 
         sound.play(); 
         try {
-          const userId = 'theUserId'; // Ensure you have a way to get the actual user ID
+          const userId = 'theUserId'; 
           const newLevel = await updateUserLevel(userId, duration);
-    
           setLevelTracker(newLevel); // Update levelTracker with the new level
           alert(`Congratulations. You are now level ${newLevel}!`);
         } catch (error) {
