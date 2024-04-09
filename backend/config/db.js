@@ -3,7 +3,12 @@ const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize('tomatopawsinitial', 'postgres', 'csds393tomatopaws', {
     host: 'tomatopaws.cnmmsigu82g0.us-east-2.rds.amazonaws.com',
     dialect: 'postgres',
-    port: 5432
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    }
 });
 
 async function testConnection() {
