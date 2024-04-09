@@ -25,7 +25,8 @@ function App() {
     const [levelTracker, setLevelTracker] = useState(1);
     const [customTime, setCustomTime] = useState(0); 
     const [userDialog, setUserDialog] = useState("false"); 
-
+    const [items, setItems] = useState([]);
+    const [newItem, setNewItem] = useState('');
     const sound = new Audio(soundFile);
 
     const handleChange = e => {
@@ -39,7 +40,36 @@ function App() {
     const handleCloseDialog = () => {
       setUserDialog(false); // Close the dialog
     };
+    //add item to to do list 
+    const addItem = () => {
+      if (newItem.trim() !== '') {
+        setItems([...items, newItem]);
+        setNewItem(''); 
+      }
+    };
+    
+    //add item to to do list 
+    const removeItem = (index) => {
+      const updatedItems = [...items];
+      updatedItems.splice(index, 1);
+      setItems(updatedItems);
+    };
 
+    //add item to to do list 
+    const addBreakItem = () => {
+      if (newItem.trim() !== '') {
+        setItems([...items, newItem]);
+        setNewItem(''); 
+      }
+    };
+    
+    //add item to to do list 
+    const removeBreakItem = (index) => {
+      const updatedItems = [...items];
+      updatedItems.splice(index, 1);
+      setItems(updatedItems);
+    };
+  
     useEffect(() => {
       let interval = null; 
 
@@ -200,6 +230,52 @@ function App() {
             <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button> {/* Close the dialog */}
           </DialogActions>
         </Dialog>
+        <div className = 'break-list'>
+        <div>
+      {/* Input field for adding new items */}
+      <input
+        type="text"
+        value={newItem}
+        onChange={(e) => setNewItem(e.target.value)}
+      />
+      {/* Button to add new item */}
+      <button onClick={addItem}>Add Item</button>
+
+      {/* Display the list of items */}
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>
+            {item}
+            {/* Button to remove item */}
+            <button onClick={() => removeItem(index)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+        </div>
+        <div className = 'study-list'>
+        <div>
+      {/* Input field for adding new items */}
+      <input
+        type="text"
+        value={newItem}
+        onChange={(e) => setNewItem(e.target.value)}
+      />
+      {/* Button to add new item */}
+      <button onClick={addBreakItem}>Add Item</button>
+
+      {/* Display the list of items */}
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>
+            {item}
+            {/* Button to remove item */}
+            <button onClick={() => removeBreakItem(index)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+        </div>
         </div>
       </BrowserRouter>
     );
