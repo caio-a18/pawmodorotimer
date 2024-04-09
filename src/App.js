@@ -9,8 +9,7 @@ import Preferences from './components/Preferences';
 import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom'; 
 import useToken from './components/App/useToken';
 import soundFile from './components/Domestic-cat-purring-and-meowing-sound-effect.mp3';
-import { useHistory } from 'react-router-dom';
-import Challenges from './Challenges'; 
+import Challenges from './components/Login/Challenges'; 
 
 function App() {
     const { token, setToken } = useToken();
@@ -21,7 +20,6 @@ function App() {
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
     const [customTime, setCustomTime] = useState(0); 
-    const history = useHistory();
 
     const sound = new Audio(soundFile);
 
@@ -140,10 +138,15 @@ function App() {
                 <Button onClick={handleChallenges}>Challenges</Button>
               </Box>
               </div>
+            <div style = {{marginLeft: 'auto', marginRight: '1in'}} auto className = "profile-container">
+              <Box>
+                <Button>Profile</Button>
+              </Box>
+              </div>
             <div className="title-container">
           <h1>Tomato Paws Timer</h1>
             </div>
-          
+
 
             <div className="control-buttons">
           <Button variant="contained" onClick={handlePause}>{isPaused ? "Resume" : "Pause"}</Button>
