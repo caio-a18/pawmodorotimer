@@ -12,6 +12,9 @@ import soundFile from './components/Domestic-cat-purring-and-meowing-sound-effec
 import { useHistory } from 'react-router-dom';
 import Challenges from './Challenges'; 
 
+//API imports
+import { updateUserLevel } from './components/api'; 
+
 function App() {
     const { token, setToken } = useToken();
     const [isCounting, setIsCounting] = useState(false); 
