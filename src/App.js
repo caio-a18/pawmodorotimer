@@ -6,12 +6,11 @@ import React from 'react';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login/Login';
 import Preferences from './components/Preferences';
-import { BrowserRouter, Route, Switch } from 'react-router-dom'; 
+import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom'; 
 import useToken from './components/App/useToken';
-import Stack from '@mui/material/Stack';
-import Chip from '@mui/material/Chip';
-import TextField from '@mui/material/TextField';
 import soundFile from './components/Domestic-cat-purring-and-meowing-sound-effect.mp3';
+import { useHistory } from 'react-router-dom';
+import Challenges from './Challenges'; 
 
 function App() {
     const { token, setToken } = useToken();
@@ -22,6 +21,7 @@ function App() {
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
     const [customTime, setCustomTime] = useState(0); 
+    const history = useHistory();
 
     const sound = new Audio(soundFile);
 
@@ -88,23 +88,25 @@ function App() {
     }; 
 
     // Handler to check when time is over
-    const handleTimerIsDone = async (duration) => {
+    const handleTimerIsDone = (duration) => {
       if (time === 0 && selectedTime === duration * 60 * 1000) {
+        console.log(selectedTime); 
         sound.play(); 
-        try {
-          const userId = 'theUserId'; // Ensure you have a way to get the actual user ID
-          const newLevel = await updateUserLevel(userId, duration);
-    
-          setLevelTracker(newLevel); // Update levelTracker with the new level
-          alert(`Congratulations. You are now level ${newLevel}!`);
-        } catch (error) {
-          alert('There was a problem updating your level. Please try again.');
-        }
+        // Timer is over for the specified duration
+        // Increases levelTracker
+        setLevelTracker(prevLevel => prevLevel + 1);
+        
       }
     };
-    
 
-    //useEffect for cat noise 
+    const handleLogout = () => {
+      setToken(0); 
+      return <Login/>
+    }; 
+
+    const handleChallenges = () => {
+      return <Challenges/>
+    }; 
     
     // UseEffect for HandleTimer
     useEffect(() => {
@@ -123,9 +125,21 @@ function App() {
         <div className="App">
           <div className="top-bar">
             <div></div>
+            <div className = "level-container">
             <Box className="level-box">
               Level: {levelTracker + 1}
             </Box>
+            </div>
+            <div style={{ marginRight: 'left' }} auto className = "logout-container">
+            <Box className="logout-button">
+              <Button onClick={handleLogout}>Logout</Button>
+            </Box>
+            </div>
+            <div style = {{marginRight: 'auto'}} auto className = "challenge-container">
+              <Box>
+                <Button onClick={handleChallenges}>Challenges</Button>
+              </Box>
+              </div>
             <div className="title-container">
           <h1>Tomato Paws Timer</h1>
             </div>
@@ -154,10 +168,10 @@ function App() {
           <div className="wrapper">
             {/* Your time options and other content here */}
             <div className="time-options">
-              <Box className="time-option-box"><Button onClick={() => howMuchTime(60)}>60 Minutes</Button></Box>
-              <Box className="time-option-box"><Button onClick={() => howMuchTime(20)}>20 Minutes</Button></Box>
-              <Box className="time-option-box"><Button onClick={() => howMuchTime(5)}>5 Minutes</Button></Box>
-              <Box className="time-option-box"><Button onClick={() => howMuchTime(1)}>1 Minute</Button></Box>
+              <Box className="time-option-box"><Button onClick={() => howMuchTime(60)}>Start: 60 Minutes</Button></Box>
+              <Box className="time-option-box"><Button onClick={() => howMuchTime(20)}>Start: 20 Minutes</Button></Box>
+              <Box className="time-option-box"><Button onClick={() => howMuchTime(5)}>Start: 5 Minutes</Button></Box>
+              <Box className="time-option-box"><Button onClick={() => howMuchTime(1)}>Start: 1 Minute</Button></Box>
             </div>
           </div>
         </div>
