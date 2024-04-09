@@ -186,10 +186,9 @@ function App() {
     }, [time]);
 
     if(!token) {
-      return <Login setToken={setToken} setUsername={(user) => {
-        setUsername(user);
-      }} />
-    }
+      // Pass handleLoginSuccess as a prop to Login component
+      return <Login setToken={setToken} handleLoginSuccess={handleLoginSuccess} />;
+  }
   
     return (
       <BrowserRouter>
