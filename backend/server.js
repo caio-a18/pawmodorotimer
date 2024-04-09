@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/db');
-const User = require('./models/User');
+const User = require('./models/users');
 
 const app = express();
 
@@ -32,8 +32,6 @@ app.post('/login', (req, res) => {
     token: 'test123'
   });
 });
-
-app.use(bodyParser.json());
 
 // Mock database for the proof of concept
 let users = [
