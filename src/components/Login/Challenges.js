@@ -2,7 +2,7 @@
 function Challenges () {
 
     return (
-        <div>I eat ass!</div>
+        <div>Okay.</div>
     )
 }
 

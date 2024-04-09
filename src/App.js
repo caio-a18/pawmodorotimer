@@ -28,13 +28,35 @@ function App() {
     const [items, setItems] = useState([]);
     const [newItem, setNewItem] = useState('');
     const sound = new Audio(soundFile);
+    const [showChallenges, setShowChallenges] = useState(false);
+    // Additional state for user info and study management
+  const [username, setUsername] = useState("");
+  const [userLevel, setUserLevel] = useState(1);  // Default to level 1
+  const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in milliseconds
+
+  // Function to update study time and calculate level
+  const updateStudyTime = (sessionTime) => {
+    setTotalStudyTime(prevTime => {
+      const newTotalTime = prevTime + sessionTime;
+      const newLevel = Math.floor(newTotalTime / (60 * 60 * 1000)); // 1 hour = 60*60*1000 milliseconds
+      setUserLevel(newLevel + 1);  // Levels start at 1
+      return newTotalTime;
+    });
+  };
+
+  // Example of setting the username on successful login
+  const handleLoginSuccess = (username, token) => {
+  setUsername(username);  // Store the username
+  setToken(token);        // Set the authentication token
+  };
+
 
     const handleChange = e => {
       setCustomTime(e.target.value);
     };
 
     const handleOpenDialog = () => {
-      setUserDialog(true); 
+      setUserDialog(true); // Open the dialog
     }; 
 
     const handleCloseDialog = () => {
@@ -152,8 +174,8 @@ function App() {
     }; 
 
     const handleChallenges = () => {
-      return <Challenges/>
-    }; 
+      setShowChallenges(true);
+    };
     
     // UseEffect for HandleTimer
     useEffect(() => {
@@ -164,19 +186,17 @@ function App() {
     }, [time]);
 
     if(!token) {
-      return <Login setToken={setToken} />
+      return <Login setToken={setToken} setUsername={(user) => {
+        setUsername(user);
+      }} />
     }
   
     return (
       <BrowserRouter>
+      {showChallenges && <Challenges />}
         <div className="App">
           <div className="top-bar">
             <div></div>
-            <div className = "level-container">
-            <Box className="level-box">
-              Level: {levelTracker + 1}
-            </Box>
-            </div>
             <div style={{ marginRight: 'left' }} auto className = "logout-container">
             <Box className="logout-button">
               <Button onClick={handleLogout}>Logout</Button>
@@ -215,6 +235,9 @@ function App() {
             <Route path="/Preferences">
               <Preferences />
             </Route>
+            <Route path="/Challenges">
+              <Dashboard />
+            </Route>
           </Switch>
     
           <div className="wrapper">
@@ -226,16 +249,21 @@ function App() {
               <Box className="time-option-box"><Button onClick={() => howMuchTime(1)}>Start: 1 Minute</Button></Box>
             </div>
           </div>
+
+          {/* START OF PROFILE TAB/DIALOG */}
           <Dialog open={userDialog} onClose={handleCloseDialog}>
-          <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
-          <DialogContent sx={{ color: 'purple' }}>
-            <p>User: </p>
-            <p>Level: </p>
-          </DialogContent>
-          <DialogActions>
-            <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button> {/* Close the dialog */}
-          </DialogActions>
-        </Dialog>
+            <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
+  <DialogContent sx={{ color: 'purple' }}>
+    <p>User: {username}</p>
+    <p>Level: {userLevel}</p>
+    <p>Total Study Hours: {Math.floor(totalStudyTime / 3600000)} hours</p>
+  </DialogContent>
+  <DialogActions>
+    <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button>
+  </DialogActions>
+</Dialog>
+        {/* END OF PROFILE TAB/DIALOG */}
+
         <div className = 'break-list'>
         <div>
       {/* Input field for adding new items */}

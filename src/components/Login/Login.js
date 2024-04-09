@@ -9,7 +9,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions'; 
 
-export default function Login({ setToken }) {
+export default function Login({ setToken, setUsername }) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
   const [errorDialog, setErrorDialog] = useState(false); 
@@ -26,20 +26,17 @@ export default function Login({ setToken }) {
   }; 
   const handleSubmit = async e => {
     e.preventDefault();
-
-    //returns -1 if the user is not found 
     const userIndex = approvedUsers.indexOf(username);
-
     if (userIndex !== -1 && approvedPWDs[userIndex] === password) {
-    const token = await loginUser({
-      username,
-      password
-    });
-    setToken(token);
-  }
-  else {
-    setErrorDialog(true);
-  }
+      const token = await loginUser({
+        username,
+        password
+      });
+      setToken(token);
+      setUsername(username);  // Update username in App's state
+    } else {
+      setErrorDialog(true);
+    }
   }
 
   return(
