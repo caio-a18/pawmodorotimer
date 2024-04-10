@@ -8,6 +8,8 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Ensure you can parse JSON request bodies
 
+app.listen(8080, () => console.log('API is running on http://localhost:8080'));
+
 // Initialize database connection
 sequelize.authenticate()
   .then(() => {
@@ -87,6 +89,5 @@ app.post('/api/user/level/update/:userId', (req, res) => {
     });
   }
 
-app.listen(8080, () => console.log('API is running on http://localhost:8080'));
-
 });
+
