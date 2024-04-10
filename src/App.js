@@ -30,9 +30,9 @@ function App() {
     const sound = new Audio(soundFile);
     const [showChallenges, setShowChallenges] = useState(false);
     // Additional state for user info and study management
-  const [username, setUsername] = useState("");
-  const [userLevel, setUserLevel] = useState(1);  // Default to level 1
-  const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in milliseconds
+    const [username, setUsername] = useState("");
+    const [userLevel, setUserLevel] = useState(1);  // Default to level 1
+    const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in milliseconds
 
   // Function to update study time and calculate level
   const updateStudyTime = (sessionTime) => {
