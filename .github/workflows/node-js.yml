@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   Node-Js: 
-      runs-on: ubuntu-latest
+      runs-on: windows-latest
 
       strategy:
         matrix:
@@ -20,7 +20,7 @@ jobs:
           cache: 'npm'
       - run: npm install 
       - run: npm ci
-      - run: dir "frontend\\public\\index.html"
+      - run: dir "..frontend\\public\\index.html"
       - run: npm run build --if-present
       - run: npm test
       - run: node C:\\Users\\asyas\\hungry-cat\\backend\\server.js
