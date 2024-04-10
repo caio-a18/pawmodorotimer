@@ -31,7 +31,7 @@ jobs:
       - run: npm install 
       - run: npm ci
       - run: node "backend\server.js"
-        timeout-minutes: 0.5
+        timeout-minutes: 10
 
   run-tests: 
     runs-on: windows-latest
@@ -41,4 +41,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}  # Remove if not using matrix strategy
           cache: 'npm'
+      - run: npm install 
       - run: npm test 
