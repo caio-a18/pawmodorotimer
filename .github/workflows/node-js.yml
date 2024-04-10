@@ -30,4 +30,4 @@ jobs:
           cache: 'npm'
       - run: npm install 
       - run: npm ci
-      - run: node C:\\Users\\asyas\\hungry-cat\\backend\\server.js
+      - run: node "backend\server.js"
