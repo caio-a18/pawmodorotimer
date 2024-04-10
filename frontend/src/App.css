@@ -1,0 +1,118 @@
+.App {
+  text-align: center;
+}
+
+.title-container {
+  flex-basis: 100%; /* Ensures the title takes full width to center properly */
+  display: flex;
+  justify-content: center;
+  margin: 20px 0; /* Adds space around the title */
+}
+
+.wrapper {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px; 
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between; /* Ensures items are spaced out to full width */
+  align-items: center;
+  flex-wrap: wrap; /* Allows items to wrap if needed */
+  padding: 20px;
+}
+
+.time-info {
+  display: flex;
+  justify-content: center;
+  gap: 50px; 
+  margin-top: 20px; 
+}
+
+.time-display {
+  text-align: center;
+}
+
+.time-options {
+  display: flex;
+  justify-content: center;
+  gap: 10px; 
+  padding: 20px;
+}
+
+.level-box {
+  position: absolute;
+  right: 20px; 
+  top: 20px;
+  border: 2px solid #666; 
+  border-radius: 20px; 
+  background-color: #f0f0f0; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+  margin-right: 20px; 
+  display: flex;
+  justify-content: right;
+  align-items: right;
+}
+
+.time-option-box {
+  border: 1px solid #ccc; 
+  padding: 10px;
+}
+
+.control-buttons {
+  flex-basis: 100%; /* Ensures the container is centered below the title */
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Adjust the space between the buttons */
+  margin: 20px 0; /* Adds space above and below the container */
+}
+
+/* New styles */
+.dot {
+  height: 20px;
+  width: 20px;
+  background-color: #3a1a1a;
+  border-radius: 50%;
+  display:flex;
+}
+
+.larger-0 {
+  height: 350px; 
+  width: 350px; 
+}
+
+.larger-1 {
+  height: 400px; 
+  width: 400px; 
+}
+
+.larger-2 {
+  height: 450px; 
+  width: 450px; 
+}
+
+.larger-3 {
+  height: 500px; 
+  width: 500px; 
+}
+
+.larger-4 {
+  height: 550px; 
+  width: 550px; 
+}
+
+.larger-5 {
+  height: 600px; 
+  width: 600px; 
+}
+
+.foodbowl {
+  border-bottom: 50px solid #555;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  height: 0;
+  width: 125px;
+}
