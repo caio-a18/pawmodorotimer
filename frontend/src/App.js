@@ -13,6 +13,12 @@ import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import soundFile from './components/Domestic-cat-purring-and-meowing-sound-effect.mp3';
 
+import Challenges from './components/Login/Challenges'; 
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions'; 
+
 //API imports
 import { updateUserLevel } from './components/api'; 
 
@@ -26,12 +32,75 @@ function App() {
     const [levelTracker, setLevelTracker] = useState(1);
     const [customTime, setCustomTime] = useState(0); 
 
+    const [userDialog, setUserDialog] = useState("false"); 
+    const [items, setItems] = useState([]);
+    const [newItem, setNewItem] = useState('');
+
     const sound = new Audio(soundFile);
+    const [showChallenges, setShowChallenges] = useState(false);
+    // Additional state for user info and study management
+  const [username, setUsername] = useState("");
+  const [userLevel, setUserLevel] = useState(1);  // Default to level 1
+  const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in milliseconds
+
+  // Function to update study time and calculate level
+  const updateStudyTime = (sessionTime) => {
+    setTotalStudyTime(prevTime => {
+      const newTotalTime = prevTime + sessionTime;
+      const newLevel = Math.floor(newTotalTime / (60 * 60 * 1000)); // 1 hour = 60*60*1000 milliseconds
+      setUserLevel(newLevel + 1);  // Levels start at 1
+      return newTotalTime;
+    });
+  };
+
+  // Example of setting the username on successful login
+  const handleLoginSuccess = (username, token) => {
+  setUsername(username);  // Store the username
+  setToken(token);        // Set the authentication token
+  };
+
 
     const handleChange = e => {
       setCustomTime(e.target.value);
     };
 
+    const handleOpenDialog = () => {
+      setUserDialog(true); // Open the dialog
+    }; 
+
+    const handleCloseDialog = () => {
+      setUserDialog(false); // Close the dialog
+    };
+    //add item to to do list 
+    const addItem = () => {
+      if (newItem.trim() !== '') {
+        setItems([...items, newItem]);
+        setNewItem(''); 
+      }
+    };
+    
+    //add item to to do list 
+    const removeItem = (index) => {
+      const updatedItems = [...items];
+      updatedItems.splice(index, 1);
+      setItems(updatedItems);
+    };
+
+    //add item to to do list 
+    const addBreakItem = () => {
+      if (newItem.trim() !== '') {
+        setItems([...items, newItem]);
+        setNewItem(''); 
+      }
+    };
+    
+    //add item to to do list 
+    const removeBreakItem = (index) => {
+      const updatedItems = [...items];
+      updatedItems.splice(index, 1);
+      setItems(updatedItems);
+    };
+  
     useEffect(() => {
       let interval = null; 
 
@@ -109,7 +178,15 @@ function App() {
       }
     };
 
-    //useEffect for cat noise 
+
+    const handleLogout = () => {
+      setToken(0); 
+      return <Login/>
+    }; 
+
+    const handleChallenges = () => {
+      setShowChallenges(true);
+    };
     
     // UseEffect for HandleTimer
     useEffect(() => {
@@ -120,21 +197,38 @@ function App() {
     }, [time]);
 
     if(!token) {
-      return <Login setToken={setToken} />
-    }
+      // Pass handleLoginSuccess and setUsername as props to Login component
+      return <Login setToken={setToken} handleLoginSuccess={handleLoginSuccess} setUsername={setUsername} />;
+  }
   
     return (
       <BrowserRouter>
+      {showChallenges && <Challenges />}
         <div className="App">
           <div className="top-bar">
             <div></div>
+            <div style={{ marginRight: 'left' }} auto className = "logout-container">
+            <Box className="logout-button">
+              <Button onClick={handleLogout}>Logout</Button>
+            </Box>
+            </div>
+            <div style = {{marginRight: 'auto'}} auto className = "challenge-container">
+              <Box>
+                <Button onClick={handleChallenges}>Challenges</Button>
+              </Box>
+              </div>
+            <div style = {{marginLeft: 'auto', marginRight: '1in'}} auto className = "profile-container">
+              <Box>
+                <Button onClick={handleOpenDialog}>Profile</Button>
+              </Box>
+              </div>
             <Box className="level-box">
               Level: {levelTracker + 1}
             </Box>
             <div className="title-container">
           <h1>Tomato Paws Timer</h1>
             </div>
-          
+
 
             <div className="control-buttons">
           <Button variant="contained" onClick={handlePause}>{isPaused ? "Resume" : "Pause"}</Button>
@@ -154,6 +248,9 @@ function App() {
             <Route path="/Preferences">
               <Preferences />
             </Route>
+            <Route path="/Challenges">
+              <Dashboard />
+            </Route>
           </Switch>
     
           <div className="wrapper">
@@ -165,6 +262,67 @@ function App() {
               <Box className="time-option-box"><Button onClick={() => howMuchTime(1)}>1 Minute</Button></Box>
             </div>
           </div>
+
+          {/* START OF PROFILE TAB/DIALOG */}
+          <Dialog open={userDialog} onClose={handleCloseDialog}>
+            <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
+  <DialogContent sx={{ color: 'purple' }}>
+    <p>User: {username}</p>
+    <p>Level: {userLevel}</p>
+    <p>Total Study Hours: {Math.floor(totalStudyTime / 3600000)} hours</p>
+  </DialogContent>
+  <DialogActions>
+    <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button>
+  </DialogActions>
+</Dialog>
+        {/* END OF PROFILE TAB/DIALOG */}
+
+        <div className = 'break-list'>
+        <div>
+      {/* Input field for adding new items */}
+      <input
+        type="text"
+        value={newItem}
+        onChange={(e) => setNewItem(e.target.value)}
+      />
+      {/* Button to add new item */}
+      <button onClick={addItem}>Add Item</button>
+
+      {/* Display the list of items */}
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>
+            {item}
+            {/* Button to remove item */}
+            <button onClick={() => removeItem(index)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+        </div>
+        <div className = 'study-list'>
+        <div>
+      {/* Input field for adding new items */}
+      <input
+        type="text"
+        value={newItem}
+        onChange={(e) => setNewItem(e.target.value)}
+      />
+      {/* Button to add new item */}
+      <button onClick={addBreakItem}>Add Item</button>
+
+      {/* Display the list of items */}
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>
+            {item}
+            {/* Button to remove item */}
+            <button onClick={() => removeBreakItem(index)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+        </div>
         </div>
       </BrowserRouter>
     );
