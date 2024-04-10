@@ -20,6 +20,8 @@ jobs:
           cache: 'npm'
       - run: npm install 
       - run: npm ci
+      - name: List Contents of Directory
+        run: ls -la C:\Users\asyas\hungry-cat\frontend\public\index.html
       - run: npm run build --if-present
       - run: npm test
-      - run: node C:\Users\asyas\hungry-cat\public\server.js
+      - run: node C:\Users\asyas\hungry-cat\backend\server.js
