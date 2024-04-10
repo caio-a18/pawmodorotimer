@@ -21,6 +21,6 @@ jobs:
       - run: npm install 
       - run: npm ci
       - run: dir "frontend\\public\\index.html"
-      - run: if exist "frontend\public\index.html" (npm run build)
+      - run: if exist "frontend\\public\\index.html" (npm run build)
       - run: npm test
       - run: node C:\\Users\\asyas\\hungry-cat\\backend\\server.js
