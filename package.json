@@ -50,6 +50,6 @@
     "cors": "^2.8.5",
     "eslint": "^8.57.0",
     "eslint-plugin-jsdoc": "^48.2.2",
-    "express": "^4.19.1"
+    "express": "^4.19.2"
   }
 }
