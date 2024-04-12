@@ -215,6 +215,10 @@ function App() {
             <div style = {{marginRight: 'auto'}} auto className = "challenge-container">
               <Box>
                 <Button onClick={handleChallenges}>Challenges</Button>
+
+                {/*NOTE, DELETE LATER- clicking the button should open
+                  *a dialogue box displaying the challenges info */}
+
               </Box>
               </div>
             <div style = {{marginLeft: 'auto', marginRight: '1in'}} auto className = "profile-container">
