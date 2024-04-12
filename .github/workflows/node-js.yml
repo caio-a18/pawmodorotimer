@@ -15,8 +15,9 @@ jobs:
           cache: 'npm'
       - run: npm install 
       - run: npm ci
+      - run: npm start 
       - run: dir "frontend\public\index.html"
-      - run: if exist dir "frontend\public\index.html" (npm run build)
+      - run: npm run build
 
   # Job for running the backend server
   run-backend:
@@ -42,4 +43,4 @@ jobs:
           node-version: ${{ matrix.node-version }}  # Remove if not using matrix strategy
           cache: 'npm'
       - run: npm install 
-      - run: npm test 
+      - run: npm test "frontend\src\AppTest.js"
