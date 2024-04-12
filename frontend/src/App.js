@@ -43,6 +43,42 @@ function App() {
   const [userLevel, setUserLevel] = useState(1);  // Default to level 1
   const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in milliseconds
 
+  // variables for study and break tasks
+  const [studyItems, setStudyItems] = useState([]);
+  const [breakItems, setBreakItems] = useState([]);
+  const [newStudyItem, setNewStudyItem] = useState('');
+  const [newBreakItem, setNewBreakItem] = useState('');
+
+  // Update addItem to handleStudyItem
+  const handleAddStudyItem = () => {
+    if (newStudyItem.trim() !== '') {
+      setStudyItems([...studyItems, newStudyItem]);
+      setNewStudyItem(''); // Reset input
+    }
+  };
+
+  // Update removeItem to handleRemoveStudyItem
+  const handleRemoveStudyItem = (index) => {
+    const updatedStudyItems = [...studyItems];
+    updatedStudyItems.splice(index, 1);
+    setStudyItems(updatedStudyItems);
+  };
+
+  // function for adding break items
+  const handleAddBreakItem = () => {
+    if (newBreakItem.trim() !== '') {
+      setBreakItems([...breakItems, newBreakItem]);
+      setNewBreakItem(''); // Reset input
+    }
+  };
+
+  // function for removing break items
+  const handleRemoveBreakItem = (index) => {
+    const updatedBreakItems = [...breakItems];
+    updatedBreakItems.splice(index, 1);
+    setBreakItems(updatedBreakItems);
+  };
+
   // Function to update study time and calculate level
   const updateStudyTime = (sessionTime) => {
     setTotalStudyTime(prevTime => {
@@ -274,55 +310,56 @@ function App() {
           </Dialog>
         {/* END OF PROFILE TAB/DIALOG */}
 
-        <div className = 'break-list'>
-        <div>
-      {/* Input field for adding new items */}
-      <input
-        type="text"
-        value={newItem}
-        onChange={(e) => setNewItem(e.target.value)}
-      />
-      {/* Button to add new item */}
-      <button onClick={addItem}>Add Item</button>
+        {/* Start of Lists Components */}
+        <div className="lists-container" style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <div className='study-list' style={{ width: '50%' }}>
+          <h2>Study Tasks</h2>
+          {/* Input field for adding new study items */}
+          <input
+            type="text"
+            value={newStudyItem}
+            onChange={(e) => setNewStudyItem(e.target.value)}
+          />
+          {/* Button to add new study item */}
+          <button onClick={handleAddStudyItem}>Add Item</button>
 
-      {/* Display the list of items */}
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>
-            {item}
-            {/* Button to remove item */}
-            <button onClick={() => removeItem(index)}>Remove</button>
-          </li>
-        ))}
-      </ul>
+          {/* Display the list of study items */}
+          <ul>
+            {studyItems.map((item, index) => (
+                <li key={index}>
+                    {item}
+                    {/* Button to remove study item */}
+                    <button onClick={() => handleRemoveStudyItem(index)}>Remove</button>
+                </li>
+            ))}
+          </ul>
+      </div>
+      <div className='break-list' style={{ width: '50%' }}>
+        <h2>Break Tasks</h2>
+        {/* Input field for adding new break items */}
+        <input
+            type="text"
+            value={newBreakItem}
+            onChange={(e) => setNewBreakItem(e.target.value)}
+        />
+        {/* Button to add new break item */}
+        <button onClick={handleAddBreakItem}>Add Item</button>
+        {/* Display the list of break items */}
+        <ul>
+          {breakItems.map((item, index) => (
+              <li key={index}>
+                  {item}
+                  {/* Button to remove break item */}
+                  <button onClick={() => handleRemoveBreakItem(index)}>Remove</button>
+              </li>
+          ))}
+        </ul>
+      </div>
     </div>
-        </div>
-        <div className = 'study-list'>
-        <div>
-      {/* Input field for adding new items */}
-      <input
-        type="text"
-        value={newItem}
-        onChange={(e) => setNewItem(e.target.value)}
-      />
-      {/* Button to add new item */}
-      <button onClick={addBreakItem}>Add Item</button>
-
-      {/* Display the list of items */}
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>
-            {item}
-            {/* Button to remove item */}
-            <button onClick={() => removeBreakItem(index)}>Remove</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-        </div>
-        </div>
-      </BrowserRouter>
-    );
+    {/*End of Lists Components */}
+  </div>
+</BrowserRouter>
+);
 
 }
 
