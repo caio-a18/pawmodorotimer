@@ -239,6 +239,10 @@ function App() {
                   <DialogTitle sx={{ color: 'blue' }}>Challenges Information</DialogTitle>
                   <DialogContent sx={{ color: 'purple' }}>
                     <p>This is where you will see past challenges and be able to start challenges.</p>
+                    <div>
+                      <p>Select a date to view your challenge history.</p>
+                      <input type="date" id="dateSelected"></input>
+                    </div>
                   </DialogContent>
                   <DialogActions>
                     <Button sx={{ color: 'blue' }} onClick={handleCloseChallenges}>OK</Button>
