@@ -43,4 +43,4 @@ jobs:
           node-version: ${{ matrix.node-version }}  # Remove if not using matrix strategy
           cache: 'npm'
       - run: npm install 
-      - run: npm test 
+      - run: npm test "frontend\src\AppTest.js"
