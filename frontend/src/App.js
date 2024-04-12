@@ -217,14 +217,11 @@ function App() {
                 <Button onClick={handleChallenges}>Challenges</Button>
               </Box>
               </div>
-            <div style = {{marginLeft: 'auto', marginRight: '1in'}} auto className = "profile-container">
+            <div style = {{marginLeft: 'auto', marginRight: '0.1in'}} auto className = "profile-container">
               <Box>
                 <Button onClick={handleOpenDialog}>Profile</Button>
               </Box>
               </div>
-            <Box className="level-box">
-              Level: {levelTracker + 1}
-            </Box>
             <div className="title-container">
           <h1>Tomato Paws Timer</h1>
             </div>
@@ -266,15 +263,15 @@ function App() {
           {/* START OF PROFILE TAB/DIALOG */}
           <Dialog open={userDialog} onClose={handleCloseDialog}>
             <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
-  <DialogContent sx={{ color: 'purple' }}>
-    <p>User: {username}</p>
-    <p>Level: {userLevel}</p>
-    <p>Total Study Hours: {Math.floor(totalStudyTime / 3600000)} hours</p>
-  </DialogContent>
-  <DialogActions>
-    <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button>
-  </DialogActions>
-</Dialog>
+            <DialogContent sx={{ color: 'purple' }}>
+            <p>User: {username}</p>
+            <p>Level: {userLevel}</p>
+            <p>Total Study Hours: {Math.floor(totalStudyTime / 3600000)} hours</p>
+            </DialogContent>
+            <DialogActions>
+              <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button>
+            </DialogActions>
+          </Dialog>
         {/* END OF PROFILE TAB/DIALOG */}
 
         <div className = 'break-list'>
