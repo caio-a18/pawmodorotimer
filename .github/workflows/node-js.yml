@@ -15,8 +15,9 @@ jobs:
           cache: 'npm'
       - run: npm install 
       - run: npm ci
+      - run: npm start 
       - run: dir "frontend\public\index.html"
-      - run: if exist dir "frontend\public\index.html" (npm run build)
+      - run: npm run build
 
   # Job for running the backend server
   run-backend:
