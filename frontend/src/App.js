@@ -53,13 +53,34 @@ function App() {
   const [newStudyItem, setNewStudyItem] = useState('');
   const [newBreakItem, setNewBreakItem] = useState('');
 
-  // Update addItem to handleStudyItem
-  const handleAddStudyItem = () => {
-    if (newStudyItem.trim() !== '') {
-      setStudyItems([...studyItems, newStudyItem]);
-      setNewStudyItem(''); // Reset input
-    }
-  };
+  // At the beginning of your component, add the suggestedStudyItems state
+const [suggestedStudyItems, setSuggestedStudyItems] = useState([
+  "Review notes",
+  "Study for exam",
+  "Do homework",
+  "Respond to emails",
+  "Read assigned chapters"
+]);
+
+const handleAddStudyItem = (itemToAdd) => {
+  // Ensure itemToAdd is a string; if not provided, default to newStudyItem
+  const newItem = (typeof itemToAdd === 'string' ? itemToAdd : newStudyItem).trim();
+  
+  if (newItem) {
+    setStudyItems([...studyItems, newItem]);
+    setNewStudyItem(''); // Reset input field
+  }
+};
+
+const handleAddSuggestedItem = (index) => {
+  const itemToAdd = suggestedStudyItems[index];
+  if (typeof itemToAdd === 'string') {
+    handleAddStudyItem(itemToAdd); // Pass the string value to handleAddStudyItem
+    // Filter out the added item from the suggested list
+    const updatedSuggestedItems = suggestedStudyItems.filter((_, i) => i !== index);
+    setSuggestedStudyItems(updatedSuggestedItems);
+  }
+};
 
   // Update removeItem to handleRemoveStudyItem
   const handleRemoveStudyItem = (index) => {
@@ -304,7 +325,7 @@ function App() {
               </Box>
             </div>
 
-            <div style = {{marginLeft: 'auto', marginRight: '1in'}} auto className = "profile-container">
+            <div style = {{marginLeft: 'auto', marginRight: '0.1in'}} auto className = "profile-container">
               <Box>
                 <Button onClick={handleOpenDialog}>Profile</Button>
               </Box>
@@ -312,13 +333,19 @@ function App() {
             <div className="title-container">
           <h1>Tomato Paws Timer</h1>
             </div>
-
-
-            <div className="control-buttons">
-          <Button variant="contained" onClick={handlePause}>{isPaused ? "Resume" : "Pause"}</Button>
+            
+          {/* Buttons */}
+          <div className="control-buttons">
+          <Button 
+            variant="contained" 
+            onClick={handlePause} 
+            sx={{ backgroundColor: '#3399FF', '&:hover': { backgroundColor: '#2a7fcb' } }}
+          >
+          {isPaused ? "Resume" : "Pause"}
+          </Button>
           <Button variant="contained" color="secondary" onClick={resetHandler}>Reset</Button>
-            </div>
         </div>
+      </div>
           
           <div className="time-info">
             <div>Selected Time: {timeGUI(selectedTime)}</div>
@@ -351,7 +378,7 @@ function App() {
           <Dialog open={userDialog} onClose={handleCloseDialog}>
             <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
             <DialogContent sx={{ color: 'purple' }}>
-            <p>User: {username}</p>
+            <p>Username: {username}</p>
             <p>Level: {userLevel}</p>
             <p>Total Study Hours: {Math.floor(totalStudyTime / 3600000)} hours</p>
             </DialogContent>
@@ -363,46 +390,74 @@ function App() {
 
         {/* Start of Lists Components */}
         <div className="lists-container" style={{ display: 'flex', justifyContent: 'space-around' }}>
-          <div className='study-list' style={{ width: '50%' }}>
-          <h2>Study Tasks</h2>
-          {/* Input field for adding new study items */}
-          <input
-            type="text"
-            value={newStudyItem}
-            onChange={(e) => setNewStudyItem(e.target.value)}
-          />
-          {/* Button to add new study item */}
-          <button onClick={handleAddStudyItem}>Add Item</button>
+          <div className='study-list' style={{ width: '27.5%' }}>
+            <h2>Study Tasks</h2>
+            {/* Input field for adding new study items */}
+            <input
+             type="text"
+              value={newStudyItem}
+              onChange={(e) => setNewStudyItem(e.target.value)}
+            />
+            {/* Button to add new study item */}
+            <button onClick={handleAddStudyItem}>Add Item</button>
 
           {/* Display the list of study items */}
           <ul>
             {studyItems.map((item, index) => (
-                <li key={index}>
-                    {item}
-                    {/* Button to remove study item */}
-                    <button onClick={() => handleRemoveStudyItem(index)}>Remove</button>
-                </li>
+              <li key={index} style={{ width: '98%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ textAlign: 'left' }}>{item}</span>
+                <button 
+                  onClick={() => handleRemoveStudyItem(index)}
+                  style={{ backgroundColor: 'red', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: '5px 10px' }}
+                >
+                Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+          </div>
+
+          {/* BREAK TASKS */}
+          <div className='break-list' style={{ width: '27.5%' }}>
+            <h2>Break Tasks</h2>
+            {/* Input field for adding new break items */}
+            <input
+              type="text"
+              value={newBreakItem}
+              onChange={(e) => setNewBreakItem(e.target.value)}
+            />
+          {/* Button to add new break item */}
+          <button onClick={handleAddBreakItem}>Add Item</button>
+          {/* Display the list of break items */}
+          <ul>
+            {breakItems.map((item, index) => (
+              <li key={index} style={{ width: '98%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ textAlign: 'left' }}>{item}</span>
+                <button 
+                  onClick={() => handleRemoveBreakItem(index)}
+                  style={{ backgroundColor: 'red', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: '5px 10px' }}
+                >
+                Remove
+                </button>
+              </li>
             ))}
           </ul>
       </div>
-      <div className='break-list' style={{ width: '50%' }}>
-        <h2>Break Tasks</h2>
-        {/* Input field for adding new break items */}
-        <input
-            type="text"
-            value={newBreakItem}
-            onChange={(e) => setNewBreakItem(e.target.value)}
-        />
-        {/* Button to add new break item */}
-        <button onClick={handleAddBreakItem}>Add Item</button>
-        {/* Display the list of break items */}
-        <ul>
-          {breakItems.map((item, index) => (
-              <li key={index}>
-                  {item}
-                  {/* Button to remove break item */}
-                  <button onClick={() => handleRemoveBreakItem(index)}>Remove</button>
-              </li>
+
+      {/* BREAK TASKS */}
+      <div className='suggested-study-list' style={{ width: '27.5%' }}>
+        <h2>Suggested Study Tasks</h2>
+        <ul style={{ paddingLeft: 0 }}>
+          {suggestedStudyItems.map((item, index) => (
+            <li key={index} style={{ width: '98%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', listStyleType: 'none' }}>
+              <span style={{ textAlign: 'left' }}>{item}</span>
+              <button 
+                onClick={() => handleAddSuggestedItem(index)}
+                style={{ backgroundColor: '#3399FF', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: '5px 10px' }}
+              >
+              Add Item
+              </button>
+            </li>
           ))}
         </ul>
       </div>
