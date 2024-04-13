@@ -37,7 +37,11 @@ function App() {
     const [newItem, setNewItem] = useState('');
 
     const sound = new Audio(soundFile);
+
+    // Challenges info
     const [showChallenges, setShowChallenges] = useState(false);
+
+
     // Additional state for user info and study management
   const [username, setUsername] = useState("");
   const [userLevel, setUserLevel] = useState(1);  // Default to level 1
@@ -214,16 +218,29 @@ function App() {
       }
     };
 
-
     const handleLogout = () => {
       setToken(0); 
       return <Login/>
     }; 
 
+
+    // Open or close the dialog box displaying challenges
+    /*
     const handleChallenges = () => {
       setShowChallenges(true);
     };
+    */
+
+    const handleOpenChallenges = () => {
+      setShowChallenges(true); // Open the dialog
+    }; 
+
+    const handleCloseChallenges = () => {
+      setShowChallenges(false); // Close the dialog
+    };
     
+
+
     // UseEffect for HandleTimer
     useEffect(() => {
       handleTimerIsDone(1);
@@ -248,12 +265,44 @@ function App() {
               <Button onClick={handleLogout}>Logout</Button>
             </Box>
             </div>
+
             <div style = {{marginRight: 'auto'}} auto className = "challenge-container">
               <Box>
-                <Button onClick={handleChallenges}>Challenges</Button>
+                <Button onClick={handleOpenChallenges}>Challenges</Button>
+
+                {/* START OF CHALLENGES TAB/DIALOG */}
+                <Dialog open={showChallenges} onClose={handleCloseChallenges}>
+                  <DialogTitle sx={{ color: 'blue' }}>Challenges Information</DialogTitle>
+                  <DialogContent sx={{ color: 'purple' }}>
+                    <p>This is where you will see past challenges and be able to start challenges.</p>
+                    <div>
+                      {/* <p>Select a date to view your challenge history.</p>
+                          <input type="date" id="dateSelected"></input> */}
+                      <table className="challengesTable">
+                          <tr>
+                            <th className="tableCell">Date Received</th>
+                            <th className="tableCell">Challenge</th>
+                            <th className="tableCell">Sender</th>
+                            <th className="tableCell">Recipient</th>
+                          </tr>
+                          <tr>
+                            <td className="tableCell">01/01/24</td>
+                            <td className="tableCell">Study the most hours this week</td>
+                            <td className="tableCell">Person A</td>
+                            <td className="tableCell">Person B</td>
+                          </tr>
+                      </table>
+                    </div>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button sx={{ color: 'blue' }} onClick={handleCloseChallenges}>OK</Button>
+                  </DialogActions>
+                </Dialog>
+                {/* END OF CHALLENGES TAB/DIALOG */}
               </Box>
-              </div>
-            <div style = {{marginLeft: 'auto', marginRight: '0.1in'}} auto className = "profile-container">
+            </div>
+
+            <div style = {{marginLeft: 'auto', marginRight: '1in'}} auto className = "profile-container">
               <Box>
                 <Button onClick={handleOpenDialog}>Profile</Button>
               </Box>
