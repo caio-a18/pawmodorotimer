@@ -284,12 +284,14 @@ function App() {
                             <th className="tableCell">Challenge</th>
                             <th className="tableCell">Sender</th>
                             <th className="tableCell">Recipient</th>
+                            <th className="tableCell">Status</th>
                           </tr>
                           <tr>
                             <td className="tableCell">01/01/24</td>
                             <td className="tableCell">Study the most hours this week</td>
                             <td className="tableCell">Person A</td>
                             <td className="tableCell">Person B</td>
+                            <td className="tableCell">Person A Won!</td>
                           </tr>
                       </table>
                     </div>
