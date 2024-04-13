@@ -240,8 +240,22 @@ function App() {
                   <DialogContent sx={{ color: 'purple' }}>
                     <p>This is where you will see past challenges and be able to start challenges.</p>
                     <div>
-                      <p>Select a date to view your challenge history.</p>
-                      <input type="date" id="dateSelected"></input>
+                      {/* <p>Select a date to view your challenge history.</p>
+                          <input type="date" id="dateSelected"></input> */}
+                      <table className="challengesTable">
+                          <tr>
+                            <th className="tableCell">Date Received</th>
+                            <th className="tableCell">Challenge</th>
+                            <th className="tableCell">Sender</th>
+                            <th className="tableCell">Recipient</th>
+                          </tr>
+                          <tr>
+                            <td className="tableCell">01/01/24</td>
+                            <td className="tableCell">Study the most hours this week</td>
+                            <td className="tableCell">Person A</td>
+                            <td className="tableCell">Person B</td>
+                          </tr>
+                      </table>
                     </div>
                   </DialogContent>
                   <DialogActions>
