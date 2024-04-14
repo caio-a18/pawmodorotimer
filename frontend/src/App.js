@@ -35,7 +35,7 @@ function App() {
     // Additional state for user info and study management
   const [username, setUsername] = useState("");
   const [userLevel, setUserLevel] = useState(1);  // Default to level 1
-  const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in milliseconds
+  const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in minutes
 
   // variables for study and break tasks
   const [studyItems, setStudyItems] = useState([]);
@@ -55,6 +55,17 @@ const [suggestedStudyItems, setSuggestedStudyItems] = useState([
 const updateUserLevel = (time) => {
   if (time == 0)
     setUserLevel(userLevel + 1); 
+}; 
+
+const updateStudyTime = (time, duration) => {
+  if (time == 0 && duration == 1)
+    setTotalStudyTime(totalStudyTime + duration); 
+  if (time == 0 && duration == 5)
+    setTotalStudyTime(totalStudyTime + duration); 
+  if (time == 0 && duration == 20)
+    setTotalStudyTime(totalStudyTime + duration);
+  if (time == 0 && duration == 60)
+    setTotalStudyTime(totalStudyTime + duration); 
 }; 
 
 const handleAddStudyItem = (itemToAdd) => {
@@ -97,16 +108,6 @@ const handleAddSuggestedItem = (index) => {
     const updatedBreakItems = [...breakItems];
     updatedBreakItems.splice(index, 1);
     setBreakItems(updatedBreakItems);
-  };
-
-  // Function to update study time and calculate level
-  const updateStudyTime = (sessionTime) => {
-    setTotalStudyTime(prevTime => {
-      const newTotalTime = prevTime + sessionTime;
-      const newLevel = Math.floor(newTotalTime / (60 * 60 * 1000)); // 1 hour = 60*60*1000 milliseconds
-      setUserLevel(newLevel + 1);  // Levels start at 1
-      return newTotalTime;
-    });
   };
 
   // Example of setting the username on successful login
@@ -171,6 +172,7 @@ const handleAddSuggestedItem = (index) => {
       if (time === 0 && selectedTime === duration * 60 * 1000) {
         sound.play(); 
         updateUserLevel(time); 
+        updateStudyTime(time,duration); 
       }
     };
 
@@ -305,7 +307,7 @@ const handleAddSuggestedItem = (index) => {
             <DialogContent sx={{ color: 'purple' }}>
             <p>Username: {username}</p>
             <p>Level: {userLevel}</p>
-            <p>Total Study Hours: {Math.floor(totalStudyTime / 3600000)} hours</p>
+            <p>Total Study Minutes: {totalStudyTime} minutes</p>
             </DialogContent>
             <DialogActions>
               <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button>
