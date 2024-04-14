@@ -37,34 +37,43 @@ function App() {
     const [userLevel, setUserLevel] = useState(parseInt(localStorage.getItem('userLevel'), 10) || 1);
     const [totalStudyTime, setTotalStudyTime] = useState(parseInt(localStorage.getItem('totalStudyTime'), 10) || 0);
     // variables for study and break tasks
-    const [studyItems, setStudyItems] = useState([]);
-    const [breakItems, setBreakItems] = useState([]);
+    const [studyItems, setStudyItems] = useState(JSON.parse(localStorage.getItem('studyItems')) || []);
+    const [breakItems, setBreakItems] =  useState(JSON.parse(localStorage.getItem('breakItems')) || []);
     const [newStudyItem, setNewStudyItem] = useState('');
     const [newBreakItem, setNewBreakItem] = useState('');
 
     // At the beginning of your component, add the suggestedStudyItems state
     const [suggestedStudyItems, setSuggestedStudyItems] = useState([
-    "Review notes",
-    "Study for exam",
-    "Do homework",
+    "Drink water",
+    "Do yoga",
+    "Work out",
     "Respond to emails",
-    "Read assigned chapters"
+    "Mew"
   ]);
-    const [approvedUsers, setApprovedUsers] = useState([
-      "noah", "asya", "maisoon", "hart", "caio", "profsegovia"
-    ]); 
 
      // Function to update user data in localStorage
     const updateUserLocalStorage = () => {
     localStorage.setItem('username', username);
     localStorage.setItem('userLevel', userLevel);
     localStorage.setItem('totalStudyTime', totalStudyTime);
+    localStorage.setItem('suggestedStudyItems', suggestedStudyItems); 
+    localStorage.setItem('studyItems', JSON.stringify(studyItems)); 
+    localStorage.setItem('breakItems', JSON.stringify(breakItems)); 
+    localStorage.setItem('newStudyItem', newStudyItem); 
+    localStorage.setItem('newBreakItem', newBreakItem); 
   };
 
   // useEffect to update localStorage when user data changes
     useEffect(() => {
     updateUserLocalStorage();
-  }, [username, userLevel, totalStudyTime]);
+  }, [username, 
+      userLevel, 
+      totalStudyTime, 
+      suggestedStudyItems, 
+      studyItems, 
+      breakItems,
+      newStudyItem,
+      newBreakItem]);
 
 const updateUserLevel = (time) => {
   if (time == 0)

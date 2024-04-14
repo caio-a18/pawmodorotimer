@@ -13,7 +13,7 @@ export default function Login({ setToken, handleLoginSuccess, setUsername }) {
     const [username, setUsernameValue] = useState("");
     const [password, setPassword] = useState("");
     const [errorDialog, setErrorDialog] = useState(false); 
-    const approvedUsers = ["noah", "asya", "maisoon", "hart", "caio", "profsegovia"]; 
+    const approvedUsers = ["Noah", "Asya", "Maisoon", "Hart", "Caio", "Profsegovia"]; 
     const approvedPWDs = ["noahisawesome", 
                             "asyaisawesome", 
                             "maisoonisawesome", 
