@@ -22,6 +22,8 @@ function App() {
     const [numClicks, setNumClicks] = useState(1);
     const [levelTracker, setLevelTracker] = useState(1);
     const [customTime, setCustomTime] = useState(0); 
+    //const [catSize, setCatSize] = useState('small'); 
+
 
     const sound = new Audio(soundFile);
 
@@ -86,6 +88,7 @@ function App() {
       const seconds = Math.floor((ms % 60000) / 1000); 
       return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; 
     }; 
+    
 
     // Handler to check when time is over
     const handleTimerIsDone = (duration) => {
