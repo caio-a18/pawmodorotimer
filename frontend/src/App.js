@@ -8,9 +8,6 @@ import Login from './components/Login/Login';
 import Preferences from './components/Preferences';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'; 
 import useToken from './../src/components/UseToken';
-import Stack from '@mui/material/Stack';
-import Chip from '@mui/material/Chip';
-import TextField from '@mui/material/TextField';
 import soundFile from './components/Domestic-cat-purring-and-meowing-sound-effect.mp3';
 
 import Challenges from './components/Login/Challenges'; 
@@ -29,8 +26,6 @@ function App() {
     const [isPaused, setIsPaused] = useState(true);
     const [time, setTime] = useState(0);
     const [numClicks, setNumClicks] = useState(1);
-    const [levelTracker, setLevelTracker] = useState(1);
-    const [customTime, setCustomTime] = useState(0); 
 
     const [userDialog, setUserDialog] = useState("false"); 
     const [items, setItems] = useState([]);
@@ -120,11 +115,6 @@ const handleAddSuggestedItem = (index) => {
   setToken(token);        // Set the authentication token
   };
 
-
-    const handleChange = e => {
-      setCustomTime(e.target.value);
-    };
-
     const handleOpenDialog = () => {
       setUserDialog(true); // Open the dialog
     }; 
@@ -132,36 +122,7 @@ const handleAddSuggestedItem = (index) => {
     const handleCloseDialog = () => {
       setUserDialog(false); // Close the dialog
     };
-    //add item to to do list 
-    const addItem = () => {
-      if (newItem.trim() !== '') {
-        setItems([...items, newItem]);
-        setNewItem(''); 
-      }
-    };
-    
-    //add item to to do list 
-    const removeItem = (index) => {
-      const updatedItems = [...items];
-      updatedItems.splice(index, 1);
-      setItems(updatedItems);
-    };
-
-    //add item to to do list 
-    const addBreakItem = () => {
-      if (newItem.trim() !== '') {
-        setItems([...items, newItem]);
-        setNewItem(''); 
-      }
-    };
-    
-    //add item to to do list 
-    const removeBreakItem = (index) => {
-      const updatedItems = [...items];
-      updatedItems.splice(index, 1);
-      setItems(updatedItems);
-    };
-  
+ 
     useEffect(() => {
       let interval = null; 
 
@@ -177,29 +138,14 @@ const handleAddSuggestedItem = (index) => {
       }; 
     }, [isCounting, isPaused, time]);
 
-    const handleStart = () => {
-      if (isPaused || !isCounting) {
-        setIsPaused(false);
-        setIsCounting(true);
-      }
-    };
-    
     const handlePause = () => {
       setIsPaused(!isPaused);
     };
-    
     
     const resetHandler = () => {
       setIsCounting(false);
       setIsPaused(true);
       setTime(selectedTime);
-    };
-
-    //handles the gui portion that counts up 20 mins 
-    const clickHandler = () => {
-      if (numClicks < 4) {
-        setNumClicks(numClicks + 1); 
-      }
     };
 
     const howMuchTime = (minutes) => {
@@ -224,6 +170,7 @@ const handleAddSuggestedItem = (index) => {
     const handleTimerIsDone = async (duration) => {
       if (time === 0 && selectedTime === duration * 60 * 1000) {
         sound.play(); 
+        /*
         try {
           const userId = 'theUserId'; 
           const newLevel = await updateUserLevel(userId, duration);
@@ -235,7 +182,7 @@ const handleAddSuggestedItem = (index) => {
         setLevelTracker(prevLevel => prevLevel + 1);
         
         //alert("Congratulations. You are now level " + (levelTracker + 1) + "!");
-        
+        */
       }
     };
 
@@ -244,14 +191,6 @@ const handleAddSuggestedItem = (index) => {
       return <Login/>
     }; 
 
-
-    // Open or close the dialog box displaying challenges
-    /*
-    const handleChallenges = () => {
-      setShowChallenges(true);
-    };
-    */
-
     const handleOpenChallenges = () => {
       setShowChallenges(true); // Open the dialog
     }; 
@@ -259,8 +198,6 @@ const handleAddSuggestedItem = (index) => {
     const handleCloseChallenges = () => {
       setShowChallenges(false); // Close the dialog
     };
-    
-
 
     // UseEffect for HandleTimer
     useEffect(() => {
