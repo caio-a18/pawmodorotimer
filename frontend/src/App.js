@@ -27,30 +27,44 @@ function App() {
     const [time, setTime] = useState(0);
     const [userDialog, setUserDialog] = useState("false"); 
     const sound = new Audio(soundFile);
-
     // Challenges info
     const [showChallenges, setShowChallenges] = useState(false);
-
-
     // Additional state for user info and study management
-  const [username, setUsername] = useState("");
-  const [userLevel, setUserLevel] = useState(1);  // Default to level 1
-  const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in minutes
+    //const [username, setUsername] = useState("");
+    //const [userLevel, setUserLevel] = useState(1);  // Default to level 1
+    //const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in minutes
+    const [username, setUsername] = useState(localStorage.getItem('username') || '');
+    const [userLevel, setUserLevel] = useState(parseInt(localStorage.getItem('userLevel'), 10) || 1);
+    const [totalStudyTime, setTotalStudyTime] = useState(parseInt(localStorage.getItem('totalStudyTime'), 10) || 0);
+    // variables for study and break tasks
+    const [studyItems, setStudyItems] = useState([]);
+    const [breakItems, setBreakItems] = useState([]);
+    const [newStudyItem, setNewStudyItem] = useState('');
+    const [newBreakItem, setNewBreakItem] = useState('');
 
-  // variables for study and break tasks
-  const [studyItems, setStudyItems] = useState([]);
-  const [breakItems, setBreakItems] = useState([]);
-  const [newStudyItem, setNewStudyItem] = useState('');
-  const [newBreakItem, setNewBreakItem] = useState('');
+    // At the beginning of your component, add the suggestedStudyItems state
+    const [suggestedStudyItems, setSuggestedStudyItems] = useState([
+    "Review notes",
+    "Study for exam",
+    "Do homework",
+    "Respond to emails",
+    "Read assigned chapters"
+  ]);
+    const [approvedUsers, setApprovedUsers] = useState([
+      "noah", "asya", "maisoon", "hart", "caio", "profsegovia"
+    ]); 
 
-  // At the beginning of your component, add the suggestedStudyItems state
-const [suggestedStudyItems, setSuggestedStudyItems] = useState([
-  "Review notes",
-  "Study for exam",
-  "Do homework",
-  "Respond to emails",
-  "Read assigned chapters"
-]);
+     // Function to update user data in localStorage
+    const updateUserLocalStorage = () => {
+    localStorage.setItem('username', username);
+    localStorage.setItem('userLevel', userLevel);
+    localStorage.setItem('totalStudyTime', totalStudyTime);
+  };
+
+  // useEffect to update localStorage when user data changes
+    useEffect(() => {
+    updateUserLocalStorage();
+  }, [username, userLevel, totalStudyTime]);
 
 const updateUserLevel = (time) => {
   if (time == 0)
