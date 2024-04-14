@@ -25,12 +25,7 @@ function App() {
     const [selectedTime, setSelectedTime] = useState(0)
     const [isPaused, setIsPaused] = useState(true);
     const [time, setTime] = useState(0);
-    const [numClicks, setNumClicks] = useState(1);
-
     const [userDialog, setUserDialog] = useState("false"); 
-    const [items, setItems] = useState([]);
-    const [newItem, setNewItem] = useState('');
-
     const sound = new Audio(soundFile);
 
     // Challenges info
@@ -56,6 +51,11 @@ const [suggestedStudyItems, setSuggestedStudyItems] = useState([
   "Respond to emails",
   "Read assigned chapters"
 ]);
+
+const updateUserLevel = (time) => {
+  if (time == 0)
+    setUserLevel(userLevel + 1); 
+}; 
 
 const handleAddStudyItem = (itemToAdd) => {
   // Ensure itemToAdd is a string; if not provided, default to newStudyItem
@@ -170,19 +170,7 @@ const handleAddSuggestedItem = (index) => {
     const handleTimerIsDone = async (duration) => {
       if (time === 0 && selectedTime === duration * 60 * 1000) {
         sound.play(); 
-        /*
-        try {
-          const userId = 'theUserId'; 
-          const newLevel = await updateUserLevel(userId, duration);
-          setLevelTracker(newLevel); // Update levelTracker with the new level
-          alert(`Congratulations. You are now level ${newLevel}!`);
-        } catch (error) {
-          alert('There was a problem updating your level. Please try again.');
-        }
-        setLevelTracker(prevLevel => prevLevel + 1);
-        
-        //alert("Congratulations. You are now level " + (levelTracker + 1) + "!");
-        */
+        updateUserLevel(time); 
       }
     };
 
