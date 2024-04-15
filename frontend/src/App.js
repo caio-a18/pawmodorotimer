@@ -17,7 +17,11 @@ import Challenges from './components/Login/Challenges';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions'; 
+import DialogActions from '@mui/material/DialogActions';
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 
 //API imports
 import { updateUserLevel } from './components/api'; 
@@ -293,28 +297,33 @@ const handleAddSuggestedItem = (index) => {
 
                 {/* START OF CHALLENGES TAB/DIALOG */}
                 <Dialog open={showChallenges} onClose={handleCloseChallenges}>
-                  <DialogTitle sx={{ color: 'blue' }}>Challenges Information</DialogTitle>
+                  <DialogTitle sx={{ color: 'blue' }}>Challenges For {username}: </DialogTitle>
                   <DialogContent sx={{ color: 'purple' }}>
                     <p>This is where you will see past challenges and be able to start challenges.</p>
                     <div>
                       {/* <p>Select a date to view your challenge history.</p>
                           <input type="date" id="dateSelected"></input> */}
-                      <table className="challengesTable">
-                          <tr>
-                            <th className="tableCell">Date Received</th>
-                            <th className="tableCell">Challenge</th>
-                            <th className="tableCell">Sender</th>
-                            <th className="tableCell">Recipient</th>
-                            <th className="tableCell">Status</th>
-                          </tr>
-                          <tr>
-                            <td className="tableCell">01/01/24</td>
-                            <td className="tableCell">Study the most hours this week</td>
-                            <td className="tableCell">Person A</td>
-                            <td className="tableCell">Person B</td>
-                            <td className="tableCell">Person A Won!</td>
-                          </tr>
-                      </table>
+                          <Accordion>
+        <AccordionSummary
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          Start a Challenge 
+        </AccordionSummary>
+        <AccordionDetails>
+        <div class = "challenge-textfield">
+        <TextField
+        id = "challenge-search"
+        type="search"
+        label = "Choose a Player to Challenge"/>
+        </div>
+        <div class = "challenge-submit">
+        <Button type = "submit">Submit</Button>
+        </div>
+        </AccordionDetails>
+      </Accordion>
+                     
+                      <Button>See Past Challenges</Button>
                     </div>
                   </DialogContent>
                   <DialogActions>
