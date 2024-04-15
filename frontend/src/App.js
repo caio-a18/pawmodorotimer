@@ -13,6 +13,19 @@ import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import soundFile from './components/Domestic-cat-purring-and-meowing-sound-effect.mp3';
 
+import Challenges from './components/Login/Challenges'; 
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+
+//API imports
+import { updateUserLevel } from './components/api'; 
+
 function App() {
     const { token, setToken } = useToken();
     const [isCounting, setIsCounting] = useState(false); 
@@ -25,12 +38,136 @@ function App() {
     //const [catSize, setCatSize] = useState('small'); 
 
 
+    const [userDialog, setUserDialog] = useState("false"); 
+    const [items, setItems] = useState([]);
+    const [newItem, setNewItem] = useState('');
+
     const sound = new Audio(soundFile);
+
+    // Challenges info
+    const [showChallenges, setShowChallenges] = useState(false);
+
+
+    // Additional state for user info and study management
+  const [username, setUsername] = useState("");
+  const [userLevel, setUserLevel] = useState(1);  // Default to level 1
+  const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in milliseconds
+
+  // variables for study and break tasks
+  const [studyItems, setStudyItems] = useState([]);
+  const [breakItems, setBreakItems] = useState([]);
+  const [newStudyItem, setNewStudyItem] = useState('');
+  const [newBreakItem, setNewBreakItem] = useState('');
+
+  // At the beginning of your component, add the suggestedStudyItems state
+const [suggestedStudyItems, setSuggestedStudyItems] = useState([
+  "Review notes",
+  "Study for exam",
+  "Do homework",
+  "Respond to emails",
+  "Read assigned chapters"
+]);
+
+const handleAddStudyItem = (itemToAdd) => {
+  // Ensure itemToAdd is a string; if not provided, default to newStudyItem
+  const newItem = (typeof itemToAdd === 'string' ? itemToAdd : newStudyItem).trim();
+  
+  if (newItem) {
+    setStudyItems([...studyItems, newItem]);
+    setNewStudyItem(''); // Reset input field
+  }
+};
+
+const handleAddSuggestedItem = (index) => {
+  const itemToAdd = suggestedStudyItems[index];
+  if (typeof itemToAdd === 'string') {
+    handleAddStudyItem(itemToAdd); // Pass the string value to handleAddStudyItem
+    // Filter out the added item from the suggested list
+    const updatedSuggestedItems = suggestedStudyItems.filter((_, i) => i !== index);
+    setSuggestedStudyItems(updatedSuggestedItems);
+  }
+};
+
+  // Update removeItem to handleRemoveStudyItem
+  const handleRemoveStudyItem = (index) => {
+    const updatedStudyItems = [...studyItems];
+    updatedStudyItems.splice(index, 1);
+    setStudyItems(updatedStudyItems);
+  };
+
+  // function for adding break items
+  const handleAddBreakItem = () => {
+    if (newBreakItem.trim() !== '') {
+      setBreakItems([...breakItems, newBreakItem]);
+      setNewBreakItem(''); // Reset input
+    }
+  };
+
+  // function for removing break items
+  const handleRemoveBreakItem = (index) => {
+    const updatedBreakItems = [...breakItems];
+    updatedBreakItems.splice(index, 1);
+    setBreakItems(updatedBreakItems);
+  };
+
+  // Function to update study time and calculate level
+  const updateStudyTime = (sessionTime) => {
+    setTotalStudyTime(prevTime => {
+      const newTotalTime = prevTime + sessionTime;
+      const newLevel = Math.floor(newTotalTime / (60 * 60 * 1000)); // 1 hour = 60*60*1000 milliseconds
+      setUserLevel(newLevel + 1);  // Levels start at 1
+      return newTotalTime;
+    });
+  };
+
+  // Example of setting the username on successful login
+  const handleLoginSuccess = (username, token) => {
+  setUsername(username);  // Store the username
+  setToken(token);        // Set the authentication token
+  };
+
 
     const handleChange = e => {
       setCustomTime(e.target.value);
     };
 
+    const handleOpenDialog = () => {
+      setUserDialog(true); // Open the dialog
+    }; 
+
+    const handleCloseDialog = () => {
+      setUserDialog(false); // Close the dialog
+    };
+    //add item to to do list 
+    const addItem = () => {
+      if (newItem.trim() !== '') {
+        setItems([...items, newItem]);
+        setNewItem(''); 
+      }
+    };
+    
+    //add item to to do list 
+    const removeItem = (index) => {
+      const updatedItems = [...items];
+      updatedItems.splice(index, 1);
+      setItems(updatedItems);
+    };
+
+    //add item to to do list 
+    const addBreakItem = () => {
+      if (newItem.trim() !== '') {
+        setItems([...items, newItem]);
+        setNewItem(''); 
+      }
+    };
+    
+    //add item to to do list 
+    const removeBreakItem = (index) => {
+      const updatedItems = [...items];
+      updatedItems.splice(index, 1);
+      setItems(updatedItems);
+    };
+  
     useEffect(() => {
       let interval = null; 
 
@@ -91,11 +228,17 @@ function App() {
     
 
     // Handler to check when time is over
-    const handleTimerIsDone = (duration) => {
+    const handleTimerIsDone = async (duration) => {
       if (time === 0 && selectedTime === duration * 60 * 1000) {
         sound.play(); 
-        // Timer is over for the specified duration
-        // Increases levelTracker
+        try {
+          const userId = 'theUserId'; 
+          const newLevel = await updateUserLevel(userId, duration);
+          setLevelTracker(newLevel); // Update levelTracker with the new level
+          alert(`Congratulations. You are now level ${newLevel}!`);
+        } catch (error) {
+          alert('There was a problem updating your level. Please try again.');
+        }
         setLevelTracker(prevLevel => prevLevel + 1);
         
         //alert("Congratulations. You are now level " + (levelTracker + 1) + "!");
@@ -103,8 +246,29 @@ function App() {
       }
     };
 
-    //useEffect for cat noise 
+    const handleLogout = () => {
+      setToken(0); 
+      return <Login/>
+    }; 
+
+
+    // Open or close the dialog box displaying challenges
+    /*
+    const handleChallenges = () => {
+      setShowChallenges(true);
+    };
+    */
+
+    const handleOpenChallenges = () => {
+      setShowChallenges(true); // Open the dialog
+    }; 
+
+    const handleCloseChallenges = () => {
+      setShowChallenges(false); // Close the dialog
+    };
     
+
+
     // UseEffect for HandleTimer
     useEffect(() => {
       handleTimerIsDone(1);
@@ -114,27 +278,86 @@ function App() {
     }, [time]);
 
     if(!token) {
-      return <Login setToken={setToken} />
-    }
+      // Pass handleLoginSuccess and setUsername as props to Login component
+      return <Login setToken={setToken} handleLoginSuccess={handleLoginSuccess} setUsername={setUsername} />;
+  }
   
     return (
       <BrowserRouter>
+      {showChallenges && <Challenges />}
         <div className="App">
           <div className="top-bar">
             <div></div>
-            <Box className="level-box">
-              Level: {levelTracker + 1}
+            <div style={{ marginRight: 'left' }} auto className = "logout-container">
+            <Box className="logout-button">
+              <Button onClick={handleLogout}>Logout</Button>
             </Box>
+            </div>
+
+            <div style = {{marginRight: 'auto'}} auto className = "challenge-container">
+              <Box>
+                <Button onClick={handleOpenChallenges}>Challenges</Button>
+
+                {/* START OF CHALLENGES TAB/DIALOG */}
+                <Dialog open={showChallenges} onClose={handleCloseChallenges}>
+                  <DialogTitle sx={{ color: 'blue' }}>Challenges For {username}: </DialogTitle>
+                  <DialogContent sx={{ color: 'purple' }}>
+                    <p>This is where you will see past challenges and be able to start challenges.</p>
+                    <div>
+                      {/* <p>Select a date to view your challenge history.</p>
+                          <input type="date" id="dateSelected"></input> */}
+                          <Accordion>
+        <AccordionSummary
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          Start a Challenge 
+        </AccordionSummary>
+        <AccordionDetails>
+        <div class = "challenge-textfield">
+        <TextField
+        id = "challenge-search"
+        type="search"
+        label = "Choose a Player to Challenge"/>
+        </div>
+        <div class = "challenge-submit">
+        <Button type = "submit">Submit</Button>
+        </div>
+        </AccordionDetails>
+      </Accordion>
+                     
+                      <Button>See Past Challenges</Button>
+                    </div>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button sx={{ color: 'blue' }} onClick={handleCloseChallenges}>OK</Button>
+                  </DialogActions>
+                </Dialog>
+                {/* END OF CHALLENGES TAB/DIALOG */}
+              </Box>
+            </div>
+
+            <div style = {{marginLeft: 'auto', marginRight: '0.1in'}} auto className = "profile-container">
+              <Box>
+                <Button onClick={handleOpenDialog}>Profile</Button>
+              </Box>
+              </div>
             <div className="title-container">
           <h1>Tomato Paws Timer</h1>
             </div>
-          
-
-            <div className="control-buttons">
-          <Button variant="contained" onClick={handlePause}>{isPaused ? "Resume" : "Pause"}</Button>
+            
+          {/* Buttons */}
+          <div className="control-buttons">
+          <Button 
+            variant="contained" 
+            onClick={handlePause} 
+            sx={{ backgroundColor: '#3399FF', '&:hover': { backgroundColor: '#2a7fcb' } }}
+          >
+          {isPaused ? "Resume" : "Pause"}
+          </Button>
           <Button variant="contained" color="secondary" onClick={resetHandler}>Reset</Button>
-            </div>
         </div>
+      </div>
           
           <div className="time-info">
             <div>Selected Time: {timeGUI(selectedTime)}</div>
@@ -148,6 +371,9 @@ function App() {
             <Route path="/Preferences">
               <Preferences />
             </Route>
+            <Route path="/Challenges">
+              <Dashboard />
+            </Route>
           </Switch>
     
           <div className="wrapper">
@@ -159,9 +385,99 @@ function App() {
               <Box className="time-option-box"><Button onClick={() => howMuchTime(1)}>1 Minute</Button></Box>
             </div>
           </div>
-        </div>
-      </BrowserRouter>
-    );
+
+          {/* START OF PROFILE TAB/DIALOG */}
+          <Dialog open={userDialog} onClose={handleCloseDialog}>
+            <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
+            <DialogContent sx={{ color: 'purple' }}>
+            <p>Username: {username}</p>
+            <p>Level: {userLevel}</p>
+            <p>Total Study Hours: {Math.floor(totalStudyTime / 3600000)} hours</p>
+            </DialogContent>
+            <DialogActions>
+              <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button>
+            </DialogActions>
+          </Dialog>
+        {/* END OF PROFILE TAB/DIALOG */}
+
+        {/* Start of Lists Components */}
+        <div className="lists-container" style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <div className='study-list' style={{ width: '27.5%' }}>
+            <h2>Study Tasks</h2>
+            {/* Input field for adding new study items */}
+            <input
+             type="text"
+              value={newStudyItem}
+              onChange={(e) => setNewStudyItem(e.target.value)}
+            />
+            {/* Button to add new study item */}
+            <button onClick={handleAddStudyItem}>Add Item</button>
+
+          {/* Display the list of study items */}
+          <ul>
+            {studyItems.map((item, index) => (
+              <li key={index} style={{ width: '98%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ textAlign: 'left' }}>{item}</span>
+                <button 
+                  onClick={() => handleRemoveStudyItem(index)}
+                  style={{ backgroundColor: 'red', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: '5px 10px' }}
+                >
+                Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+          </div>
+
+          {/* BREAK TASKS */}
+          <div className='break-list' style={{ width: '27.5%' }}>
+            <h2>Break Tasks</h2>
+            {/* Input field for adding new break items */}
+            <input
+              type="text"
+              value={newBreakItem}
+              onChange={(e) => setNewBreakItem(e.target.value)}
+            />
+          {/* Button to add new break item */}
+          <button onClick={handleAddBreakItem}>Add Item</button>
+          {/* Display the list of break items */}
+          <ul>
+            {breakItems.map((item, index) => (
+              <li key={index} style={{ width: '98%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ textAlign: 'left' }}>{item}</span>
+                <button 
+                  onClick={() => handleRemoveBreakItem(index)}
+                  style={{ backgroundColor: 'red', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: '5px 10px' }}
+                >
+                Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+      </div>
+
+      {/* BREAK TASKS */}
+      <div className='suggested-study-list' style={{ width: '27.5%' }}>
+        <h2>Suggested Study Tasks</h2>
+        <ul style={{ paddingLeft: 0 }}>
+          {suggestedStudyItems.map((item, index) => (
+            <li key={index} style={{ width: '98%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', listStyleType: 'none' }}>
+              <span style={{ textAlign: 'left' }}>{item}</span>
+              <button 
+                onClick={() => handleAddSuggestedItem(index)}
+                style={{ backgroundColor: '#3399FF', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: '5px 10px' }}
+              >
+              Add Item
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    {/*End of Lists Components */}
+  </div>
+</BrowserRouter>
+);
 
 }
 

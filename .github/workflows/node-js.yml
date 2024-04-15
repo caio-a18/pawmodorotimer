@@ -3,22 +3,44 @@ name: Node Js
 on: [push]
 
 jobs:
-  Node-Js: 
-      runs-on: ubuntu-latest
-
-      strategy:
-        matrix:
-          node-version: [16.x]
-          # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-      steps:
+  # Job for building the frontend
+  build-frontend:
+    runs-on: windows-latest
+    steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node-version }}  # Remove if not using matrix strategy
           cache: 'npm'
+      - run: npm install 
       - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
-      - run: node C:\Users\asyas\hungry-cat\public\server.js
+      - run: npm start 
+      - run: dir "frontend\public\index.html"
+      - run: npm run build
+
+  # Job for running the backend server
+  run-backend:
+    runs-on: windows-latest  # Consider using different runners for different needs
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}  # Remove if not using matrix strategy
+          cache: 'npm'
+      - run: npm install 
+      - run: npm ci
+      - run: node "backend\server.js"
+        timeout-minutes: 10
+
+  run-tests: 
+    runs-on: windows-latest
+    steps: 
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}  # Remove if not using matrix strategy
+          cache: 'npm'
+      - run: npm install 
+      - run: npm test "frontend\src\AppTest.js"
