@@ -39,8 +39,17 @@ function App() {
     //const [userLevel, setUserLevel] = useState(1);  // Default to level 1
     //const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in minutes
     const [username, setUsername] = useState(localStorage.getItem('username') || '');
-    const [userLevel, setUserLevel] = useState(parseInt(localStorage.getItem('userLevel'), 10) || 1);
-    const [totalStudyTime, setTotalStudyTime] = useState(parseInt(localStorage.getItem('totalStudyTime'), 10) || 0);
+
+    //array that we use to match the levels and other user stats up with each individual user 
+    const [usernameArray, setUsernameArray] = useState(["Noah", "Asya", "Maisoon", "Hart", "Caio", "Profsegovia"]); 
+    
+    /*userLevel, totalStudyTime are both arrays of length 6, with each index corresponding to the level of the users in the system. 
+    index 0 corresponds to Noah's level, index 1 corresponds to Asya's level, etc */
+    const [userLevel, setUserLevel] = useState([1, 1, 1, 1, 1, 1]);
+    const [totalStudyTime, setTotalStudyTime] = useState(
+      JSON.parse(localStorage.getItem('totalStudyTime')) || [0, 0, 0, 0, 0, 0]
+    );
+
     // variables for study and break tasks
     const [studyItems, setStudyItems] = useState(JSON.parse(localStorage.getItem('studyItems')) || []);
     const [breakItems, setBreakItems] =  useState(JSON.parse(localStorage.getItem('breakItems')) || []);
@@ -81,8 +90,13 @@ function App() {
       newBreakItem]);
 
 const updateUserLevel = (time) => {
-  if (time == 0)
-    setUserLevel(userLevel + 1); 
+
+  //find which user we are interested in 
+  const userIndex = usernameArray.indexOf(username);
+  if (time == 0 && userIndex !== -1) {
+   userLevel[userIndex]++; // Increment the userLevel at userIndex
+   setUserLevel(userLevel); // Set the updated userLevel array
+  }
 }; 
 
 const updateStudyTime = (time, duration) => {
@@ -339,7 +353,7 @@ const handleAddSuggestedItem = (index) => {
             <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
             <DialogContent sx={{ color: 'purple' }}>
             <p>Username: {username}</p>
-            <p>Level: {userLevel}</p>
+            <p>Level: {userLevel[usernameArray.indexOf(username)]}</p>
             <p>Total Study Minutes: {totalStudyTime} minutes</p>
             </DialogContent>
             <DialogActions>
