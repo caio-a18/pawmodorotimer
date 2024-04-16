@@ -34,21 +34,15 @@ function App() {
     const sound = new Audio(soundFile);
     // Challenges info
     const [showChallenges, setShowChallenges] = useState(false);
-    // Additional state for user info and study management
-    //const [username, setUsername] = useState("");
-    //const [userLevel, setUserLevel] = useState(1);  // Default to level 1
-    //const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in minutes
     const [username, setUsername] = useState(localStorage.getItem('username') || '');
 
     //array that we use to match the levels and other user stats up with each individual user 
     const [usernameArray, setUsernameArray] = useState(["Noah", "Asya", "Maisoon", "Hart", "Caio", "Profsegovia"]); 
     
-    /*userLevel, totalStudyTime are both arrays of length 6, with each index corresponding to the level of the users in the system. 
-    index 0 corresponds to Noah's level, index 1 corresponds to Asya's level, etc */
+    /*userLevel and totalStudyTime are both arrays of length 6, with each index corresponding to the level of the users in the system. 
+    index 0 corresponds to Noah's level, index 1 corresponds to Asya's level, etc. Same with study time. */
     const [userLevel, setUserLevel] = useState([1, 1, 1, 1, 1, 1]);
-    const [totalStudyTime, setTotalStudyTime] = useState(
-      JSON.parse(localStorage.getItem('totalStudyTime')) || [0, 0, 0, 0, 0, 0]
-    );
+    const [totalStudyTime, setTotalStudyTime] = useState([0, 0, 0, 0, 0, 0]);
 
     // variables for study and break tasks
     const [studyItems, setStudyItems] = useState(JSON.parse(localStorage.getItem('studyItems')) || []);
@@ -100,14 +94,12 @@ const updateUserLevel = (time) => {
 }; 
 
 const updateStudyTime = (time, duration) => {
-  if (time == 0 && duration == 1)
-    setTotalStudyTime(totalStudyTime + duration); 
-  if (time == 0 && duration == 5)
-    setTotalStudyTime(totalStudyTime + duration); 
-  if (time == 0 && duration == 20)
-    setTotalStudyTime(totalStudyTime + duration);
-  if (time == 0 && duration == 60)
-    setTotalStudyTime(totalStudyTime + duration); 
+  //find which user we are interested in 
+  const userIndex = usernameArray.indexOf(username); 
+  if (time == 0 && userIndex !== -1) {
+    totalStudyTime[userIndex] = totalStudyTime[userIndex] + duration; 
+   // setTotalStudyTime(totalStudyTime + duration); 
+  }
 }; 
 
 const handleAddStudyItem = (itemToAdd) => {
@@ -354,7 +346,7 @@ const handleAddSuggestedItem = (index) => {
             <DialogContent sx={{ color: 'purple' }}>
             <p>Username: {username}</p>
             <p>Level: {userLevel[usernameArray.indexOf(username)]}</p>
-            <p>Total Study Minutes: {totalStudyTime} minutes</p>
+            <p>Total Study Minutes: {totalStudyTime[usernameArray.indexOf(username)]} minutes</p>
             </DialogContent>
             <DialogActions>
               <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button>
