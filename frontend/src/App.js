@@ -313,18 +313,33 @@ const handleAddSuggestedItem = (index) => {
               </Box>
             </div>
 
-            <div style={{ marginRight: 'auto' }} className="calendar-container">
-    <Button onClick={handleOpenCalendar}>Calendar</Button>
-</div>
+            {/*START OF CALENDAR */}
+            {/* CALENDAR BUTTON */}
+      <div className="calendar-container">
+        <Button onClick={handleOpenCalendar}>Calendar</Button>
+      </div>
 
-<CalendarView
-    open={showCalendar}
-    onClose={handleCloseCalendar}
-    username={username}
-    totalStudyTime={totalStudyTime}
-    usernameArray={usernameArray}
-/>
-
+      {/* CALENDAR DIALOG */}
+      <Dialog open={showCalendar} onClose={handleCloseCalendar} className="calendar-dialog">
+        <DialogTitle className="calendar-header">Study Calendar for {username}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <CalendarView
+              open={showCalendar}
+              onClose={handleCloseCalendar}
+              username={username}
+              totalStudyTime={totalStudyTime}
+              usernameArray={usernameArray}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCalendar} className="close-button">Close</Button>
+        </DialogActions>
+      </Dialog>
+            {/* END OF CALENDAR */}
+            
+            {/* START OF PROFILE */}
             <div style = {{marginLeft: 'auto', marginRight: '0.1in'}} auto className = "profile-container">
               <Box>
                 <Button onClick={handleOpenDialog}>Profile</Button>

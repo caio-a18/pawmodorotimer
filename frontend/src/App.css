@@ -245,6 +245,77 @@ input[type="text"] {
   margin-bottom: 10px;
 }
 
+/* Calendar container */
+.calendar-container {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px auto;
+}
+
+/* Calendar header */
+.calendar-header {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* React Calendar specific styles */
+.react-calendar {
+  width: 100%;
+  border: none;
+  line-height: 1.125em;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: #d10000;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #ccc;
+}
+
+.react-calendar__tile--active,
+.react-calendar__tile--hasActive {
+  background: #006edc;
+  color: white;
+  font-weight: bold;
+}
+
+/* Study hours info */
+.study-info {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.study-info p {
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* Close button styling */
+.close-button {
+  font-size: 16px;
+  padding: 10px 20px;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+}
+
+.close-button:hover {
+  background-color: #c9302c;
+}
+
 
 
 
