@@ -20,7 +20,7 @@ import AccordionActions from '@mui/material/AccordionActions';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import TextField from '@mui/material/TextField'; 
-import CalendarView from './components/CalendarView';
+import CalendarView from './CalendarView';
 
 //API imports
 import { updateUserLevel } from './components/api'; 
@@ -313,33 +313,19 @@ const handleAddSuggestedItem = (index) => {
               </Box>
             </div>
 
-            {/*START OF CALENDAR */}
-            {/* CALENDAR BUTTON */}
-      <div className="calendar-container">
-        <Button onClick={handleOpenCalendar}>Calendar</Button>
-      </div>
+            {/*START OF CALENDAR*/}
+            <div style={{ marginRight: 'auto' }} className="calendar-container">
+    <Button onClick={handleOpenCalendar}>Calendar</Button>
+</div>
 
-      {/* CALENDAR DIALOG */}
-      <Dialog open={showCalendar} onClose={handleCloseCalendar} className="calendar-dialog">
-        <DialogTitle className="calendar-header">Study Calendar for {username}</DialogTitle>
-        <DialogContent>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <CalendarView
-              open={showCalendar}
-              onClose={handleCloseCalendar}
-              username={username}
-              totalStudyTime={totalStudyTime}
-              usernameArray={usernameArray}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseCalendar} className="close-button">Close</Button>
-        </DialogActions>
-      </Dialog>
-            {/* END OF CALENDAR */}
-            
-            {/* START OF PROFILE */}
+<CalendarView
+    open={showCalendar}
+    onClose={handleCloseCalendar}
+    username={username}
+    totalStudyTime={totalStudyTime}
+    usernameArray={usernameArray}
+/>
+
             <div style = {{marginLeft: 'auto', marginRight: '0.1in'}} auto className = "profile-container">
               <Box>
                 <Button onClick={handleOpenDialog}>Profile</Button>

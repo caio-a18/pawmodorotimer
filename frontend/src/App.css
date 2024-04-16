@@ -245,38 +245,62 @@ input[type="text"] {
   margin-bottom: 10px;
 }
 
-/* Calendar container */
-.calendar-container {
-  font-family: 'Arial', sans-serif;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Ensure the rest of your CSS from previous snippets is here */
+
+/* Container for the calendar dialog */
+.calendar-dialog-content {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   padding: 20px;
-  margin: 10px auto;
+  position: fixed; /* Fixed position to cover the entire screen */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100; /* High z-index to ensure it's on top of other elements */
+  max-width: 520px; /* Set a max-width for the calendar */
+  width: 90%; /* Make it responsive */
 }
 
-/* Calendar header */
-.calendar-header {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+/* Actions at the bottom of the dialog */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+/* Style for the calendar button that opens the dialog */
+.calendar-button {
   margin-bottom: 20px;
-  text-align: center;
 }
 
-/* React Calendar specific styles */
+/* Additional styles to override the react-calendar default styles */
 .react-calendar {
   width: 100%;
+  max-width: 100%; /* Prevent it from overflowing its container */
+  background: white;
   border: none;
-  line-height: 1.125em;
+  font-family: Arial, sans-serif;
 }
 
+.react-calendar__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px; /* Set a fixed height */
+  margin-bottom: 10px;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  border: none;
+  font-size: 16px;
+}
+
+/* Modify this to suit your color scheme */
 .react-calendar__month-view__days__day--weekend {
   color: #d10000;
-}
-
-.react-calendar__month-view__days__day--neighboringMonth {
-  color: #ccc;
 }
 
 .react-calendar__tile--active,
@@ -286,38 +310,7 @@ input[type="text"] {
   font-weight: bold;
 }
 
-/* Study hours info */
-.study-info {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
+/* Hide the calendar view when it's not open */
+.hidden {
+  display: none;
 }
-
-.study-info p {
-  background: #f0f0f0;
-  padding: 10px;
-  border-radius: 4px;
-}
-
-/* Close button styling */
-.close-button {
-  font-size: 16px;
-  padding: 10px 20px;
-  background-color: #d9534f;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  float: right;
-}
-
-.close-button:hover {
-  background-color: #c9302c;
-}
-
-
-
-
-
-
