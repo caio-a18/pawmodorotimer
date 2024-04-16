@@ -43,6 +43,7 @@ function App() {
     index 0 corresponds to Noah's level, index 1 corresponds to Asya's level, etc. Same with study time. */
     const [userLevel, setUserLevel] = useState([1, 1, 1, 1, 1, 1]);
     const [totalStudyTime, setTotalStudyTime] = useState([0, 0, 0, 0, 0, 0]);
+    const [dailyStudyTime, setDailyStudyTime] = useState([0, 0, 0, 0, 0, 0]); 
 
     // variables for study and break tasks
     const [studyItems, setStudyItems] = useState(JSON.parse(localStorage.getItem('studyItems')) || []);
@@ -258,9 +259,8 @@ const handleAddSuggestedItem = (index) => {
                   <DialogContent sx={{ color: 'purple' }}>
                     <p>This is where you will see past challenges and be able to start challenges.</p>
                     <div>
-                      {/* <p>Select a date to view your challenge history.</p>
-                          <input type="date" id="dateSelected"></input> */}
-                          <Accordion>
+                      
+      <Accordion>
         <AccordionSummary
           aria-controls="panel1-content"
           id="panel1-header"
@@ -280,7 +280,15 @@ const handleAddSuggestedItem = (index) => {
         </AccordionDetails>
       </Accordion>
                      
-                      <Button>See Past Challenges</Button>
+      <Accordion>
+      <AccordionSummary
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          See Past Challenges 
+        </AccordionSummary>
+
+      </Accordion>
                     </div>
                   </DialogContent>
                   <DialogActions>
