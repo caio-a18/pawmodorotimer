@@ -20,6 +20,7 @@ import AccordionActions from '@mui/material/AccordionActions';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import TextField from '@mui/material/TextField'; 
+import CalendarView from './components/CalendarView';
 
 //API imports
 import { updateUserLevel } from './components/api'; 
@@ -51,6 +52,18 @@ function App() {
     const [newStudyItem, setNewStudyItem] = useState('');
     const [newBreakItem, setNewBreakItem] = useState('');
 
+    // Add new state to control the visibility of the calendar dialog
+const [showCalendar, setShowCalendar] = useState(false);
+
+// Function to open and close the calendar dialog
+const handleOpenCalendar = () => {
+    setShowCalendar(true);
+};
+
+const handleCloseCalendar = () => {
+    setShowCalendar(false);
+};
+
     // At the beginning of your component, add the suggestedStudyItems state
     const [suggestedStudyItems, setSuggestedStudyItems] = useState([
     "Drink water",
@@ -59,6 +72,7 @@ function App() {
     "Respond to emails",
     "Mew"
   ]);
+
 
      // Function to update user data in localStorage
     const updateUserLocalStorage = () => {
@@ -298,6 +312,18 @@ const handleAddSuggestedItem = (index) => {
                 {/* END OF CHALLENGES TAB/DIALOG */}
               </Box>
             </div>
+
+            <div style={{ marginRight: 'auto' }} className="calendar-container">
+    <Button onClick={handleOpenCalendar}>Calendar</Button>
+</div>
+
+<CalendarView
+    open={showCalendar}
+    onClose={handleCloseCalendar}
+    username={username}
+    totalStudyTime={totalStudyTime}
+    usernameArray={usernameArray}
+/>
 
             <div style = {{marginLeft: 'auto', marginRight: '0.1in'}} auto className = "profile-container">
               <Box>
