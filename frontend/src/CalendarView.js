@@ -17,20 +17,21 @@ function CalendarView({ open, onClose, username, totalStudyTime, usernameArray }
         if (userIndex !== -1) {
             const minutes = totalStudyTime[userIndex];
             const hours = Math.floor(minutes / 60); // Convert minutes to hours and round down to the nearest hour
+            const weekly = Math.floor(minutes / (60*24));
+            const monthly = Math.floor(minutes/  (60*24*30));
+            const yearly = Math.floor(minutes / (60*24*365));
 
-            // Logic to calculate study time for week, month, year will be similar
-            // Need to adjust based on reset logic for each period
             setStudyHours({
                 today: hours, // For now, it just sets the hours for today
-                week: hours,  // You will need to implement the logic for the week, month, and year
-                month: hours,
-                year: hours
+                week: weekly,  // You will need to implement the logic for the week, month, and year
+                month: monthly,
+                year: yearly
             });
         }
     };
 
     useEffect(() => {
-        // Logic to reset the study hours based on the date
+        // resets the study hours based on the date
         const resetDailyStudyHours = () => {
             const currentDate = new Date();
             if (currentDate.getHours() === 0 && currentDate.getMinutes() === 0) {
@@ -48,11 +49,13 @@ function CalendarView({ open, onClose, username, totalStudyTime, usernameArray }
 
     const today = new Date().toLocaleDateString();
 
+    // creates Dialog for Calendar
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Study Calendar for {username}</DialogTitle>
             <DialogContent>
                 <Box>
+                    {/* Display for Date, Week, Month, Year, */}
                     <p>Today's Date: {today}</p>
                     <p>Study Hours Today: {studyHours.today}</p>
                     <p>Study Hours This Week: {studyHours.week}</p>
