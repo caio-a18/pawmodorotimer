@@ -45,6 +45,9 @@ function App() {
     const [userLevel, setUserLevel] = useState([1, 1, 1, 1, 1, 1]);
     const [totalStudyTime, setTotalStudyTime] = useState([0, 0, 0, 0, 0, 0]);
     const [dailyStudyTime, setDailyStudyTime] = useState([0, 0, 0, 0, 0, 0]); 
+    const [weeklyStudyTime, setWeeklyStudyTime] = useState([0, 0, 0, 0, 0, 0]);
+    const [monthlyStudyTime, setMonthlyStudyTime] = useState([0, 0, 0, 0, 0, 0]);
+    const [yearlyStudyTime, setYearlyStudyTime] = useState([0, 0, 0, 0, 0, 0]);
 
     // variables for study and break tasks
     const [studyItems, setStudyItems] = useState(JSON.parse(localStorage.getItem('studyItems')) || []);
@@ -53,16 +56,16 @@ function App() {
     const [newBreakItem, setNewBreakItem] = useState('');
 
     // Add new state to control the visibility of the calendar dialog
-const [showCalendar, setShowCalendar] = useState(false);
+    const [showCalendar, setShowCalendar] = useState(false);
 
-// Function to open and close the calendar dialog
-const handleOpenCalendar = () => {
-    setShowCalendar(true);
-};
+    // Function to open and close the calendar dialog
+    const handleOpenCalendar = () => {
+      setShowCalendar(true);
+    };
 
-const handleCloseCalendar = () => {
-    setShowCalendar(false);
-};
+    const handleCloseCalendar = () => {
+      setShowCalendar(false);
+    };
 
     // At the beginning of your component, add the suggestedStudyItems state
     const [suggestedStudyItems, setSuggestedStudyItems] = useState([
@@ -72,7 +75,6 @@ const handleCloseCalendar = () => {
     "Respond to emails",
     "Mew"
   ]);
-
 
      // Function to update user data in localStorage
     const updateUserLocalStorage = () => {
@@ -172,9 +174,94 @@ const handleAddSuggestedItem = (index) => {
     const handleCloseDialog = () => {
       setUserDialog(false); // Close the dialog
     };
+
+    // Start of reseting times for calendar
+    const resetStudyTimes = (period) => {
+      const now = new Date();
+    
+      let newDailyStudyTime = dailyStudyTime;
+      let newWeeklyStudyTime = weeklyStudyTime;
+      let newMonthlyStudyTime = monthlyStudyTime;
+      let newYearlyStudyTime = yearlyStudyTime;
+    
+      switch (period) {
+        case 'daily':
+          newDailyStudyTime = newDailyStudyTime.map(() => 0);
+          setDailyStudyTime(newDailyStudyTime);
+          localStorage.setItem('lastDailyReset', now.toString());
+          localStorage.setItem('dailyStudyTime', JSON.stringify(newDailyStudyTime));
+          break;
+        case 'weekly':
+          newWeeklyStudyTime = newWeeklyStudyTime.map(() => 0);
+          setWeeklyStudyTime(newWeeklyStudyTime);
+          localStorage.setItem('lastWeeklyReset', now.toString());
+          localStorage.setItem('weeklyStudyTime', JSON.stringify(newWeeklyStudyTime));
+          break;
+        case 'monthly':
+          newMonthlyStudyTime = newMonthlyStudyTime.map(() => 0);
+          setMonthlyStudyTime(newMonthlyStudyTime);
+          localStorage.setItem('lastMonthlyReset', now.toString());
+          localStorage.setItem('monthlyStudyTime', JSON.stringify(newMonthlyStudyTime));
+          break;
+        case 'yearly':
+          newYearlyStudyTime = newYearlyStudyTime.map(() => 0);
+          setYearlyStudyTime(newYearlyStudyTime);
+          localStorage.setItem('lastYearlyReset', now.toString());
+          localStorage.setItem('yearlyStudyTime', JSON.stringify(newYearlyStudyTime));
+          break;
+        default:
+      }
+    };
+
+    useEffect(() => {
+      const now = new Date();
+  
+      // Calculate the start of today (at 00:00:00)
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  
+      // Calculate the start of the current week (Sunday at 00:00:00)
+      const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+  
+      // Calculate the start of the current month (1st day at 00:00:00)
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth());
+  
+      // Calculate the start of the current year (January 1st at 00:00:00)
+      const startOfYear = new Date(now.getFullYear(), 0);
+  
+      // Check for end of day
+      if (now.getTime() >= startOfToday.getTime() + 86400000) { // 24 * 60 * 60 * 1000
+        resetStudyTimes('daily');
+      }
+  
+      // Check for end of week
+      if (now.getTime() >= startOfWeek.getTime() + 604800000) { // 7 * 24 * 60 * 60 * 1000
+        resetStudyTimes('weekly');
+      }
+  
+      // Check for end of month
+      if (now > new Date(now.getFullYear(), now.getMonth() + 1, 0)) {
+        resetStudyTimes('monthly');
+      }
+  
+      // Check for end of year
+      if (now > new Date(now.getFullYear(), 11, 31)) {
+        resetStudyTimes('yearly');
+      }
+  
+      // Note: This will not account for leap seconds, time zone changes, etc.
+  
+      // Set an interval to check at a regular interval
+      const intervalId = setInterval(() => {
+        // Repeat the same checks inside this interval callback
+      }, 60000); // Check every minute - for production, you might want to check less frequently
+  
+      // Cleanup the interval on component unmount
+      return () => clearInterval(intervalId);
+    }, [totalStudyTime]);
+    // End of reseting times for calendar
  
     useEffect(() => {
-      let interval = null; 
+      let interval = null;
 
       if (isCounting && isPaused === false && time > 0) {
         interval = setInterval(() => {
@@ -263,7 +350,7 @@ const handleAddSuggestedItem = (index) => {
             </Box>
             </div>
 
-            <div style = {{marginRight: 'auto'}} auto className = "challenge-container">
+            <div style = {{marginRight: 'left', marginLeft: '0.1in'}} auto className = "challenge-container">
               <Box>
                 <Button onClick={handleOpenChallenges}>Challenges</Button>
 
@@ -295,13 +382,12 @@ const handleAddSuggestedItem = (index) => {
       </Accordion>
                      
       <Accordion>
-      <AccordionSummary
+        <AccordionSummary
           aria-controls="panel1-content"
           id="panel1-header"
         >
           See Past Challenges 
         </AccordionSummary>
-
       </Accordion>
                     </div>
                   </DialogContent>
@@ -314,17 +400,17 @@ const handleAddSuggestedItem = (index) => {
             </div>
 
             {/*START OF CALENDAR*/}
-            <div style={{ marginRight: 'auto' }} className="calendar-container">
-    <Button onClick={handleOpenCalendar}>Calendar</Button>
-</div>
+            <div style={{marginLeft: 'auto', marginRight: 'left'}} className="calendar-container">
+              <Button onClick={handleOpenCalendar}>Calendar</Button>
+            </div>
 
-<CalendarView
-    open={showCalendar}
-    onClose={handleCloseCalendar}
-    username={username}
-    totalStudyTime={totalStudyTime}
-    usernameArray={usernameArray}
-/>
+            <CalendarView
+              open={showCalendar}
+              onClose={handleCloseCalendar}
+              username={username}
+              totalStudyTime={totalStudyTime}
+              usernameArray={usernameArray}
+            />
 
             <div style = {{marginLeft: 'auto', marginRight: '0.1in'}} auto className = "profile-container">
               <Box>
@@ -332,7 +418,7 @@ const handleAddSuggestedItem = (index) => {
               </Box>
               </div>
             <div className="title-container">
-          <h1>Tomato Paws Timer</h1>
+              <h1>Tomato Paws Timer</h1>
             </div>
             
           {/* Buttons */}
