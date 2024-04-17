@@ -317,6 +317,9 @@ const handleAddSuggestedItem = (index) => {
     <Button onClick={handleOpenCalendar}>Calendar</Button>
 </div>
 
+{/* TO DELETE */ }
+{/* When you search for a user, it should display their data. */}
+
 <CalendarView
     open={showCalendar}
     onClose={handleCloseCalendar}
