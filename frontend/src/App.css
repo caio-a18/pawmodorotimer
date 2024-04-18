@@ -246,7 +246,22 @@ input[type="text"] {
 }
 
 
+.cat-svg {
+  /* Add your desired styles here */
+  max-width: 200px; /* Example size, adjust as needed */
+  margin: 20px; /* Example margin, adjust as needed */
+}
 
+.cat-svg {
+  animation-name: shrink-to-small;
+  animation-duration: var(--timer-duration);
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
 
+@keyframes shrink-to-small {
+  from { transform: scale(1.5); }
+  to { transform: scale(1); }
+}
 
 
