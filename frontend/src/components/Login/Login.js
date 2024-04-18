@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Login.css';
 import PropTypes from 'prop-types';
-import { loginUser, createUser, checkUserExistence } from '../api.js';
+import { loginUser, createUser, checkUser } from '../api.js';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -26,7 +26,10 @@ export default function Login({ setToken, handleLoginSuccess }) {
         // First, check if the user is registered
         try {
             const user = await checkUser(email);
-            if (user) {
+            if (user.exists) {
+                console.log("The user exists");
+                console.log(user);
+                console.log(user.exists);
                 // User exists, proceed with login
                 try {
                     const token = await loginUser({ name, email, password });
@@ -36,6 +39,7 @@ export default function Login({ setToken, handleLoginSuccess }) {
                     setErrorDialog(true);
                 }
             } else if (isRegistering) {
+                console.log("The user does not exists");
                 // User does not exist, and is trying to register
                 try {
                     await createUser({ name, email, password });
