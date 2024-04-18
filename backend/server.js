@@ -1,7 +1,10 @@
 const cors = require('cors');
 const sequelize = require('./config/db');
-const User = require('./models/users');
+const initUserModel = require('./models/users');
+const DataTypes = require('sequelize').DataTypes;
 const express = require('express');
+
+const User = initUserModel(sequelize, DataTypes);
 
 const app = express();
 
@@ -29,68 +32,62 @@ sequelize.sync()
     console.error('Unable to sync database models:');
   });
 
-// Existing login endpoint
 app.post('/login', (req, res) => {
   res.send({
     token: 'test123'
   });
 });
 
-// Mock database for the proof of concept
-let users = [
-  {
-    userId: "12345",
-    username: "userOne",
-    totalFocusTime: 120, // in minutes
-    currentLevel: 2,
-    rewards: [],
-  },
-  // Add more mock users as needed
-];
 
-app.post('/create-user', (req, res) => {
-  const { username, password } = req.body;
+app.post('/create-user', async (req, res) => {
+  const {email, password, name } = req.body;
   
-  const newUser = {
-    id: users.length + 1,
-    username,
-    password, 
-  };
+  console.log('Received data:', {email, password, name });  // Add this to log and check what data is received
 
-  users.push(newUser);
-
-  res.status(201).send({ message: 'User created', user: newUser });
+  try {
+      const newUser = await User.create({ email, password, name });
+      res.status(201).send({ message: 'User created', user: { id: newUser.id, email: newUser.email, name: newUser.name } });
+  } catch (error) {
+      console.error('Error creating user:', error);
+      res.status(500).send({ message: 'Failed to create user', error: error.message });
+  }
 });
 
-app.post('/api/user/level/update/:userId', (req, res) => {
+app.post('/api/user/level/update/:userId', async (req, res) => {
   const { userId } = req.params;
-  const { focusDuration } = req.body; 
+  const { focusDuration } = req.body; // focusDuration should be validated to be a number
 
-  const user = users.find(u => u.userId === userId);
+  try {
+    const user = await User.findByPk(userId);
 
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  // Update the total focus time
-  user.totalFocusTime += focusDuration;
+    // Update the total focus time
+    user.total_focus_time += parseInt(focusDuration);
 
-  // Calculate new level based on focus time
-  const newLevel = Math.floor(user.totalFocusTime / 60); // 1 level per hour of focus
-  
-  // Check if the level has changed to update and possibly add rewards
-  if (newLevel > user.currentLevel) {
-    user.currentLevel = newLevel;
-    
-    // For demonstration, add a mock reward for every level gained
-    user.rewards.push({
-      rewardType: "cat sticker",
-      rewardName: `Level ${newLevel} Sticker`,
-      description: `A special sticker for reaching level ${newLevel}.`
+    // Calculate new level based on focus time (assuming 1 level per hour of focus)
+    const newLevel = Math.floor(user.total_focus_time / 60);
+
+    // Check if the level has changed to update and possibly add rewards
+    if (newLevel > user.currentLevel) {
+      user.currentLevel = newLevel;
+      // Ideally, this should also update the user record in the database
+      await user.save();
+    }
+
+    res.json({
+      userId: user.id,
+      newLevel: user.currentLevel,
+      totalFocusTime: user.total_focus_time
     });
+  } catch (error) {
+    console.error('Error updating user level:', error);
+    res.status(500).json({ message: "Failed to update user level", error: error.message });
   }
-
 });
+
 /*
 
 const express = require('express');

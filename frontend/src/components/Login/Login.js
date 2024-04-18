@@ -1,72 +1,80 @@
 import React, { useState } from 'react';
 import './Login.css';
 import PropTypes from 'prop-types';
-import { loginUser } from '../api.js'; 
+import { loginUser, createUser, checkUserExistence } from '../api.js';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions'; 
+import DialogActions from '@mui/material/DialogActions';
 
-export default function Login({ setToken, handleLoginSuccess, setUsername }) {
-    const [username, setUsernameValue] = useState("");
+export default function Login({ setToken, handleLoginSuccess }) {
+    const [name, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [errorDialog, setErrorDialog] = useState(false); 
-    const approvedUsers = ["noah", "asya", "maisoon", "hart", "caio", "profsegovia"]; 
-    const approvedPWDs = ["noahisawesome", 
-                            "asyaisawesome", 
-                            "maisoonisawesome", 
-                            "hartisawesome", 
-                            "caioisawesome",
-                            "profsegoviaisawesome"]
+    const [errorDialog, setErrorDialog] = useState(false);
+    const [isRegistering, setIsRegistering] = useState(false);
 
     const handleCloseDialog = () => {
-        setErrorDialog(false); 
-    }; 
+        setErrorDialog(false);
+    };
 
-    const handleSubmit = async e => {
+    const handleLoginOrRegister = async (e) => {
         e.preventDefault();
-        const userIndex = approvedUsers.indexOf(username);
-        if (userIndex !== -1 && approvedPWDs[userIndex] === password) {
-            const token = await loginUser({
-                username,
-                password
-            });
-            setToken(token);
-            handleLoginSuccess(username, token); // Call handleLoginSuccess with username and token
-        } else {
+        
+        // First, check if the user is registered
+        try {
+            const user = await checkUser(email);
+            if (user) {
+                // User exists, proceed with login
+                try {
+                    const token = await loginUser({ name, email, password });
+                    setToken(token);
+                    handleLoginSuccess(name, token); // Call handleLoginSuccess with username and token
+                } catch (loginError) {
+                    setErrorDialog(true);
+                }
+            } else if (isRegistering) {
+                // User does not exist, and is trying to register
+                try {
+                    await createUser({ name, email, password });
+                    alert('User created successfully! Please log in.');
+                    setIsRegistering(false); // Switch back to login after registration
+                } catch (createError) {
+                    alert('Failed to create user: ' + createError.message);
+                    console.error('Registration error:', createError);
+                }
+            } else {
+                // User does not exist, and is not in registration mode
+                alert('No user found with this email. Please register.');
+                setIsRegistering(true); // Prompt user to switch to registration mode
+            }
+        } catch (checkUserError) {
+            console.error('Error checking user:', checkUserError);
             setErrorDialog(true);
         }
-    }
+    };
+    
 
     return (
         <div className="login-wrapper">
-            <div className="top-bar">
-                <div className="login-header">
-                    <h1>Please Log In!</h1>
-                </div>
-            </div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <p>Username</p>
-                    <TextField type="text" value={username} onChange={e => setUsernameValue(e.target.value)}/>
-                </label>
-                <label>
-                    <p>Password</p>
-                    <TextField type="password" value={password} onChange={e => setPassword(e.target.value)}/>
-                </label>
-                <div className = "submit-button">
-                    <Button type="submit">Submit</Button>
-                </div>
+            <form onSubmit={handleLoginOrRegister}>
+                <TextField label="Username" type="text" value={name} onChange={e => setUsername(e.target.value)} fullWidth margin="normal"/>
+                <TextField label="Email" type="email" value={email} onChange={e => setEmail(e.target.value)} fullWidth margin="normal"/>
+                <TextField label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} fullWidth margin="normal"/>
+                <Button type="submit" variant="contained" color="primary">{isRegistering ? 'Register' : 'Login'}</Button>
+                <Button onClick={() => setIsRegistering(!isRegistering)} color="secondary">
+                    {isRegistering ? 'Back to Login' : 'Need to Register?'}
+                </Button>
             </form>
             <Dialog open={errorDialog} onClose={handleCloseDialog}>
-                <DialogTitle sx={{ color: 'red' }}>Error</DialogTitle>
-                <DialogContent sx={{color: 'blue'}}>
-                    <p>You are not an approved tomato paws user.</p>
+                <DialogTitle>Error</DialogTitle>
+                <DialogContent>
+                    <p>{isRegistering ? "A user with this email already exists." : "No account found with this email."}</p>
                 </DialogContent>
                 <DialogActions>
-                    <Button sx={{color: 'red'}} onClick={handleCloseDialog}>OK</Button>
+                    <Button onClick={handleCloseDialog}>OK</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -75,5 +83,5 @@ export default function Login({ setToken, handleLoginSuccess, setUsername }) {
 
 Login.propTypes = {
     setToken: PropTypes.func.isRequired,
-    handleLoginSuccess: PropTypes.func.isRequired // Declare handleLoginSuccess as a prop
+    handleLoginSuccess: PropTypes.func.isRequired
 };

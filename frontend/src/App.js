@@ -12,7 +12,6 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import soundFile from './components/Domestic-cat-purring-and-meowing-sound-effect.mp3';
-
 import Challenges from './components/Login/Challenges'; 
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';

@@ -32,4 +32,14 @@ const updateUserLevel = async (userId, duration) => {
   }
 };
 
-export { loginUser, createUser, updateUserLevel};
+async function checkUser(email) {
+  try {
+    const response = await axios.get(`http://localhost:8080/check-user?email=${encodeURIComponent(email)}`);
+    return response.data; // Assuming the API returns user data if existing or null if not
+  } catch (error) {
+    console.error('Error checking user:', error);
+    throw error;
+  }
+}
+
+export {loginUser, createUser, updateUserLevel, checkUser};
