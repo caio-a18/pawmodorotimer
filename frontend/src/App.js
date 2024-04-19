@@ -238,6 +238,13 @@ const handleAddSuggestedItem = (index) => {
       setShowChallenges(false); // Close the dialog
     };
 
+
+    const handleSubmitChallenge = () => {
+
+      alert("The challenge was issued succesfully");
+    }
+
+
     // UseEffect for HandleTimer
     useEffect(() => {
       handleTimerIsDone(1);
@@ -292,15 +299,24 @@ const handleAddSuggestedItem = (index) => {
             label = "Choose a Player to Challenge"/>
           </div>
 
-          <form>
+          <form onSubmit={handleSubmitChallenge} id="challengeForm">
             <div class = "challenge-submit">
-              <Button type = "submit">Submit</Button>
+              {/* <Button type = "submit">Submit</Button> */}
+              <Button type="submit">Submit</Button>
             </div>
           </form>
 
         </AccordionDetails>
       </Accordion>
 
+      <Accordion>
+      <AccordionSummary
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          See Ongoing Challenges 
+        </AccordionSummary>
+      </Accordion>
 
       <Accordion>
       <AccordionSummary
@@ -309,7 +325,6 @@ const handleAddSuggestedItem = (index) => {
         >
           See Past Challenges 
         </AccordionSummary>
-
       </Accordion>
 
 
