@@ -274,6 +274,8 @@ const handleAddSuggestedItem = (index) => {
                     <p>This is where you will see past challenges and be able to start challenges.</p>
                     <div>
                       
+
+
       <Accordion>
         <AccordionSummary
           aria-controls="panel1-content"
@@ -282,18 +284,24 @@ const handleAddSuggestedItem = (index) => {
           Start a Challenge 
         </AccordionSummary>
         <AccordionDetails>
-        <div class = "challenge-textfield">
-        <TextField
-        id = "challenge-search"
-        type="search"
-        label = "Choose a Player to Challenge"/>
-        </div>
-        <div class = "challenge-submit">
-        <Button type = "submit">Submit</Button>
-        </div>
+
+          <div class = "challenge-textfield">
+            <TextField
+            id = "challenge-search"
+            type="search"
+            label = "Choose a Player to Challenge"/>
+          </div>
+
+          <form>
+            <div class = "challenge-submit">
+              <Button type = "submit">Submit</Button>
+            </div>
+          </form>
+
         </AccordionDetails>
       </Accordion>
-                     
+
+
       <Accordion>
       <AccordionSummary
           aria-controls="panel1-content"
@@ -303,6 +311,8 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
 
       </Accordion>
+
+
                     </div>
                   </DialogContent>
                   <DialogActions>
