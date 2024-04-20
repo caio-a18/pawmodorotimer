@@ -239,9 +239,24 @@ const handleAddSuggestedItem = (index) => {
     };
 
 
+
+    // Are we looking up by id or username?
+    const lookupUser = (inputtedUser) => {
+      const userArray = [];
+      if (userArray.includes(inputtedUser)) {
+        //  show user's data, return
+      }
+      // user does not exist
+    };
+
+
     const handleSubmitChallenge = () => {
 
-      alert("The challenge was issued succesfully");
+      // if inputted user exists (and is not yourself), then can invite them to a challenge
+      // Add inputted data along with the challenge proposal
+
+
+      {/* alert("The challenge was issued succesfully"); */}
     }
 
 
@@ -291,7 +306,7 @@ const handleAddSuggestedItem = (index) => {
           Start a Challenge 
         </AccordionSummary>
         <AccordionDetails>
-
+          
           <div class = "challenge-textfield">
             <TextField
             id = "challenge-search"
@@ -309,6 +324,7 @@ const handleAddSuggestedItem = (index) => {
         </AccordionDetails>
       </Accordion>
 
+
       <Accordion>
       <AccordionSummary
           aria-controls="panel1-content"
@@ -317,6 +333,7 @@ const handleAddSuggestedItem = (index) => {
           See Ongoing Challenges 
         </AccordionSummary>
       </Accordion>
+
 
       <Accordion>
       <AccordionSummary
