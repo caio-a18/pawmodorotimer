@@ -251,6 +251,7 @@ const handleAddSuggestedItem = (index) => {
     
     // I do not know if we are searching by username or id
     function lookupUser(inputName) {
+      // See if that name exists in the user array
       const userExists = userArray.find((user) => user.username === inputName);
       if (userExists) {
         // return user data
@@ -265,15 +266,28 @@ const handleAddSuggestedItem = (index) => {
 
 
     const handleSubmitChallenge = () => {
-      let inputName = document.getElementById("playerToChallenge").value;
-      var userData = lookupUser(inputName);
-      if (userData)   // if null, return
+      let username = document.getElementById("playerToChallenge").value;
+      var userData = lookupUser(username);
+      if (userData) {   // if player name exists, append a challenge to the table
+        let description = document.getElementById("challengeDescription").value;
+
+        let str = `Challenge opponent is: ${username}. The challenge is: ${description}.`;
+        alert(str);
+        /*
+        var ongoingTable = document.getElementById("ongoingChallenges");
+        var row = ongoingTable.insertRow(1);
+        var cell1 = row.insertCell(0);
+        cell1.innerHTML = inputName;
+        var cell2 = row.insertCell(1);
+        cell2.innerHTML = inputDescription;
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        cell4.innerHTMl = "Pending"; */
         return;
-      // Else, add the data to the table
-      let inputDescription = document.getElementById("challengeDescription").value;
+      }
 
-
-      {/* alert("The challenge was issued succesfully"); */}
+      // Else
+      alert("This player name does not exist.");
     };
 
 
