@@ -129,7 +129,7 @@
 .tableCell {
   border: 1px solid black;
   overflow: auto;
-  text-align: left;
+  text-align: center;
 }
 
 .lists-container {

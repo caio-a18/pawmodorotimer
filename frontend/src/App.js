@@ -240,24 +240,36 @@ const handleAddSuggestedItem = (index) => {
 
 
 
-    // Are we looking up by id or username?
-    const lookupUser = (inputtedUser) => {
-      const userArray = [];
-      if (userArray.includes(inputtedUser)) {
-        //  show user's data, return
+
+    // An example user array, to be replaced / connected to backend
+    let userArray = [
+      {userId: "111", username: "userOne"},
+      {userId: "222", username: "userTwo"},
+      {userId: "333", username: "userThree"},
+    ];
+
+  
+    // I do not know if we are searching by id or username
+    const lookupUser = (input) => {
+      const userExists = userArray.find((user) => user.username === input);
+      if (userExists) {
+        // return user data
       }
-      // user does not exist
+      // Else, communicate user not found
     };
 
 
     const handleSubmitChallenge = () => {
+      
 
-      // if inputted user exists (and is not yourself), then can invite them to a challenge
-      // Add inputted data along with the challenge proposal
 
+      // If inputted user exists and is not you, invite them to a challenge
+      // Display challenge data
 
       {/* alert("The challenge was issued succesfully"); */}
     }
+
+
 
 
     // UseEffect for HandleTimer
@@ -307,15 +319,25 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
         <AccordionDetails>
           
+          {/*
           <div class = "challenge-textfield">
             <TextField
             id = "challenge-search"
             type="search"
             label = "Choose a Player to Challenge"/>
           </div>
+          */}
 
           <form onSubmit={handleSubmitChallenge} id="challengeForm">
             <div class = "challenge-submit">
+              <div>
+                <label for="playerToChallenge">Choose a player to challenge.</label>
+                <input type="text" id="playerToChallenge"/>
+              </div>
+              <div>
+                <label for="challengeDescription">What kind of challenge?</label>
+                <input type="text" id="challengeDescription"/>
+              </div>
               {/* <Button type = "submit">Submit</Button> */}
               <Button type="submit">Submit</Button>
             </div>
@@ -326,22 +348,58 @@ const handleAddSuggestedItem = (index) => {
 
 
       <Accordion>
-      <AccordionSummary
+        <AccordionSummary
           aria-controls="panel1-content"
           id="panel1-header"
         >
           See Ongoing Challenges 
         </AccordionSummary>
+        <AccordionDetails>
+          <div>
+            <table id="ongoingChallenges" class="challengesTable">
+              <tr>
+                <th class="tableCell">Opponent</th>
+                <th class="tableCell">Challenge</th>
+                <th class="tableCell">Date Started</th>
+                <th class="tableCell">Status</th>
+              </tr>
+              <tr>
+                <td class="tableCell"></td> 
+                <td class="tableCell"></td>
+                <td class="tableCell"></td>
+                <td class="tableCell"></td>
+              </tr>
+            </table>
+          </div>
+        </AccordionDetails>
       </Accordion>
 
 
       <Accordion>
-      <AccordionSummary
+        <AccordionSummary
           aria-controls="panel1-content"
           id="panel1-header"
         >
           See Past Challenges 
         </AccordionSummary>
+        <AccordionDetails>
+          <div>
+            <table id="pastChallenges" class="challengesTable">
+              <tr>
+                <th class="tableCell">Opponent</th>
+                <th class="tableCell">Challenge</th>
+                <th class="tableCell">Date Started</th>
+                <th class="tableCell">Outcome</th>
+              </tr>
+              <tr>
+                <td class="tableCell"></td> 
+                <td class="tableCell"></td>
+                <td class="tableCell"></td>
+                <td class="tableCell"></td>
+              </tr>
+            </table>
+          </div>
+        </AccordionDetails>
       </Accordion>
 
 
