@@ -248,28 +248,33 @@ const handleAddSuggestedItem = (index) => {
       {userId: "333", username: "userThree"},
     ];
 
-  
-    // I do not know if we are searching by id or username
-    const lookupUser = (input) => {
-      const userExists = userArray.find((user) => user.username === input);
+    
+    // I do not know if we are searching by username or id
+    function lookupUser(inputName) {
+      const userExists = userArray.find((user) => user.username === inputName);
       if (userExists) {
         // return user data
+        for (let i = 0; i < userArray.length; i++) {
+          if (userArray[i].username === inputName) {
+            return userArray[i];
+          }                        
+        }
+        // Else, user not found
       }
-      // Else, communicate user not found
-    };
-
-
-    const handleSubmitChallenge = () => {
-      
-
-
-      // If inputted user exists and is not you, invite them to a challenge
-      // Display challenge data
-
-      {/* alert("The challenge was issued succesfully"); */}
     }
 
 
+    const handleSubmitChallenge = () => {
+      let inputName = document.getElementById("playerToChallenge").value;
+      var userData = lookupUser(inputName);
+      if (userData)   // if null, return
+        return;
+      // Else, add the data to the table
+      let inputDescription = document.getElementById("challengeDescription").value;
+
+
+      {/* alert("The challenge was issued succesfully"); */}
+    };
 
 
     // UseEffect for HandleTimer
@@ -328,15 +333,16 @@ const handleAddSuggestedItem = (index) => {
           </div>
           */}
 
+
           <form onSubmit={handleSubmitChallenge} id="challengeForm">
             <div class = "challenge-submit">
               <div>
                 <label for="playerToChallenge">Choose a player to challenge.</label>
-                <input type="text" id="playerToChallenge"/>
+                <input type="text" id="playerToChallenge" required/>
               </div>
               <div>
                 <label for="challengeDescription">What kind of challenge?</label>
-                <input type="text" id="challengeDescription"/>
+                <input type="text" id="challengeDescription" required/>
               </div>
               {/* <Button type = "submit">Submit</Button> */}
               <Button type="submit">Submit</Button>
