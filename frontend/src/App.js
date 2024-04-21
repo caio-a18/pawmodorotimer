@@ -55,6 +55,7 @@ function App() {
 
     // Variables for starting a new challenge
     const [playerToChallenge, setPlayerToChallenge] = useState('');
+    const [challengeDuration, setChallengeDuration] = useState('');
     // List of pending challenges
     // List of ongoing challenges
     // List of past challenges
@@ -93,6 +94,7 @@ const handleCloseCalendar = () => {
     localStorage.setItem('newStudyItem', newStudyItem); 
     localStorage.setItem('newBreakItem', newBreakItem); 
     localStorage.setItem('playerToChallenge', playerToChallenge); 
+    localStorage.setItem('challengeDuration', challengeDuration);
   };
 
   // useEffect to update localStorage when user data changes
@@ -106,7 +108,8 @@ const handleCloseCalendar = () => {
       breakItems,
       newStudyItem,
       newBreakItem,
-      playerToChallenge]);
+      playerToChallenge,
+      challengeDuration]);
 
 const updateUserLevel = (time) => {
 
@@ -293,6 +296,15 @@ const handleAddSuggestedItem = (index) => {
       if (opponent !== undefined) {
         // pendingChallenges.push(opponent);
         // alert(JSON.stringify(pendingChallenges));
+        var pendingTable = document.getElementById("pendingChallenges");
+        var row = pendingTable.insertRow(1);
+        var cell1 = row.insertCell(0);
+        cell1.className = "tableCell";
+        cell1.innerHTML = opponent.username;
+        var cell2 = row.insertCell(1);
+        cell2.className = "tableCell";
+        cell2.innerHTML = "some duration";
+
 
         let str = `${opponent.username} has ${opponent.totalFocusTime} minutes of focus time.`;
         document.getElementById("inputPlayerInfo").innerHTML = str;
@@ -368,11 +380,11 @@ const handleAddSuggestedItem = (index) => {
               
               <div>
                 <p>Choose a duration for the challenge.</p>
-                <input type="radio" id="1day" name="duration" value="1day"/>
+                <input type="radio" id="1day" name="duration" value="day" required />
                 <label for="1day">1 Day</label><br/>
-                <input type="radio" id="1week" name="duration" value="1week"/>
+                <input type="radio" id="1week" name="duration" value="week" required />
                 <label for="1week">1 Week</label><br/>
-                <input type="radio" id="1month" name="duration" value="1month"/>
+                <input type="radio" id="1month" name="duration" value="month" required />
                 <label for="1month">1 Month</label><br/>
               </div>
 
@@ -401,7 +413,12 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
         <AccordionDetails>
           <div>
-        
+            <table id="pendingChallenges" class="challengesTable">
+              <tr>
+                <th class="tableCell">Opponent</th>
+                <th class="tableCell">Duration</th>
+              </tr>
+            </table>
           </div>
         </AccordionDetails>
       </Accordion>
@@ -416,7 +433,9 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
         <AccordionDetails>
           <div>
-        
+            <table id="ongoingChallenges" class="challengesTable">
+
+            </table>
           </div>
         </AccordionDetails>
       </Accordion>
@@ -431,7 +450,9 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
         <AccordionDetails>
           <div>
+            <table id="pastChallenges" class="challengesTable">
 
+            </table>
           </div>
         </AccordionDetails>
       </Accordion>
