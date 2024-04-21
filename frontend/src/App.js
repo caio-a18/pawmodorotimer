@@ -365,6 +365,17 @@ const handleAddSuggestedItem = (index) => {
                 <p>Choose a player to challenge.</p>
                 <TextField id="challenge-search" type="search" value={playerToChallenge} onChange={e => setPlayerToChallenge(e.target.value)}/>
               </label>
+              
+              <div>
+                <p>Choose a duration for the challenge.</p>
+                <input type="radio" id="1day" name="duration" value="1day"/>
+                <label for="1day">1 Day</label><br/>
+                <input type="radio" id="1week" name="duration" value="1week"/>
+                <label for="1week">1 Week</label><br/>
+                <input type="radio" id="1month" name="duration" value="1month"/>
+                <label for="1month">1 Month</label><br/>
+              </div>
+
               <div className = "challenge-submit">
                 <Button type="submit">Submit</Button>
               </div>
