@@ -251,23 +251,20 @@ const handleAddSuggestedItem = (index) => {
 
 
     // An example user array, to be replaced
-    let userArray = [
-      {userId: "111", username: "userOne", totalFocusTime: 60},
-      {userId: "222", username: "userTwo", totalFocusTime: 120},
-      {userId: "333", username: "userThree", totalFocusTime: 180},
-    ];
+    const exampleUsernameArray = ["Noah", "Asya", "Maisoon", "Hart", "Caio", "Profsegovia", "2hoursguy", "-2hoursguy"];
+    const exampleTotalStudyTime = [0, 0, 0, 0, 0, 0, 2, -2];
 
-    
+
     // Search up a user by username. Return their index if they exist, return -1 if not.
     function lookupUser(inputUsername) {
-      return usernameArray.indexOf(inputUsername);
+      return exampleUsernameArray.indexOf(inputUsername);
     }
 
     
     // Challenge a user to see who has more total study time
     function challenge(opponent) {
-      let myTotalStudyTime = totalStudyTime[lookupUser(username)];    // my total study time
-      let oppTotalStudyTime = totalStudyTime[lookupUser(opponent)];   // opponent total study time
+      let myTotalStudyTime = exampleTotalStudyTime[lookupUser(username)];    // my total study time
+      let oppTotalStudyTime = exampleTotalStudyTime[lookupUser(opponent)];   // opponent total study time
       if (myTotalStudyTime > oppTotalStudyTime)
         return "Win";
       else if (myTotalStudyTime < oppTotalStudyTime)
