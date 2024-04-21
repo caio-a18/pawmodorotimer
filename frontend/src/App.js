@@ -52,11 +52,12 @@ function App() {
     const [newStudyItem, setNewStudyItem] = useState('');
     const [newBreakItem, setNewBreakItem] = useState('');
 
+
     // Variables for starting a new challenge
     const [playerToChallenge, setPlayerToChallenge] = useState('');
-    const [pendingChallenges, setPendingChallenges] = useState(JSON.parse(localStorage.getItem('pendingChallenges')) || []);
-    const [ongoingChallenges, setOngoingChallenges] = useState(JSON.parse(localStorage.getItem('ongoingChallenges')) || []);
-    const [pastChallenges, setPastChallenges] = useState(JSON.parse(localStorage.getItem('pastChallenges')) || []);
+    // List of pending challenges
+    // List of ongoing challenges
+    // List of past challenges
 
 
     // Add new state to control the visibility of the calendar dialog
@@ -91,11 +92,7 @@ const handleCloseCalendar = () => {
     localStorage.setItem('breakItems', JSON.stringify(breakItems)); 
     localStorage.setItem('newStudyItem', newStudyItem); 
     localStorage.setItem('newBreakItem', newBreakItem); 
-
-    localStorage.setItem('playerToChallenge', playerToChallenge);
-    localStorage.setItem('pendingChallenges', JSON.stringify(pendingChallenges)); 
-    localStorage.setItem('ongoingChallenges', JSON.stringify(ongoingChallenges)); 
-    localStorage.setItem('pastChallenges', JSON.stringify(pastChallenges)); 
+    localStorage.setItem('playerToChallenge', playerToChallenge); 
   };
 
   // useEffect to update localStorage when user data changes
@@ -109,10 +106,7 @@ const handleCloseCalendar = () => {
       breakItems,
       newStudyItem,
       newBreakItem,
-      playerToChallenge,
-      pendingChallenges,
-      ongoingChallenges,
-      pastChallenges]);
+      playerToChallenge]);
 
 const updateUserLevel = (time) => {
 
@@ -174,6 +168,8 @@ const handleAddSuggestedItem = (index) => {
     updatedBreakItems.splice(index, 1);
     setBreakItems(updatedBreakItems);
   };
+
+
 
   // Example of setting the username on successful login
   const handleLoginSuccess = (username, token) => {
