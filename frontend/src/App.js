@@ -251,8 +251,8 @@ const handleAddSuggestedItem = (index) => {
 
 
     // An example user array, to be replaced
-    const exampleUsernameArray = ["Noah", "Asya", "Maisoon", "Hart", "Caio", "Profsegovia", "2hoursguy", "-2hoursguy"];
-    const exampleTotalStudyTime = [0, 0, 0, 0, 0, 0, 2, -2];
+    const exampleUsernameArray = ["Noah", "Asya", "Maisoon", "Hart", "Caio", "Profsegovia", "100hoursguy", "-100hoursguy"];
+    const exampleTotalStudyTime = [0, 0, 0, 0, 0, 0, 6000, -6000];
 
 
     // Search up a user by username. Return their index if they exist, return -1 if not.
@@ -276,6 +276,8 @@ const handleAddSuggestedItem = (index) => {
 
     const handleSubmitChallenge = async e => {
       e.preventDefault();
+      let challengeResult = document.getElementById("challenge-result");
+      challengeResult.innerHTML = "";
  
       if (lookupUser(playerToChallenge) === -1) {
         alert("This player does not exist");
@@ -284,6 +286,18 @@ const handleAddSuggestedItem = (index) => {
         alert("You can't compete against yourself...");
       }
       else {
+        // Display challenge result
+        challengeResult.innerHTML = `Challenge Results:
+        You have studied for ${exampleTotalStudyTime[lookupUser(username)]} minutes.
+        ${playerToChallenge} has studied for ${exampleTotalStudyTime[lookupUser(playerToChallenge)]} minutes.`;
+        if (challenge(playerToChallenge) === "Win")
+          challengeResult.innerHTML += " You win!";
+        else if (challenge(playerToChallenge) === "Loss")
+          challengeResult.innerHTML += " You lose!";
+        else
+          challengeResult.innerHTML += " It's a tie!";
+
+        // Add challenge opponent and result to table
         var pastTable = document.getElementById("pastChallenges");
         var row = pastTable.insertRow(1);
         var cell1 = row.insertCell(0);
@@ -359,11 +373,8 @@ const handleAddSuggestedItem = (index) => {
               </form>
             </div>
 
-            <div class="rightDiv" id="challenge-result" style={{width: '50%', float: 'right', display:'none'}}>
-              <p>Challenge Results:</p>
-              <p>You have studied for ___ hours.</p>
-              <p>___ has studied for ___ hours.</p>
-              <p>___ won this challenge!</p>
+            <div class="rightDiv" id="challenge-result" style={{width: '50%', float: 'right'}}>
+              {/* Put challenge results info here */}
             </div>
           </div>
 
