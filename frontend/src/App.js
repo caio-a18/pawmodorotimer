@@ -243,51 +243,28 @@ const handleAddSuggestedItem = (index) => {
 
     // An example user array, to be replaced / connected to backend
     let userArray = [
-      {userId: "111", username: "userOne"},
-      {userId: "222", username: "userTwo"},
-      {userId: "333", username: "userThree"},
+      {userId: "111", username: "userOne", totalFocusTime: 60},
+      {userId: "222", username: "userTwo", totalFocusTime: 120},
+      {userId: "333", username: "userThree", totalFocusTime: 180},
     ];
 
     
-    // I do not know if we are searching by username or id
-    function lookupUser(inputName) {
-      // See if that name exists in the user array
-      const userExists = userArray.find((user) => user.username === inputName);
-      if (userExists) {
-        // return user data
-        for (let i = 0; i < userArray.length; i++) {
-          if (userArray[i].username === inputName) {
-            return userArray[i];
-          }                        
-        }
-        // Else, user not found
+    // Search up a user by userId. If found, return that user. Else, returns null.
+    function lookupUser(inputUserId) {
+      const inputUser = userArray.find((user) => user.userId === inputUserId);
+      if (inputUser !== null ) {
+        return inputUser;
+      }
+      else {
+        return null;
       }
     }
 
 
     const handleSubmitChallenge = () => {
-      let username = document.getElementById("playerToChallenge").value;
-      var userData = lookupUser(username);
-      if (userData) {   // if player name exists, append a challenge to the table
-        let description = document.getElementById("challengeDescription").value;
-
-        let str = `Challenge opponent is: ${username}. The challenge is: ${description}.`;
-        alert(str);
-        /*
-        var ongoingTable = document.getElementById("ongoingChallenges");
-        var row = ongoingTable.insertRow(1);
-        var cell1 = row.insertCell(0);
-        cell1.innerHTML = inputName;
-        var cell2 = row.insertCell(1);
-        cell2.innerHTML = inputDescription;
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        cell4.innerHTMl = "Pending"; */
-        return;
-      }
-
-      // Else
-      alert("This player name does not exist.");
+      
+      // console.log("Submitted a challenge!");
+      alert("Submitted a challenge");
     };
 
 
@@ -324,7 +301,7 @@ const handleAddSuggestedItem = (index) => {
                 <Dialog open={showChallenges} onClose={handleCloseChallenges}>
                   <DialogTitle sx={{ color: 'blue' }}>Challenges For {username}: </DialogTitle>
                   <DialogContent sx={{ color: 'purple' }}>
-                    <p>This is where you will see past challenges and be able to start challenges.</p>
+                    <p>Here you can challenge another user! Below you can view pending, ongoing and past challenges.</p>
                     <div>
                       
 
@@ -338,31 +315,36 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
         <AccordionDetails>
           
-          {/*
-          <div class = "challenge-textfield">
-            <TextField
-            id = "challenge-search"
-            type="search"
-            label = "Choose a Player to Challenge"/>
-          </div>
-          */}
-
 
           <form onSubmit={handleSubmitChallenge} id="challengeForm">
-            <div class = "challenge-submit">
-              <div>
-                <label for="playerToChallenge">Choose a player to challenge.</label>
-                <input type="text" id="playerToChallenge" required/>
-              </div>
-              <div>
-                <label for="challengeDescription">What kind of challenge?</label>
-                <input type="text" id="challengeDescription" required/>
-              </div>
-              {/* <Button type = "submit">Submit</Button> */}
+            <label>
+              <p>Choose a player to challenge.</p>
+              {/*
+              <TextField id="challenge-search" type="search" value={playerToChallenge} onChange={e => setPlayerToChallengeValue(e.target.value)}/>
+              */}
+              <TextField type="text"/>
+            </label>
+            <div className = "challenge-submit">
               <Button type="submit">Submit</Button>
             </div>
           </form>
 
+
+        </AccordionDetails>
+      </Accordion>
+
+
+      <Accordion>
+        <AccordionSummary
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          See Pending Challenges 
+        </AccordionSummary>
+        <AccordionDetails>
+          <div>
+        
+          </div>
         </AccordionDetails>
       </Accordion>
 
@@ -376,20 +358,7 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
         <AccordionDetails>
           <div>
-            <table id="ongoingChallenges" class="challengesTable">
-              <tr>
-                <th class="tableCell">Opponent</th>
-                <th class="tableCell">Challenge</th>
-                <th class="tableCell">Date Started</th>
-                <th class="tableCell">Status</th>
-              </tr>
-              <tr>
-                <td class="tableCell"></td> 
-                <td class="tableCell"></td>
-                <td class="tableCell"></td>
-                <td class="tableCell"></td>
-              </tr>
-            </table>
+        
           </div>
         </AccordionDetails>
       </Accordion>
@@ -404,20 +373,7 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
         <AccordionDetails>
           <div>
-            <table id="pastChallenges" class="challengesTable">
-              <tr>
-                <th class="tableCell">Opponent</th>
-                <th class="tableCell">Challenge</th>
-                <th class="tableCell">Date Started</th>
-                <th class="tableCell">Outcome</th>
-              </tr>
-              <tr>
-                <td class="tableCell"></td> 
-                <td class="tableCell"></td>
-                <td class="tableCell"></td>
-                <td class="tableCell"></td>
-              </tr>
-            </table>
+
           </div>
         </AccordionDetails>
       </Accordion>
