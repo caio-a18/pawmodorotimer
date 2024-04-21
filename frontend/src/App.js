@@ -260,16 +260,14 @@ const handleAddSuggestedItem = (index) => {
       {userId: "333", username: "userThree", totalFocusTime: 180},
     ];
 
-    
-    // Search up a user by userId. If found, return that user. Else, returns null.
+    // Example list for pending challenges
+    let pendingChallenges = [];
+
+
+    // Search up a user by userId. If found, return that user. Else, returns undefined.
     function lookupUser(inputUserId) {
       const inputUser = userArray.find((user) => user.userId === inputUserId);
-      if (inputUser !== null ) {
         return inputUser;
-      }
-      else {
-        return null;
-      }
     }
 
 
@@ -290,13 +288,24 @@ const handleAddSuggestedItem = (index) => {
     const handleSubmitChallenge = async e => {
       e.preventDefault();
 
+      const opponent = lookupUser(playerToChallenge);
       // If player exists, send them a challenge request, and update the pending challenges list
-      if ((lookupUser(playerToChallenge)) !== null) {
+      if (opponent !== undefined) {
+        // pendingChallenges.push(opponent);
+        // alert(JSON.stringify(pendingChallenges));
 
+        let str = `${opponent.username} has ${opponent.totalFocusTime} minutes of focus time.`;
+        document.getElementById("inputPlayerInfo").innerHTML = str;
+        /*
+        alert(opponent.userId);
+        alert(opponent.username);
+        alert(opponent.totalFocusTime);
+        */
+        return;
       }
       
       // console.log("Submitted a challenge!");
-      alert("Submitted a challenge");
+      alert("This player does not exist");
     };
 
 
@@ -348,17 +357,25 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
         <AccordionDetails>
           
+          <div>
 
-          <form onSubmit={handleSubmitChallenge} id="challengeForm">
-            <label>
-              <p>Choose a player to challenge.</p>
-              <TextField id="challenge-search" type="search" value={playerToChallenge} onChange={e => setPlayerToChallenge(e.target.value)}/>
-            </label>
-            <div className = "challenge-submit">
-              <Button type="submit">Submit</Button>
-            </div>
-          </form>
+          <div class="leftDiv" style={{width: '50%', float: 'left'}}>
+            <form onSubmit={handleSubmitChallenge} id="challengeForm">
+              <label>
+                <p>Choose a player to challenge.</p>
+                <TextField id="challenge-search" type="search" value={playerToChallenge} onChange={e => setPlayerToChallenge(e.target.value)}/>
+              </label>
+              <div className = "challenge-submit">
+                <Button type="submit">Submit</Button>
+              </div>
+            </form>
+          </div>
 
+          <div class="rightDiv" id="inputPlayerInfo">
+
+          </div>
+
+          </div>
 
         </AccordionDetails>
       </Accordion>
