@@ -52,12 +52,8 @@ function App() {
     const [newStudyItem, setNewStudyItem] = useState('');
     const [newBreakItem, setNewBreakItem] = useState('');
 
-
     // Variables for starting a new challenge
     const [playerToChallenge, setPlayerToChallenge] = useState('');
-    const [challengeDuration, setChallengeDuration] = useState('');
-    // List of pending challenges
-    // List of ongoing challenges
     // List of past challenges
 
 
@@ -94,7 +90,6 @@ const handleCloseCalendar = () => {
     localStorage.setItem('newStudyItem', newStudyItem); 
     localStorage.setItem('newBreakItem', newBreakItem); 
     localStorage.setItem('playerToChallenge', playerToChallenge); 
-    localStorage.setItem('challengeDuration', challengeDuration);
   };
 
   // useEffect to update localStorage when user data changes
@@ -108,8 +103,7 @@ const handleCloseCalendar = () => {
       breakItems,
       newStudyItem,
       newBreakItem,
-      playerToChallenge,
-      challengeDuration]);
+      playerToChallenge]);
 
 const updateUserLevel = (time) => {
 
@@ -256,68 +250,53 @@ const handleAddSuggestedItem = (index) => {
 
 
 
-    // An example user array, to be replaced / connected to backend
+    // An example user array, to be replaced
     let userArray = [
       {userId: "111", username: "userOne", totalFocusTime: 60},
       {userId: "222", username: "userTwo", totalFocusTime: 120},
       {userId: "333", username: "userThree", totalFocusTime: 180},
     ];
 
-    // Example list for pending challenges
-    let pendingChallenges = [];
-
-
-    // Search up a user by userId. If found, return that user. Else, returns undefined.
-    function lookupUser(inputUserId) {
-      const inputUser = userArray.find((user) => user.userId === inputUserId);
-        return inputUser;
+    
+    // Search up a user by username. Return their index if they exist, return -1 if not.
+    function lookupUser(inputUsername) {
+      return usernameArray.indexOf(inputUsername);
     }
 
-
-    // When a challenge ends, update the status and result
-    function endChallenge(user1, user2) {
-      if (user1.totalFocusTime > user2.totalFocusTime) {
-        // user1 wins, user2 loses
-      }
-      else if (user1.totalFocusTime < user2.totalFocusTime) {
-        // user1 loses, user2 wins
-      }
-      else {
-        // user1 and user2 tied
-      }
+    
+    // Challenge a user to see who has more total study time
+    function challenge(opponent) {
+      let myTotalStudyTime = totalStudyTime[lookupUser(username)];    // my total study time
+      let oppTotalStudyTime = totalStudyTime[lookupUser(opponent)];   // opponent total study time
+      if (myTotalStudyTime > oppTotalStudyTime)
+        return "Win";
+      else if (myTotalStudyTime < oppTotalStudyTime)
+        return "Loss";
+      else
+        return "Tie";   
     }
 
 
     const handleSubmitChallenge = async e => {
       e.preventDefault();
-
-      const opponent = lookupUser(playerToChallenge);
-      // If player exists, send them a challenge request, and update the pending challenges list
-      if (opponent !== undefined) {
-        // pendingChallenges.push(opponent);
-        // alert(JSON.stringify(pendingChallenges));
-        var pendingTable = document.getElementById("pendingChallenges");
-        var row = pendingTable.insertRow(1);
+ 
+      if (lookupUser(playerToChallenge) === -1) {
+        alert("This player does not exist");
+      }
+      else if (lookupUser(playerToChallenge) === lookupUser(username)) {
+        alert("You can't compete against yourself...");
+      }
+      else {
+        var pastTable = document.getElementById("pastChallenges");
+        var row = pastTable.insertRow(1);
         var cell1 = row.insertCell(0);
         cell1.className = "tableCell";
-        cell1.innerHTML = opponent.username;
+        cell1.innerHTML = playerToChallenge;
         var cell2 = row.insertCell(1);
         cell2.className = "tableCell";
-        cell2.innerHTML = "some duration";
-
-
-        let str = `${opponent.username} has ${opponent.totalFocusTime} minutes of focus time.`;
-        document.getElementById("inputPlayerInfo").innerHTML = str;
-        /*
-        alert(opponent.userId);
-        alert(opponent.username);
-        alert(opponent.totalFocusTime);
-        */
+        cell2.innerHTML = challenge(playerToChallenge);
         return;
       }
-      
-      // console.log("Submitted a challenge!");
-      alert("This player does not exist");
     };
 
 
@@ -355,7 +334,7 @@ const handleAddSuggestedItem = (index) => {
                 <Dialog open={showChallenges} onClose={handleCloseChallenges}>
                   <DialogTitle sx={{ color: 'blue' }}>Challenges For {username}: </DialogTitle>
                   <DialogContent sx={{ color: 'purple' }}>
-                    <p>Here you can challenge another user! Below you can view pending, ongoing and past challenges.</p>
+                    <p>Challenge a user to see who has more focus time! Below you can view past challenges.</p>
                     <div>
                       
 
@@ -370,73 +349,27 @@ const handleAddSuggestedItem = (index) => {
         <AccordionDetails>
           
           <div>
+            <div class="leftDiv" style={{width: '50%', float: 'left'}}>
+              <form onSubmit={handleSubmitChallenge} id="challengeForm">
+                <label>
+                  <p>Choose a player to challenge.</p>
+                  <TextField id="challenge-search" type="search" value={playerToChallenge} onChange={e => setPlayerToChallenge(e.target.value)}/>
+                </label>
+                
+                <div className = "challenge-submit">
+                  <Button type="submit">Submit</Button>
+                </div>
+              </form>
+            </div>
 
-          <div class="leftDiv" style={{width: '50%', float: 'left'}}>
-            <form onSubmit={handleSubmitChallenge} id="challengeForm">
-              <label>
-                <p>Choose a player to challenge.</p>
-                <TextField id="challenge-search" type="search" value={playerToChallenge} onChange={e => setPlayerToChallenge(e.target.value)}/>
-              </label>
-              
-              <div>
-                <p>Choose a duration for the challenge.</p>
-                <input type="radio" id="1day" name="duration" value="day" required />
-                <label for="1day">1 Day</label><br/>
-                <input type="radio" id="1week" name="duration" value="week" required />
-                <label for="1week">1 Week</label><br/>
-                <input type="radio" id="1month" name="duration" value="month" required />
-                <label for="1month">1 Month</label><br/>
-              </div>
-
-              <div className = "challenge-submit">
-                <Button type="submit">Submit</Button>
-              </div>
-            </form>
+            <div class="rightDiv" id="challenge-result" style={{width: '50%', float: 'right', display:'none'}}>
+              <p>Challenge Results:</p>
+              <p>You have studied for ___ hours.</p>
+              <p>___ has studied for ___ hours.</p>
+              <p>___ won this challenge!</p>
+            </div>
           </div>
 
-          <div class="rightDiv" id="inputPlayerInfo">
-
-          </div>
-
-          </div>
-
-        </AccordionDetails>
-      </Accordion>
-
-
-      <Accordion>
-        <AccordionSummary
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          See Pending Challenges 
-        </AccordionSummary>
-        <AccordionDetails>
-          <div>
-            <table id="pendingChallenges" class="challengesTable">
-              <tr>
-                <th class="tableCell">Opponent</th>
-                <th class="tableCell">Duration</th>
-              </tr>
-            </table>
-          </div>
-        </AccordionDetails>
-      </Accordion>
-
-
-      <Accordion>
-        <AccordionSummary
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          See Ongoing Challenges 
-        </AccordionSummary>
-        <AccordionDetails>
-          <div>
-            <table id="ongoingChallenges" class="challengesTable">
-
-            </table>
-          </div>
         </AccordionDetails>
       </Accordion>
 
@@ -451,7 +384,10 @@ const handleAddSuggestedItem = (index) => {
         <AccordionDetails>
           <div>
             <table id="pastChallenges" class="challengesTable">
-
+              <tr>
+                <th class="tableCell">Opponent</th>
+                <th class="tableCell">Outcome</th>
+              </tr>
             </table>
           </div>
         </AccordionDetails>
