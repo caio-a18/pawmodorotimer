@@ -271,13 +271,27 @@ const handleAddSuggestedItem = (index) => {
     }
 
 
+    // When a challenge ends, update the status and result
+    function endChallenge(user1, user2) {
+      if (user1.totalFocusTime > user2.totalFocusTime) {
+        // user1 wins, user2 loses
+      }
+      else if (user1.totalFocusTime < user2.totalFocusTime) {
+        // user1 loses, user2 wins
+      }
+      else {
+        // user1 and user2 tied
+      }
+    }
+
+
     const handleSubmitChallenge = () => {
       
       // console.log("Submitted a challenge!");
       alert("Submitted a challenge");
     };
 
-    
+
 
     // UseEffect for HandleTimer
     useEffect(() => {
