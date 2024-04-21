@@ -52,6 +52,16 @@ function App() {
     const [newStudyItem, setNewStudyItem] = useState('');
     const [newBreakItem, setNewBreakItem] = useState('');
 
+
+
+    // Variables for starting a new challenge
+    const [playerToChallenge, setPlayerToChallenge] = useState('');
+    // List for pending challenges
+    // List for ongoing challenges
+    // List for past challenges
+
+
+
     // Add new state to control the visibility of the calendar dialog
 const [showCalendar, setShowCalendar] = useState(false);
 
@@ -267,6 +277,7 @@ const handleAddSuggestedItem = (index) => {
       alert("Submitted a challenge");
     };
 
+    
 
     // UseEffect for HandleTimer
     useEffect(() => {
@@ -319,10 +330,7 @@ const handleAddSuggestedItem = (index) => {
           <form onSubmit={handleSubmitChallenge} id="challengeForm">
             <label>
               <p>Choose a player to challenge.</p>
-              {/*
-              <TextField id="challenge-search" type="search" value={playerToChallenge} onChange={e => setPlayerToChallengeValue(e.target.value)}/>
-              */}
-              <TextField type="text"/>
+              <TextField id="challenge-search" type="search" value={playerToChallenge} onChange={e => setPlayerToChallenge(e.target.value)}/>
             </label>
             <div className = "challenge-submit">
               <Button type="submit">Submit</Button>
