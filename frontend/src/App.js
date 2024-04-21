@@ -52,14 +52,11 @@ function App() {
     const [newStudyItem, setNewStudyItem] = useState('');
     const [newBreakItem, setNewBreakItem] = useState('');
 
-
-
     // Variables for starting a new challenge
     const [playerToChallenge, setPlayerToChallenge] = useState('');
-    // List for pending challenges
-    // List for ongoing challenges
-    // List for past challenges
-
+    const [pendingChallenges, setPendingChallenges] = useState(JSON.parse(localStorage.getItem('pendingChallenges')) || []);
+    const [ongoingChallenges, setOngoingChallenges] = useState(JSON.parse(localStorage.getItem('ongoingChallenges')) || []);
+    const [pastChallenges, setPastChallenges] = useState(JSON.parse(localStorage.getItem('pastChallenges')) || []);
 
 
     // Add new state to control the visibility of the calendar dialog
@@ -94,6 +91,11 @@ const handleCloseCalendar = () => {
     localStorage.setItem('breakItems', JSON.stringify(breakItems)); 
     localStorage.setItem('newStudyItem', newStudyItem); 
     localStorage.setItem('newBreakItem', newBreakItem); 
+
+    localStorage.setItem('playerToChallenge', playerToChallenge);
+    localStorage.setItem('pendingChallenges', JSON.stringify(pendingChallenges)); 
+    localStorage.setItem('ongoingChallenges', JSON.stringify(ongoingChallenges)); 
+    localStorage.setItem('pastChallenges', JSON.stringify(pastChallenges)); 
   };
 
   // useEffect to update localStorage when user data changes
@@ -106,7 +108,11 @@ const handleCloseCalendar = () => {
       studyItems, 
       breakItems,
       newStudyItem,
-      newBreakItem]);
+      newBreakItem,
+      playerToChallenge,
+      pendingChallenges,
+      ongoingChallenges,
+      pastChallenges]);
 
 const updateUserLevel = (time) => {
 
@@ -285,7 +291,13 @@ const handleAddSuggestedItem = (index) => {
     }
 
 
-    const handleSubmitChallenge = () => {
+    const handleSubmitChallenge = async e => {
+      e.preventDefault();
+
+      // If player exists, send them a challenge request, and update the pending challenges list
+      if ((lookupUser(playerToChallenge)) !== null) {
+
+      }
       
       // console.log("Submitted a challenge!");
       alert("Submitted a challenge");
