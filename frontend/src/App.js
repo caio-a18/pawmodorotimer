@@ -297,15 +297,24 @@ const handleAddSuggestedItem = (index) => {
         else
           challengeResult.innerHTML += " It's a tie!";
 
+
         // Add challenge opponent and result to table
-        var pastTable = document.getElementById("pastChallenges");
-        var row = pastTable.insertRow(1);
-        var cell1 = row.insertCell(0);
+        let pastTable = document.getElementById("pastChallenges");
+        let row = pastTable.insertRow(1);
+
+        let cell0 = row.insertCell(0);
+        let today = new Date();
+        cell0.innerHTML = today.toLocaleString();
+        cell0.className = "tableCell";
+
+        let cell1 = row.insertCell(1);
         cell1.className = "tableCell";
         cell1.innerHTML = playerToChallenge;
-        var cell2 = row.insertCell(1);
+
+        let cell2 = row.insertCell(2);
         cell2.className = "tableCell";
         cell2.innerHTML = challenge(playerToChallenge);
+
         return;
       }
     };
@@ -393,6 +402,7 @@ const handleAddSuggestedItem = (index) => {
           <div>
             <table id="pastChallenges" class="challengesTable">
               <tr>
+                <th class="tableCell">Date/Time</th>
                 <th class="tableCell">Opponent</th>
                 <th class="tableCell">Outcome</th>
               </tr>
