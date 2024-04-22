@@ -298,7 +298,7 @@ const handleAddSuggestedItem = (index) => {
           challengeResult.innerHTML += " It's a tie!";
 
 
-        // Add challenge opponent and result to table
+        // Add challenge date, opponent, and result to table
         let pastTable = document.getElementById("pastChallenges");
         let row = pastTable.insertRow(1);
 
