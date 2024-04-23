@@ -213,6 +213,7 @@ const handleAddSuggestedItem = (index) => {
       }
     };
 
+    // logic to calculate new date / week / month / year
     useEffect(() => {
       const now = new Date();
   
