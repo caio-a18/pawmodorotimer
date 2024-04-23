@@ -55,9 +55,18 @@ function App() {
     const [newStudyItem, setNewStudyItem] = useState('');
     const [newBreakItem, setNewBreakItem] = useState('');
 
-    // Variables for starting a new challenge
+    // Variables for challenges tab
     const [playerToChallenge, setPlayerToChallenge] = useState('');
-    // List of past challenges
+    const [pastChallenges, setPastChallenges] = useState(JSON.parse(localStorage.getItem('pastChallenges')) || []);
+
+
+
+    // Add a challenge(s) to local storage
+    function storeChallenge(challenge) {
+      // When enter challenge, create object with date/time, opponent, result
+      // Store this in the array
+
+    }
 
 
     // Add new state to control the visibility of the calendar dialog
@@ -92,6 +101,7 @@ function App() {
     localStorage.setItem('newStudyItem', newStudyItem); 
     localStorage.setItem('newBreakItem', newBreakItem); 
     localStorage.setItem('playerToChallenge', playerToChallenge); 
+    localStorage.setItem('pastChallenges', JSON.stringify('pastChallenges'));
   };
 
   // useEffect to update localStorage when user data changes
@@ -105,7 +115,8 @@ function App() {
       breakItems,
       newStudyItem,
       newBreakItem,
-      playerToChallenge]);
+      playerToChallenge,
+      pastChallenges]);
 
 const updateUserLevel = (time) => {
 
@@ -350,58 +361,76 @@ const handleAddSuggestedItem = (index) => {
 
     
     // Challenge a user to see who has more total study time
-    function challenge(opponent) {
+    function doChallenge(opponentName) {
       let myTotalStudyTime = exampleTotalStudyTime[lookupUser(username)];    // my total study time
-      let oppTotalStudyTime = exampleTotalStudyTime[lookupUser(opponent)];   // opponent total study time
+      let oppTotalStudyTime = exampleTotalStudyTime[lookupUser(opponentName)];   // opponent total study time
+      let challengeResult = '';
+      let today = new Date();
       if (myTotalStudyTime > oppTotalStudyTime)
-        return "Win";
+        challengeResult = "Win";
       else if (myTotalStudyTime < oppTotalStudyTime)
-        return "Loss";
+        challengeResult = "Loss";
       else
-        return "Tie";   
+        challengeResult = "Tie";   
+      
+      // Return challenge object with three things stored in table
+      let challenge = {
+        opponent: opponentName,
+        result: challengeResult,
+        datetime: today.toLocaleString(),
+      };
+
+    return challenge;
     }
 
 
+
+    // Submit a challenge
     const handleSubmitChallenge = async e => {
       e.preventDefault();
-      let challengeResult = document.getElementById("challenge-result");
-      challengeResult.innerHTML = "";
- 
-      if (lookupUser(playerToChallenge) === -1) {
+
+      // This stores the opponent, result, and date of the challenge
+      let challenge = doChallenge(playerToChallenge);
+      // Store in table
+      setPlayerToChallenge('');
+
+      let resultText = document.getElementById("challenge-result");
+      resultText.innerHTML = "";
+      
+      if (lookupUser(challenge.opponent) === -1) {
         alert("This player does not exist");
       }
-      else if (lookupUser(playerToChallenge) === lookupUser(username)) {
+      else if (lookupUser(challenge.opponent) === lookupUser(username)) {
         alert("You can't compete against yourself...");
       }
       else {
         // Display challenge result
-        challengeResult.innerHTML = `Challenge Results:
+        resultText.innerHTML = `Challenge Results:
         You have studied for ${exampleTotalStudyTime[lookupUser(username)]} minutes.
-        ${playerToChallenge} has studied for ${exampleTotalStudyTime[lookupUser(playerToChallenge)]} minutes.`;
-        if (challenge(playerToChallenge) === "Win")
-          challengeResult.innerHTML += " You win!";
-        else if (challenge(playerToChallenge) === "Loss")
-          challengeResult.innerHTML += " You lose!";
+        ${challenge.opponent} has studied for ${exampleTotalStudyTime[lookupUser(challenge.opponent)]} minutes.`;
+        if (challenge.result === "Win")
+          resultText.innerHTML += " You win!";
+        else if (challenge.result === "Loss")
+          resultText.innerHTML += " You lose!";
         else
-          challengeResult.innerHTML += " It's a tie!";
+          resultText.innerHTML += " It's a tie!";
 
 
         // Add challenge date, opponent, and result to table
         let pastTable = document.getElementById("pastChallenges");
         let row = pastTable.insertRow(1);
-
+        // date / time
         let cell0 = row.insertCell(0);
-        let today = new Date();
-        cell0.innerHTML = today.toLocaleString();
+        cell0.innerHTML = challenge.datetime;
         cell0.className = "tableCell";
-
+        // opponent
         let cell1 = row.insertCell(1);
         cell1.className = "tableCell";
-        cell1.innerHTML = playerToChallenge;
-
+        cell1.innerHTML = challenge.opponent;
+        // result
         let cell2 = row.insertCell(2);
         cell2.className = "tableCell";
-        cell2.innerHTML = challenge(playerToChallenge);
+        cell2.innerHTML = challenge.result;
 
         return;
       }
