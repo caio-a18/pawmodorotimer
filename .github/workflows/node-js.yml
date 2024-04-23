@@ -16,8 +16,8 @@ jobs:
       - run: npm install 
       - run: npm ci
       - run: npm start 
-      - run: dir "frontend\public\index.html"
-      - run: npm run build
+      - run: dir "frontend"
+      - run: npm start
 
   # Job for running the backend server
   run-backend:
