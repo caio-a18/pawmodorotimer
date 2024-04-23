@@ -55,6 +55,11 @@ function App() {
     const [newStudyItem, setNewStudyItem] = useState('');
     const [newBreakItem, setNewBreakItem] = useState('');
 
+    // Variables for starting a new challenge
+    const [playerToChallenge, setPlayerToChallenge] = useState('');
+    // List of past challenges
+
+
     // Add new state to control the visibility of the calendar dialog
     const [showCalendar, setShowCalendar] = useState(false);
 
@@ -86,6 +91,7 @@ function App() {
     localStorage.setItem('breakItems', JSON.stringify(breakItems)); 
     localStorage.setItem('newStudyItem', newStudyItem); 
     localStorage.setItem('newBreakItem', newBreakItem); 
+    localStorage.setItem('playerToChallenge', playerToChallenge); 
   };
 
   // useEffect to update localStorage when user data changes
@@ -98,7 +104,8 @@ function App() {
       studyItems, 
       breakItems,
       newStudyItem,
-      newBreakItem]);
+      newBreakItem,
+      playerToChallenge]);
 
 const updateUserLevel = (time) => {
 
@@ -160,6 +167,8 @@ const handleAddSuggestedItem = (index) => {
     updatedBreakItems.splice(index, 1);
     setBreakItems(updatedBreakItems);
   };
+
+
 
   // Example of setting the username on successful login
   const handleLoginSuccess = (username, token) => {
@@ -326,6 +335,80 @@ const handleAddSuggestedItem = (index) => {
       setShowChallenges(false); // Close the dialog
     };
 
+
+
+
+    // An example user array, to be replaced
+    const exampleUsernameArray = ["Noah", "Asya", "Maisoon", "Hart", "Caio", "Profsegovia", "100hoursguy", "-100hoursguy"];
+    const exampleTotalStudyTime = [0, 0, 0, 0, 0, 0, 6000, -6000];
+
+
+    // Search up a user by username. Return their index if they exist, return -1 if not.
+    function lookupUser(inputUsername) {
+      return exampleUsernameArray.indexOf(inputUsername);
+    }
+
+    
+    // Challenge a user to see who has more total study time
+    function challenge(opponent) {
+      let myTotalStudyTime = exampleTotalStudyTime[lookupUser(username)];    // my total study time
+      let oppTotalStudyTime = exampleTotalStudyTime[lookupUser(opponent)];   // opponent total study time
+      if (myTotalStudyTime > oppTotalStudyTime)
+        return "Win";
+      else if (myTotalStudyTime < oppTotalStudyTime)
+        return "Loss";
+      else
+        return "Tie";   
+    }
+
+
+    const handleSubmitChallenge = async e => {
+      e.preventDefault();
+      let challengeResult = document.getElementById("challenge-result");
+      challengeResult.innerHTML = "";
+ 
+      if (lookupUser(playerToChallenge) === -1) {
+        alert("This player does not exist");
+      }
+      else if (lookupUser(playerToChallenge) === lookupUser(username)) {
+        alert("You can't compete against yourself...");
+      }
+      else {
+        // Display challenge result
+        challengeResult.innerHTML = `Challenge Results:
+        You have studied for ${exampleTotalStudyTime[lookupUser(username)]} minutes.
+        ${playerToChallenge} has studied for ${exampleTotalStudyTime[lookupUser(playerToChallenge)]} minutes.`;
+        if (challenge(playerToChallenge) === "Win")
+          challengeResult.innerHTML += " You win!";
+        else if (challenge(playerToChallenge) === "Loss")
+          challengeResult.innerHTML += " You lose!";
+        else
+          challengeResult.innerHTML += " It's a tie!";
+
+
+        // Add challenge date, opponent, and result to table
+        let pastTable = document.getElementById("pastChallenges");
+        let row = pastTable.insertRow(1);
+
+        let cell0 = row.insertCell(0);
+        let today = new Date();
+        cell0.innerHTML = today.toLocaleString();
+        cell0.className = "tableCell";
+
+        let cell1 = row.insertCell(1);
+        cell1.className = "tableCell";
+        cell1.innerHTML = playerToChallenge;
+
+        let cell2 = row.insertCell(2);
+        cell2.className = "tableCell";
+        cell2.innerHTML = challenge(playerToChallenge);
+
+        return;
+      }
+    };
+
+
+
     // UseEffect for HandleTimer
     useEffect(() => {
       handleTimerIsDone(1);
@@ -359,9 +442,11 @@ const handleAddSuggestedItem = (index) => {
                 <Dialog open={showChallenges} onClose={handleCloseChallenges}>
                   <DialogTitle sx={{ color: 'blue' }}>Challenges For {username}: </DialogTitle>
                   <DialogContent sx={{ color: 'purple' }}>
-                    <p>This is where you will see past challenges and be able to start challenges.</p>
+                    <p>Challenge a user to see who has more focus time! Below you can view past challenges.</p>
                     <div>
                       
+
+
       <Accordion>
         <AccordionSummary
           aria-controls="panel1-content"
@@ -370,18 +455,30 @@ const handleAddSuggestedItem = (index) => {
           Start a Challenge 
         </AccordionSummary>
         <AccordionDetails>
-        <div class = "challenge-textfield">
-        <TextField
-        id = "challenge-search"
-        type="search"
-        label = "Choose a Player to Challenge"/>
-        </div>
-        <div class = "challenge-submit">
-        <Button type = "submit">Submit</Button>
-        </div>
+          
+          <div>
+            <div class="leftDiv" style={{width: '50%', float: 'left'}}>
+              <form onSubmit={handleSubmitChallenge} id="challengeForm">
+                <label>
+                  <p>Choose a player to challenge.</p>
+                  <TextField id="challenge-search" type="search" value={playerToChallenge} onChange={e => setPlayerToChallenge(e.target.value)}/>
+                </label>
+                
+                <div className = "challenge-submit">
+                  <Button type="submit">Submit</Button>
+                </div>
+              </form>
+            </div>
+
+            <div class="rightDiv" id="challenge-result" style={{width: '50%', float: 'right'}}>
+              {/* Put challenge results info here */}
+            </div>
+          </div>
+
         </AccordionDetails>
       </Accordion>
-                     
+
+
       <Accordion>
         <AccordionSummary
           aria-controls="panel1-content"
@@ -389,7 +486,20 @@ const handleAddSuggestedItem = (index) => {
         >
           See Past Challenges 
         </AccordionSummary>
+        <AccordionDetails>
+          <div>
+            <table id="pastChallenges" class="challengesTable">
+              <tr>
+                <th class="tableCell">Date/Time</th>
+                <th class="tableCell">Opponent</th>
+                <th class="tableCell">Outcome</th>
+              </tr>
+            </table>
+          </div>
+        </AccordionDetails>
       </Accordion>
+
+
                     </div>
                   </DialogContent>
                   <DialogActions>
@@ -405,13 +515,16 @@ const handleAddSuggestedItem = (index) => {
               <Button onClick={handleOpenCalendar}>Calendar</Button>
             </div>
 
-            <CalendarView
-              open={showCalendar}
-              onClose={handleCloseCalendar}
-              username={username}
-              totalStudyTime={totalStudyTime}
-              usernameArray={usernameArray}
-            />
+{/* TO DELETE */ }
+{/* When you search for a user, it should display their data. */}
+
+<CalendarView
+    open={showCalendar}
+    onClose={handleCloseCalendar}
+    username={username}
+    totalStudyTime={totalStudyTime}
+    usernameArray={usernameArray}
+/>
 
             <div style = {{marginLeft: 'auto', marginRight: '0.1in'}} auto className = "profile-container">
               <Box>
