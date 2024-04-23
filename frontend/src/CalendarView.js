@@ -8,6 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
+// initializes all to 0
 function CalendarView({ open, onClose, username, totalStudyTime, usernameArray }) {
     const [studyHours, setStudyHours] = useState({ today: 0, week: 0, month: 0, year: 0 });
 
@@ -16,14 +17,15 @@ function CalendarView({ open, onClose, username, totalStudyTime, usernameArray }
         const userIndex = usernameArray.indexOf(username);
         if (userIndex !== -1) {
             const minutes = totalStudyTime[userIndex];
-            const hours = Math.floor(minutes / 60); // Convert minutes to hours and round down to the nearest hour
+            const hours = Math.floor(minutes / 60);
             const weekly = Math.floor(minutes / (60*24));
             const monthly = Math.floor(minutes/  (60*24*30));
             const yearly = Math.floor(minutes / (60*24*365));
 
+            // sets the hours for daily, weekly, monthly, yearly
             setStudyHours({
-                today: hours, // For now, it just sets the hours for today
-                week: weekly,  // You will need to implement the logic for the week, month, and year
+                today: hours,
+                week: weekly, 
                 month: monthly,
                 year: yearly
             });
@@ -31,17 +33,17 @@ function CalendarView({ open, onClose, username, totalStudyTime, usernameArray }
     };
 
     useEffect(() => {
-        // resets the study hours based on the date
+        // resets the study hours based on the date --> resets the hours for today
         const resetDailyStudyHours = () => {
             const currentDate = new Date();
             if (currentDate.getHours() === 0 && currentDate.getMinutes() === 0) {
-                // Assuming the reset logic has been implemented elsewhere to reset the totalStudyTime array
                 setStudyHours(prevState => ({ ...prevState, today: 0 }));
             }
         };
 
-        const intervalId = setInterval(resetDailyStudyHours, 60000); // Check every minute
+        const intervalId = setInterval(resetDailyStudyHours, 60000);
 
+        // calculates the study hours
         calculateStudyHours();
 
         return () => clearInterval(intervalId);
@@ -55,7 +57,7 @@ function CalendarView({ open, onClose, username, totalStudyTime, usernameArray }
             <DialogTitle>Study Calendar for {username}</DialogTitle>
             <DialogContent>
                 <Box>
-                    {/* Display for Date, Week, Month, Year, */}
+                    {/* Display for Date, Week, Month, Year */}
                     <p>Today's Date: {today}</p>
                     <p>Study Hours Today: {studyHours.today}</p>
                     <p>Study Hours This Week: {studyHours.week}</p>
@@ -64,6 +66,7 @@ function CalendarView({ open, onClose, username, totalStudyTime, usernameArray }
                 </Box>
             </DialogContent>
             <DialogActions>
+                {/* Closes */}
                 <Button onClick={onClose}>Close</Button>
             </DialogActions>
         </Dialog>
