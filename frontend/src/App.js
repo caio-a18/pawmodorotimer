@@ -418,7 +418,7 @@ const handleAddSuggestedItem = (index) => {
       e.preventDefault();
       // Delete lines below
       // clearPastChallenges();
-      // alert(localStorage.getItem('pastChallenges'));
+      alert(localStorage.getItem('pastChallenges'));
       
       let resultText = document.getElementById("challenge-result");
       resultText.innerHTML = "";
@@ -445,9 +445,6 @@ const handleAddSuggestedItem = (index) => {
           resultText.innerHTML += " You lose!";
         else
           resultText.innerHTML += " It's a tie!";
-
-        // Stores new challenge in local storage
-        storeChallenge(challenge);
       }
 
       updateTable();
