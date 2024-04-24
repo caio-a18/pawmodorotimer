@@ -416,11 +416,11 @@ const handleAddSuggestedItem = (index) => {
       handleTimerIsDone(20);
       handleTimerIsDone(60);
     }, [time]);
-
+    /*
     if(!token) {
       // Pass handleLoginSuccess and setUsername as props to Login component
       return <Login setToken={setToken} handleLoginSuccess={handleLoginSuccess} setUsername={setUsername} />;
-  }
+  }*/
   
     return (
       <BrowserRouter>
@@ -550,7 +550,7 @@ const handleAddSuggestedItem = (index) => {
           
           <div className="time-info">
             <div>Selected Time: {timeGUI(selectedTime)}</div>
-            <div>Time Remaining: {timeGUI(time)}</div>
+            <div data-testid="timer">Time Remaining: {timeGUI(time)}</div>
           </div>
     
           <Switch>
