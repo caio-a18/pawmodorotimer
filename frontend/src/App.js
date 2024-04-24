@@ -57,16 +57,8 @@ function App() {
 
     // Variables for challenges tab
     const [playerToChallenge, setPlayerToChallenge] = useState('');
-    const [pastChallenges, setPastChallenges] = useState(JSON.parse(localStorage.getItem('pastChallenges')) || []);
+    const [pastChallenges, setPastChallenges] = useState(JSON.parse(localStorage.getItem('pastChallenges')));
 
-
-
-    // Add a challenge(s) to local storage
-    function storeChallenge(challenge) {
-      // When enter challenge, create object with date/time, opponent, result
-      // Store this in the array
-
-    }
 
 
     // Add new state to control the visibility of the calendar dialog
@@ -101,7 +93,7 @@ function App() {
     localStorage.setItem('newStudyItem', newStudyItem); 
     localStorage.setItem('newBreakItem', newBreakItem); 
     localStorage.setItem('playerToChallenge', playerToChallenge); 
-    localStorage.setItem('pastChallenges', JSON.stringify('pastChallenges'));
+    localStorage.setItem('pastChallenges', JSON.stringify(pastChallenges));
   };
 
   // useEffect to update localStorage when user data changes
@@ -359,6 +351,35 @@ const handleAddSuggestedItem = (index) => {
       return exampleUsernameArray.indexOf(inputUsername);
     }
 
+
+    // Add a challenge to the list, local storage
+    function storeChallenge(newChallenge) {
+      alert(localStorage.getItem('pastChallenges'));
+      const challengeArray = JSON.parse(localStorage.getItem('pastChallenges'));
+      challengeArray.push(newChallenge);
+      localStorage.setItem('pastChallenges', JSON.stringify(challengeArray));
+    }
+
+
+
+    // Update table
+    function updateTable() {
+      let pastTable = document.getElementById("pastChallenges");
+      const challengeArray = JSON.parse(localStorage.getItem('pastChallenges'));
+      for (let i = 0; i < challengeArray.length; i++) {
+        let row = pastTable.insertRow(1);
+        let cell0 = row.insertCell(0);
+        cell0.innerHTML = challengeArray[i].datetime;
+        cell0.className = "tableCell";
+        let cell1 = row.insertCell(1);
+        cell1.className = "tableCell";
+        cell1.innerHTML = challengeArray[i].opponent;
+        let cell2 = row.insertCell(2);
+        cell2.className = "tableCell";
+        cell2.innerHTML = challengeArray[i].result;
+      }
+    }
+
     
     // Challenge a user to see who has more total study time
     function doChallenge(opponentName) {
@@ -391,7 +412,7 @@ const handleAddSuggestedItem = (index) => {
 
       // This stores the opponent, result, and date of the challenge
       let challenge = doChallenge(playerToChallenge);
-      // Store in table
+      storeChallenge(challenge);
       setPlayerToChallenge('');
 
       let resultText = document.getElementById("challenge-result");
@@ -415,25 +436,12 @@ const handleAddSuggestedItem = (index) => {
         else
           resultText.innerHTML += " It's a tie!";
 
-
-        // Add challenge date, opponent, and result to table
-        let pastTable = document.getElementById("pastChallenges");
-        let row = pastTable.insertRow(1);
-        // date / time
-        let cell0 = row.insertCell(0);
-        cell0.innerHTML = challenge.datetime;
-        cell0.className = "tableCell";
-        // opponent
-        let cell1 = row.insertCell(1);
-        cell1.className = "tableCell";
-        cell1.innerHTML = challenge.opponent;
-        // result
-        let cell2 = row.insertCell(2);
-        cell2.className = "tableCell";
-        cell2.innerHTML = challenge.result;
-
-        return;
+        // Stores new challenge in local storage
+        storeChallenge(challenge);
       }
+
+      updateTable();
+      return;
     };
 
 
