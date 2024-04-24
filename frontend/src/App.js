@@ -57,7 +57,7 @@ function App() {
 
     // Variables for challenges tab
     const [playerToChallenge, setPlayerToChallenge] = useState('');
-    const [pastChallenges, setPastChallenges] = useState(JSON.parse(localStorage.getItem('pastChallenges')));
+    const [pastChallenges, setPastChallenges] = useState(JSON.parse(localStorage.getItem('pastChallenges')) || []);
 
 
 
@@ -354,7 +354,6 @@ const handleAddSuggestedItem = (index) => {
 
     // Add a challenge to the list, local storage
     function storeChallenge(newChallenge) {
-      alert(localStorage.getItem('pastChallenges'));
       const challengeArray = JSON.parse(localStorage.getItem('pastChallenges'));
       challengeArray.push(newChallenge);
       localStorage.setItem('pastChallenges', JSON.stringify(challengeArray));
@@ -380,6 +379,14 @@ const handleAddSuggestedItem = (index) => {
       }
     }
 
+
+
+    // Clear pastChallenges in local storage
+    const clearPastChallenges = () => {
+      setPastChallenges('');
+    };
+
+    
     
     // Challenge a user to see who has more total study time
     function doChallenge(opponentName) {
@@ -409,22 +416,25 @@ const handleAddSuggestedItem = (index) => {
     // Submit a challenge
     const handleSubmitChallenge = async e => {
       e.preventDefault();
-
-      // This stores the opponent, result, and date of the challenge
-      let challenge = doChallenge(playerToChallenge);
-      storeChallenge(challenge);
-      setPlayerToChallenge('');
-
+      // Delete lines below
+      // clearPastChallenges();
+      // alert(localStorage.getItem('pastChallenges'));
+      
       let resultText = document.getElementById("challenge-result");
       resultText.innerHTML = "";
       
-      if (lookupUser(challenge.opponent) === -1) {
+      if (lookupUser(playerToChallenge) === -1) {
         alert("This player does not exist");
       }
-      else if (lookupUser(challenge.opponent) === lookupUser(username)) {
+      else if (lookupUser(playerToChallenge) === lookupUser(username)) {
         alert("You can't compete against yourself...");
       }
       else {
+        // This stores the opponent, result, and date of the challenge
+        let challenge = doChallenge(playerToChallenge);
+        storeChallenge(challenge);
+        setPlayerToChallenge('');
+
         // Display challenge result
         resultText.innerHTML = `Challenge Results:
         You have studied for ${exampleTotalStudyTime[lookupUser(username)]} minutes.
