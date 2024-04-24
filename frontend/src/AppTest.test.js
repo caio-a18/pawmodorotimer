@@ -2,6 +2,15 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import Login from './components/Login/Login';
 import { loginUser } from './components/api';
+import App from './App';
+
+test('App renders without crashing', () => {
+  render(<App />);
+});
+
+test('Login renders without crashing', () => {
+  render(<Login />);
+});
 
 jest.mock('./components/api'); // Mock the API module
 
@@ -35,3 +44,5 @@ describe('Login Component', () => {
     });
   });
 });
+
+
