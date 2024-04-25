@@ -33,7 +33,9 @@ jobs:
 
       - name: Start the backend server
         working-directory: backend
-        run: node server.js
+        run: 
+          npm install cors --save
+          node server.js
 
   run-tests:
     runs-on: windows-latest
