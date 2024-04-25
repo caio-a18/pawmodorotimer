@@ -159,10 +159,50 @@ describe('Login Component', () => {
             });
             });
 
-            it('Reset Button for 60 minutes', () => {
+          it('Reset Button for 60 minutes', () => {
               const { getByText, getByTestId } = render(<App />);
               const button60Minutes = getByText('60 Minutes');
               fireEvent.click(button60Minutes);
+          
+              // Wait for the timer to start
+              waitFor(() => {
+                const timerElement = getByTestId('timer');
+                expect(timerElement).not.toHaveTextContent('0:00'); // Timer should not be at 0:00
+              });
+          
+              fireEvent.click(getByText('Reset'));
+          
+              // Wait for the timer to reset
+              waitFor(() => {
+                const timerElement = getByTestId('timer');
+                expect(timerElement).toHaveTextContent('0:00'); // Timer should be reset to 0:00
+              });
+            });
+
+          it('Reset Button for 20 minutes', () => {
+              const { getByText, getByTestId } = render(<App />);
+              const button20Minutes = getByText('20 Minutes');
+              fireEvent.click(button20Minutes);
+          
+              // Wait for the timer to start
+              waitFor(() => {
+                const timerElement = getByTestId('timer');
+                expect(timerElement).not.toHaveTextContent('0:00'); // Timer should not be at 0:00
+              });
+          
+              fireEvent.click(getByText('Reset'));
+          
+              // Wait for the timer to reset
+              waitFor(() => {
+                const timerElement = getByTestId('timer');
+                expect(timerElement).toHaveTextContent('0:00'); // Timer should be reset to 0:00
+              });
+            });
+
+          it('Reset Button for 5 minutes', () => {
+              const { getByText, getByTestId } = render(<App />);
+              const button5Minutes = getByText('5 Minutes');
+              fireEvent.click(button5Minutes);
           
               // Wait for the timer to start
               waitFor(() => {
