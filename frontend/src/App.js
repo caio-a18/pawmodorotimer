@@ -354,15 +354,6 @@ const handleAddSuggestedItem = (index) => {
 
     // Add a challenge to the list, local storage
     function storeChallenge(newChallenge) {
-      
-      alert(JSON.parse(localStorage.getItem('pastChallenges')));
-      /*
-      const challengeArray = JSON.parse(localStorage.getItem('pastChallenges'));
-      alert(JSON.stringify(challengeArray));
-      challengeArray.push(newChallenge);
-      alert(JSON.stringify(challengeArray));
-      // localStorage.setItem('pastChallenges', JSON.stringify(challengeArray));
-      */
       setPastChallenges([...pastChallenges, newChallenge]);
     }
 
@@ -390,8 +381,7 @@ const handleAddSuggestedItem = (index) => {
 
     // Clear pastChallenges in local storage
     const clearPastChallenges = () => {
-      setPastChallenges('');
-      updateTable();
+      setPastChallenges([]);
     };
 
     
@@ -425,7 +415,7 @@ const handleAddSuggestedItem = (index) => {
     const handleSubmitChallenge = async e => {
       e.preventDefault();
       // Delete lines below
-      // clearPastChallenges();
+      alert(JSON.parse(localStorage.getItem('pastChallenges')));
       
       let resultText = document.getElementById("challenge-result");
       resultText.innerHTML = "";
