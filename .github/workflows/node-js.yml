@@ -16,6 +16,7 @@ jobs:
 
       - name: Run npm start and build
         run: |
+          npm install react-scripts
           dir "frontend\public\index.html"
           npm run build
 
