@@ -504,7 +504,7 @@ const handleAddSuggestedItem = (index) => {
         </AccordionSummary>
         <AccordionDetails>
           <div>
-              <Button onClick={clearPastChallenges} style={{width: '50%', float: 'right', color: 'red'}}>Clear all challenges</Button>
+              <Button onClick={clearPastChallenges} class="clear-challenges" style={{backgroundColor: 'red', float: 'right'}}>Clear All</Button>
             <table id="pastChallenges" class="challengesTable">
               <thead>
                 <tr>

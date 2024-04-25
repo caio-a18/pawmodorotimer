@@ -314,3 +314,10 @@ input[type="text"] {
 .hidden {
   display: none;
 }
+
+.clear-challenges {
+  width: '30%';
+  color: 'white';
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
