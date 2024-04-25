@@ -16,8 +16,6 @@ jobs:
 
       - name: Run npm start and build
         run: |
-          npm ci
-          npm start 
           dir "frontend\public\index.html"
           npm run build
 
