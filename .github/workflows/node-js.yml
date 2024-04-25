@@ -14,13 +14,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Clean install dependencies
-        run: |
-          Remove-Item node_modules -Force -Recurse -ErrorAction Ignore
-          Remove-Item package-lock.json -Force -ErrorAction Ignore
-          npm install
-        shell: pwsh
-
       - name: Run npm start and build
         run: |
           npm ci
