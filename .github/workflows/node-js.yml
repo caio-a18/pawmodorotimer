@@ -18,7 +18,7 @@ jobs:
         run: |
           echo "Current directory:"
           dir
-          cd "\hungry-cat\frontend\public\"
+          cd "D:\hungry-cat\hungry-cat\frontend\public\"
           dir
           npm install react-scripts
           dir "frontend\public\index.html"
