@@ -380,7 +380,7 @@ const handleAddSuggestedItem = (index) => {
       // Return challenge object with three things stored in table
       let challenge = {
         opponent: opponentName,
-        result: challengeResult,
+        result: `(${myTotalStudyTime} - ${oppTotalStudyTime}): ${challengeResult}`,
         datetime: today.toLocaleString(),
       };
 
