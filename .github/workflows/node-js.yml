@@ -18,6 +18,7 @@ jobs:
         working-directory: frontend/public
         run: |
           npm install react-scripts
+          npm start 
           npm run build
 
   run-backend:
