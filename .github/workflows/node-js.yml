@@ -31,7 +31,7 @@ jobs:
 
       - name: Start the backend server
         working-directory: backend
-        run: 
+        run: |
           npm install cors --save
           node server.js
 
@@ -47,7 +47,7 @@ jobs:
 
       - name: Run tests
         working-directory: "frontend/src/"
-        run: 
+        run: |
           npm install react-scripts
           npm install jest 
           npm test
