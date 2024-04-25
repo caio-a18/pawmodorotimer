@@ -580,7 +580,7 @@ const handleAddSuggestedItem = (index) => {
             <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
             <DialogContent sx={{ color: 'purple' }}>
             <p>Username: {username}</p>
-            <p>Level: {userLevel[usernameArray.indexOf(username)]}</p>
+            <p data-testid="level_test">Level: {userLevel[usernameArray.indexOf(username)]}</p>
             <p>Total Study Minutes: {totalStudyTime[usernameArray.indexOf(username)]} minutes</p>
             </DialogContent>
             <DialogActions>

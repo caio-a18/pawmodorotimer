@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor, getByRole } from '@testing-library/react';
+import { render, fireEvent, waitFor, getByRole, getByTestId } from '@testing-library/react';
 import Login from './components/Login/Login';
 import { loginUser } from './components/api';
 import App from './App';
@@ -220,6 +220,27 @@ describe('Login Component', () => {
             });
   
   });
+
+  describe('Feature 1 Testing', () => { 
+
+    test('userLevel updates based on action', () => {
+      // Render the component with initial state
+      const { getByTestId } = render(<App />);
+    
+      // Find the element that displays the user's level
+      const userLevelElement = getByTestId('level_test');
+    
+      // Get the text content of the element
+      const userLevelText = userLevelElement.textContent;
+    
+      // Extract the level from the text content (assuming it's in the format "Level: <level>")
+      const level = parseInt(userLevelText.split(':')[1].trim());
+    
+      // Assert that the user's level is displayed correctly
+      expect(level).toBe(1); // Update the expected level as needed
+    });
+
+  }); 
 
  
   
