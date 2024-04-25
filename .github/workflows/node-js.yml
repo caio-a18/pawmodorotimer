@@ -8,6 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Navigate to frontend directory
+        run: cd "C:\Users\asyas\hungry-cat\frontend"
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -18,7 +21,7 @@ jobs:
         run: |
           echo "Current directory:"
           dir
-          cd "D:\hungry-cat\hungry-cat\frontend\public\"
+          cd "\frontend\public\"
           dir
           npm install react-scripts
           dir "frontend\public\index.html"
