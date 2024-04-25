@@ -158,6 +158,26 @@ describe('Login Component', () => {
               expect(getByTestId('timer')).toHaveTextContent(currentTime); 
             });
             });
+
+            it('Reset Button for 60 minutes', () => {
+              const { getByText, getByTestId } = render(<App />);
+              const button60Minutes = getByText('60 Minutes');
+              fireEvent.click(button60Minutes);
+          
+              // Wait for the timer to start
+              waitFor(() => {
+                const timerElement = getByTestId('timer');
+                expect(timerElement).not.toHaveTextContent('0:00'); // Timer should not be at 0:00
+              });
+          
+              fireEvent.click(getByText('Reset'));
+          
+              // Wait for the timer to reset
+              waitFor(() => {
+                const timerElement = getByTestId('timer');
+                expect(timerElement).toHaveTextContent('0:00'); // Timer should be reset to 0:00
+              });
+            });
   
   });
 
