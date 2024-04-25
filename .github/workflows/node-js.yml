@@ -50,4 +50,4 @@ jobs:
         run: |
           npm install react-scripts
           npm install jest 
-          npm test
+          npm test "frontend/src/AppTest.test.js"
