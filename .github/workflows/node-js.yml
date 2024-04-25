@@ -51,4 +51,6 @@ jobs:
 
       - name: Run tests
         working-directory: "frontend/src/"
-        run: npm test "AppTest.js"
+        run: 
+          npm install react-scripts
+          npm test "AppTest.js"
