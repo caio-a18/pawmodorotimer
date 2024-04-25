@@ -14,11 +14,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Run npm start and build
+      - name: Run npm build
         working-directory: frontend/public
         run: |
           npm install react-scripts
-          npm start 
           npm run build
 
   run-backend:
@@ -32,17 +31,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Clean install dependencies
-        run: |
-          Remove-Item node_modules -Force -Recurse -ErrorAction Ignore
-          Remove-Item package-lock.json -Force -ErrorAction Ignore
-          npm install
-
       - name: Start the backend server
+        working-directory: backend
         run: |
           npm ci
-          node "backend\server.js"
-        timeout-minutes: 10
+          node "server.js"
+        timeout-minutes: 4
 
   run-tests:
     runs-on: windows-latest
@@ -55,11 +49,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Clean install dependencies
-        run: |
-          Remove-Item node_modules -Force -Recurse -ErrorAction Ignore
-          Remove-Item package-lock.json -Force -ErrorAction Ignore
-          npm install
-
       - name: Run tests
-        run: npm test "frontend\src\AppTest.js"
+        working-directory: "frontend/src/"
+        run: npm test "AppTest.js"
