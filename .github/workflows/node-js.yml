@@ -16,7 +16,10 @@ jobs:
 
       - name: Run npm start and build
         run: |
+          echo "Current directory:"
+          dir
           cd "\hungry-cat\frontend\public\"
+          dir
           npm install react-scripts
           dir "frontend\public\index.html"
           npm run build
