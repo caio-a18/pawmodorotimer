@@ -354,6 +354,7 @@ const handleAddSuggestedItem = (index) => {
 
     // Add a challenge to the list, local storage
     function storeChallenge(newChallenge) {
+      alert(localStorage.getItem('pastChallenges'));
       const challengeArray = JSON.parse(localStorage.getItem('pastChallenges'));
       challengeArray.push(newChallenge);
       localStorage.setItem('pastChallenges', JSON.stringify(challengeArray));
@@ -418,7 +419,6 @@ const handleAddSuggestedItem = (index) => {
       e.preventDefault();
       // Delete lines below
       // clearPastChallenges();
-      alert(localStorage.getItem('pastChallenges'));
       
       let resultText = document.getElementById("challenge-result");
       resultText.innerHTML = "";
