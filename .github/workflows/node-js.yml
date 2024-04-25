@@ -49,4 +49,5 @@ jobs:
         working-directory: "frontend/src/"
         run: 
           npm install react-scripts
+          npm install jest 
           npm test
