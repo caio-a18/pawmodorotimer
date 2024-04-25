@@ -33,11 +33,7 @@ jobs:
 
       - name: Start the backend server
         working-directory: backend
-        run: |
-          npm install cors --save
-          npm ci
-          node "server.js"
-        timeout-minutes: 4
+        run: node server.js
 
   run-tests:
     runs-on: windows-latest
