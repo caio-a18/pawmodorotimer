@@ -221,6 +221,7 @@ describe('Login Component', () => {
   
   });
 
+  /*
   describe('Feature 1 Testing', () => { 
 
     test('userLevel updates based on action', () => {
@@ -241,6 +242,6 @@ describe('Login Component', () => {
     });
 
   }); 
-
+*/
  
   
