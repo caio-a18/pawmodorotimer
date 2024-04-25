@@ -358,33 +358,11 @@ const handleAddSuggestedItem = (index) => {
     }
 
 
-
-    // Update table
-    function updateTable() {
-      let pastTable = document.getElementById("pastChallenges");
-      const challengeArray = JSON.parse(localStorage.getItem('pastChallenges'));
-      for (let i = 0; i < challengeArray.length; i++) {
-        let row = pastTable.insertRow(1);
-        let cell0 = row.insertCell(0);
-        cell0.innerHTML = challengeArray[i].datetime;
-        cell0.className = "tableCell";
-        let cell1 = row.insertCell(1);
-        cell1.className = "tableCell";
-        cell1.innerHTML = challengeArray[i].opponent;
-        let cell2 = row.insertCell(2);
-        cell2.className = "tableCell";
-        cell2.innerHTML = challengeArray[i].result;
-      }
-    }
-
-
-
     // Clear pastChallenges in local storage
     const clearPastChallenges = () => {
       setPastChallenges([]);
     };
 
-    
     
     // Challenge a user to see who has more total study time
     function doChallenge(opponentName) {
@@ -414,8 +392,6 @@ const handleAddSuggestedItem = (index) => {
     // Submit a challenge
     const handleSubmitChallenge = async e => {
       e.preventDefault();
-      // Delete lines below
-      alert(JSON.parse(localStorage.getItem('pastChallenges')));
       
       let resultText = document.getElementById("challenge-result");
       resultText.innerHTML = "";
@@ -444,7 +420,6 @@ const handleAddSuggestedItem = (index) => {
           resultText.innerHTML += " It's a tie!";
       }
 
-      updateTable();
       return;
     };
 
@@ -531,11 +506,24 @@ const handleAddSuggestedItem = (index) => {
           <div>
               <Button onClick={clearPastChallenges} style={{width: '50%', float: 'right', color: 'red'}}>Clear all challenges</Button>
             <table id="pastChallenges" class="challengesTable">
-              <tr>
-                <th class="tableCell">Date/Time</th>
-                <th class="tableCell">Opponent</th>
-                <th class="tableCell">Outcome</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th class="tableCell">Date/Time</th>
+                  <th class="tableCell">Opponent</th>
+                  <th class="tableCell">Outcome</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  pastChallenges.map((row, i) => (
+                      <tr>
+                        <td class="tableCell">{row.datetime}</td>
+                        <td class="tableCell">{row.opponent}</td>
+                        <td class="tableCell">{row.result}</td>
+                      </tr>
+                  ))
+                }
+              </tbody>
             </table>
           </div>
         </AccordionDetails>
