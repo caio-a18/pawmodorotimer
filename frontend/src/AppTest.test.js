@@ -103,6 +103,61 @@ describe('Login Component', () => {
           expect(getByTestId('timer')).toHaveTextContent('4:59'); 
         });
         });
+        
+      /****Pause button working for timers****/
+      it('Pause button for 60 minutes', async () => {
+        const { getByText, getByTestId } = render(<App />);
+        const button60Minutes = getByText('60 Minutes');
+        fireEvent.click(button60Minutes);
+      
+        await waitFor(() => {
+          const timerElement = getByTestId('timer');
+          expect(timerElement).toHaveTextContent('0:00'); // Timer should not be at 0:00
+        });
+      
+        fireEvent.click(getByText('Pause'));
+        const currentTime = getByTestId('timer').textContent;
+      
+        await waitFor(() => {
+          expect(getByTestId('timer')).toHaveTextContent(currentTime); 
+        });
+        });
+
+        it('Pause button for 20 minutes', async () => {
+          const { getByText, getByTestId } = render(<App />);
+          const button20Minutes = getByText('20 Minutes');
+          fireEvent.click(button20Minutes);
+        
+          await waitFor(() => {
+            const timerElement = getByTestId('timer');
+            expect(timerElement).toHaveTextContent('0:00'); // Timer should not be at 0:00
+          });
+        
+          fireEvent.click(getByText('Pause'));
+          const currentTime = getByTestId('timer').textContent;
+        
+          await waitFor(() => {
+            expect(getByTestId('timer')).toHaveTextContent(currentTime); 
+          });
+          });
+
+          it('Pause button for 5 minutes', async () => {
+            const { getByText, getByTestId } = render(<App />);
+            const button5Minutes = getByText('5 Minutes');
+            fireEvent.click(button5Minutes);
+          
+            await waitFor(() => {
+              const timerElement = getByTestId('timer');
+              expect(timerElement).not.toHaveTextContent('0:00'); // Timer should not be at 0:00
+            });
+          
+            fireEvent.click(getByText('Pause'));
+            const currentTime = getByTestId('timer').textContent;
+          
+            await waitFor(() => {
+              expect(getByTestId('timer')).toHaveTextContent(currentTime); 
+            });
+            });
   
   });
 
