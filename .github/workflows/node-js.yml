@@ -18,7 +18,6 @@ jobs:
         working-directory: frontend/public
         run: |
           npm install react-scripts
-          dir "frontend\public\index.html"
           npm run build
 
   run-backend:
