@@ -74,11 +74,11 @@ function App() {
 
     // At the beginning of your component, add the suggestedStudyItems state
     const [suggestedStudyItems, setSuggestedStudyItems] = useState([
-    "Drink water",
-    "Do yoga",
-    "Work out",
     "Respond to emails",
-    "Mew"
+    "Listen to podcast",
+    "Study notes",
+    "Outline calendar",
+    "Review lecture"
   ]);
 
      // Function to update user data in localStorage
