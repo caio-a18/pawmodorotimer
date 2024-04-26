@@ -2,7 +2,7 @@
   "name": "hungry-cat",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://localhost:3000", 
+  "homepage": "http://localhost:3000",
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
@@ -55,7 +55,7 @@
     "@babel/preset-react": "^7.24.1",
     "babel-jest": "^29.7.0",
     "cors": "^2.8.5",
-    "eslint": "^6.6.0",
+    "eslint": "^9.1.1",
     "eslint-plugin-jsdoc": "^48.2.2",
     "express": "^4.19.1",
     "jest": "^27.5.1"

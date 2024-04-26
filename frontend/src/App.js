@@ -43,6 +43,8 @@ function App() {
     /*userLevel and totalStudyTime are both arrays of length 6, with each index corresponding to the level of the users in the system. 
     index 0 corresponds to Noah's level, index 1 corresponds to Asya's level, etc. Same with study time. */
     const [userLevel, setUserLevel] = useState([1, 1, 1, 1, 1, 1]);
+    const [currUserLevel, setCurrUserLevel] = useState(1);
+    const [currStudyTime, setCurrStudyTime] = useState(0);
     const [totalStudyTime, setTotalStudyTime] = useState([0, 0, 0, 0, 0, 0]);
     const [dailyStudyTime, setDailyStudyTime] = useState([0, 0, 0, 0, 0, 0]); 
     const [weeklyStudyTime, setWeeklyStudyTime] = useState([0, 0, 0, 0, 0, 0]);
@@ -334,8 +336,10 @@ const handleAddSuggestedItem = (index) => {
           const oldLevel = Math.floor(oldTotalTime);
           console.log("New level: " + newLevel)
           setUserLevel(updateResponse.newLevel);
+          setCurrUserLevel(updateResponse.newLevel);
           updateUserLevel(time); 
           updateStudyTime(time,duration); 
+          setCurrStudyTime(newTotalTime);
           // Check if level has changed and update if necessary
           if (newLevel > oldLevel) {
             alert(`Congratulations. You are now level ${newLevel}!`);
@@ -634,8 +638,8 @@ const handleAddSuggestedItem = (index) => {
             <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
             <DialogContent sx={{ color: 'purple' }}>
             <p>Username: {username}</p>
-            <p>Level: {userLevel}</p>
-            <p>Total Study Minutes: {totalFocusTime} minutes</p>
+            <p>Level: {currUserLevel}</p>
+            <p>Total Study Minutes: {currStudyTime} minutes</p>
             </DialogContent>
             <DialogActions>
               <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button>

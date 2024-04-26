@@ -89,7 +89,7 @@ app.get('/api/user/details', asyncHandler(async (req, res) => {
   const user = await User.findOne({ where: { email } });
   if (user) {
     res.json({
-      totalFocusTime: user.total_focus_time, // Assuming focus time is stored in minutes
+      totalFocusTime: user.total_focus_time, 
       currentLevel: user.currentLevel
     });
   } else {
