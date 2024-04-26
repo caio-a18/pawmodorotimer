@@ -32,6 +32,32 @@ const updateUserLevel = async (userId, duration) => {
   }
 };
 
+// Function to fetch user details by email
+const fetchUserDetailsByEmail = async (email) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/user/details?email=${encodeURIComponent(email)}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    throw error;
+  }
+};
+
+// Function to increment the total study time for a user by email
+const updateUserStudyTimeByEmail = async (email, additionalTime) => {
+  try {
+    const response = await axios.post(`http://localhost:8080/api/user/level/update`, {
+      email,
+      focusDuration: additionalTime, // Clearly indicates this is a duration to add
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user study time:', error);
+    throw error;
+  }
+};
+
+
 async function checkUser(email) {
   try {
     const response = await axios.get(`http://localhost:8080/check-user?email=${encodeURIComponent(email)}`);
@@ -42,4 +68,4 @@ async function checkUser(email) {
   }
 }
 
-export {loginUser, createUser, updateUserLevel, checkUser};
+export {loginUser, createUser, updateUserLevel, checkUser, updateUserStudyTimeByEmail, fetchUserDetailsByEmail};

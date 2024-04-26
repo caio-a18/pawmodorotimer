@@ -27,14 +27,11 @@ export default function Login({ setToken, handleLoginSuccess }) {
         try {
             const user = await checkUser(email);
             if (user.exists) {
-                console.log("The user exists");
-                console.log(user);
-                console.log(user.exists);
                 // User exists, proceed with login
                 try {
                     const token = await loginUser({ name, email, password });
                     setToken(token);
-                    handleLoginSuccess(name, token); // Call handleLoginSuccess with username and token
+                    handleLoginSuccess(name, email, token); // Call handleLoginSuccess with username and token
                 } catch (loginError) {
                     setErrorDialog(true);
                 }

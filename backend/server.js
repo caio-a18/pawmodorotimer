@@ -55,30 +55,48 @@ app.get('/check-user', asyncHandler(async (req, res) => {
   }
 }));
 
-app.post('/api/user/level/update/:userId', asyncHandler(async (req, res) => {
-  const { userId } = req.params;
-  const { focusDuration } = req.body;
+// Update POST route to handle user level and focus time via email
+app.post('/api/user/level/update', asyncHandler(async (req, res) => {
+  const { email, focusDuration } = req.body;
+  
+  // Find the user by email
+  const user = await User.findOne({ where: { email } });
 
-  const user = await User.findByPk(userId);
   if (!user) {
     res.status(404).json({ message: "User not found" });
     return;
   }
 
+  console.log("previous focus time: " + user.total_focus_time)
+  // Add the focus duration to the existing total focus time
   user.total_focus_time += parseInt(focusDuration);
-  const newLevel = Math.floor(user.total_focus_time / 60);
+  console.log("focus duration: " + focusDuration)
+  console.log("new focus time: " + user.total_focus_time)
+  // Save the updates to the database
+  await user.save();
 
-  if (newLevel > user.currentLevel) {
-    user.currentLevel = newLevel;
-    await user.save();
-  }
-
+  // Respond with the updated information
   res.json({
-    userId: user.id,
-    newLevel: user.currentLevel,
+    email: user.email,
     totalFocusTime: user.total_focus_time
   });
 }));
+
+
+// Route to get user details by email
+app.get('/api/user/details', asyncHandler(async (req, res) => {
+  const { email } = req.query;
+  const user = await User.findOne({ where: { email } });
+  if (user) {
+    res.json({
+      totalFocusTime: user.total_focus_time, // Assuming focus time is stored in minutes
+      currentLevel: user.currentLevel
+    });
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
+}));
+
 
 // General error handler for catching async errors
 app.use((err, req, res, next) => {

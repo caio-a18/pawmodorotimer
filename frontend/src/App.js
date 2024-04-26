@@ -19,7 +19,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions'; 
 
 //API imports
-import { updateUserLevel } from './components/api'; 
+import {updateUserStudyTimeByEmail} from './components/api'; 
 
 function App() {
     const { token, setToken } = useToken();
@@ -43,6 +43,7 @@ function App() {
 
     // Additional state for user info and study management
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [userLevel, setUserLevel] = useState(1);  // Default to level 1
   const [totalStudyTime, setTotalStudyTime] = useState(0);  // Total study time in milliseconds
 
@@ -114,8 +115,9 @@ const handleAddSuggestedItem = (index) => {
   };
 
   // Example of setting the username on successful login
-  const handleLoginSuccess = (username, token) => {
+  const handleLoginSuccess = (username, email, token) => {
   setUsername(username);  // Store the username
+  setEmail(email);
   setToken(token);        // Set the authentication token
   };
 
@@ -219,22 +221,31 @@ const handleAddSuggestedItem = (index) => {
       return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; 
     }; 
 
-    // Handler to check when time is over
-    const handleTimerIsDone = async (duration) => {
+    // Handler to check when time is over and update user details using email
+    const handleTimerIsDone = async (duration) => { // duration * 60 = time in seconds
       if (time === 0 && selectedTime === duration * 60 * 1000) {
-        sound.play(); 
+        sound.play();
         try {
-          const userId = 'theUserId'; 
-          const newLevel = await updateUserLevel(userId, duration);
-          setLevelTracker(newLevel); // Update levelTracker with the new level
-          alert(`Congratulations. You are now level ${newLevel}!`);
+          const updateResponse = await updateUserStudyTimeByEmail(email, duration * 10);
+
+          // Calculate new total study time
+          const newTotalTime = updateResponse.totalFocusTime;
+          console.log("Current study duration: " + duration)
+          console.log("Current total study time: " + updateResponse.totalFocusTime)
+          const oldTotalTime = updateResponse.totalFocusTime - duration;
+          setTotalStudyTime(updateResponse.totalFocusTime);
+          const newLevel = Math.floor(newTotalTime); // Level changes every 60 minutes of focus time
+          const oldLevel = Math.floor(oldTotalTime);
+          console.log("New level: " + newLevel)
+          setUserLevel(updateResponse.newLevel);
+          // Check if level has changed and update if necessary
+          if (newLevel > oldLevel) {
+            alert(`Congratulations. You are now level ${newLevel}!`);
+          }
         } catch (error) {
+          console.log(error);
           alert('There was a problem updating your level. Please try again.');
         }
-        setLevelTracker(prevLevel => prevLevel + 1);
-        
-        //alert("Congratulations. You are now level " + (levelTracker + 1) + "!");
-        
       }
     };
 
@@ -263,7 +274,8 @@ const handleAddSuggestedItem = (index) => {
 
     // UseEffect for HandleTimer
     useEffect(() => {
-      handleTimerIsDone(1);
+      handleTimerIsDone(0.1); // 6 seconds
+      handleTimerIsDone(1); // 60 seconds
       handleTimerIsDone(5);
       handleTimerIsDone(20);
       handleTimerIsDone(60);
@@ -271,7 +283,7 @@ const handleAddSuggestedItem = (index) => {
 
     if(!token) {
       // Pass handleLoginSuccess and setUsername as props to Login component
-      return <Login setToken={setToken} handleLoginSuccess={handleLoginSuccess} setUsername={setUsername} />;
+      return <Login setToken={setToken} handleLoginSuccess={handleLoginSuccess} setUsername={setUsername} setEmail={setEmail} />;
   }
   
     return (
@@ -370,6 +382,7 @@ const handleAddSuggestedItem = (index) => {
               <Box className="time-option-box"><Button onClick={() => howMuchTime(20)}>20 Minutes</Button></Box>
               <Box className="time-option-box"><Button onClick={() => howMuchTime(5)}>5 Minutes</Button></Box>
               <Box className="time-option-box"><Button onClick={() => howMuchTime(1)}>1 Minute</Button></Box>
+              <Box className="time-option-box"><Button onClick={() => howMuchTime(0.1)}>6 seconds</Button></Box>
             </div>
           </div>
 
@@ -379,7 +392,7 @@ const handleAddSuggestedItem = (index) => {
             <DialogContent sx={{ color: 'purple' }}>
             <p>Username: {username}</p>
             <p>Level: {userLevel}</p>
-            <p>Total Study Hours: {Math.floor(totalStudyTime / 3600000)} hours</p>
+            <p>Total Study Minutes: {totalFocusTime} minutes</p>
             </DialogContent>
             <DialogActions>
               <Button sx={{ color: 'blue' }} onClick={handleCloseDialog}>OK</Button>
