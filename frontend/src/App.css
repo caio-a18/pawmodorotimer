@@ -129,7 +129,7 @@
 .tableCell {
   border: 1px solid black;
   overflow: auto;
-  text-align: left;
+  text-align: center;
 }
 
 .lists-container {
@@ -245,8 +245,79 @@ input[type="text"] {
   margin-bottom: 10px;
 }
 
+/* Ensure the rest of your CSS from previous snippets is here */
 
+/* Container for the calendar dialog */
+.calendar-dialog-content {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  position: fixed; /* Fixed position to cover the entire screen */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100; /* High z-index to ensure it's on top of other elements */
+  max-width: 520px; /* Set a max-width for the calendar */
+  width: 90%; /* Make it responsive */
+}
 
+/* Actions at the bottom of the dialog */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
 
+/* Style for the calendar button that opens the dialog */
+.calendar-button {
+  margin-bottom: 20px;
+}
 
+/* Additional styles to override the react-calendar default styles */
+.react-calendar {
+  width: 100%;
+  max-width: 100%; /* Prevent it from overflowing its container */
+  background: white;
+  border: none;
+  font-family: Arial, sans-serif;
+}
 
+.react-calendar__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px; /* Set a fixed height */
+  margin-bottom: 10px;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  border: none;
+  font-size: 16px;
+}
+
+/* Modify this to suit your color scheme */
+.react-calendar__month-view__days__day--weekend {
+  color: #d10000;
+}
+
+.react-calendar__tile--active,
+.react-calendar__tile--hasActive {
+  background: #006edc;
+  color: white;
+  font-weight: bold;
+}
+
+/* Hide the calendar view when it's not open */
+.hidden {
+  display: none;
+}
+
+.clear-challenges {
+  width: '30%';
+  color: 'white';
+  border-radius: 5px;
+  margin-bottom: 10px;
+}

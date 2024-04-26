@@ -3,44 +3,53 @@ name: Node Js
 on: [push]
 
 jobs:
-  # Job for building the frontend
   build-frontend:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}  # Remove if not using matrix strategy
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm install 
-      - run: npm ci
-      - run: npm start 
-      - run: dir "frontend\public\index.html"
-      - run: npm run build
 
-  # Job for running the backend server
+      - name: Run npm build
+        working-directory: frontend/public
+        run: |
+          npm install react-scripts
+          npm run build
+
   run-backend:
-    runs-on: windows-latest  # Consider using different runners for different needs
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}  # Remove if not using matrix strategy
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm install 
-      - run: npm ci
-      - run: node "backend\server.js"
-        timeout-minutes: 10
 
-  run-tests: 
+      - name: Start the backend server
+        working-directory: backend
+        run: |
+          npm install cors --save
+          node server.js
+          pid=$(lsof -i :8080 -t)
+          kill -9 $pid || true
+
+  run-tests:
     runs-on: windows-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}  # Remove if not using matrix strategy
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm install 
-      - run: npm test "frontend\src\AppTest.js"
+
+      - name: Run tests
+        working-directory: "frontend/src/"
+        run: |
+          npm install react-scripts
+          npm install jest 
+          npm test "frontend/src/AppTest.test.js"
