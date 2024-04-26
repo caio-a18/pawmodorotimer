@@ -55,9 +55,10 @@ function App() {
     const [newStudyItem, setNewStudyItem] = useState('');
     const [newBreakItem, setNewBreakItem] = useState('');
 
-    // Variables for starting a new challenge
+    // Variables for challenges tab
     const [playerToChallenge, setPlayerToChallenge] = useState('');
-    // List of past challenges
+    const [pastChallenges, setPastChallenges] = useState(JSON.parse(localStorage.getItem('pastChallenges')) || []);
+
 
 
     // Add new state to control the visibility of the calendar dialog
@@ -92,6 +93,7 @@ function App() {
     localStorage.setItem('newStudyItem', newStudyItem); 
     localStorage.setItem('newBreakItem', newBreakItem); 
     localStorage.setItem('playerToChallenge', playerToChallenge); 
+    localStorage.setItem('pastChallenges', JSON.stringify(pastChallenges));
   };
 
   // useEffect to update localStorage when user data changes
@@ -105,7 +107,8 @@ function App() {
       breakItems,
       newStudyItem,
       newBreakItem,
-      playerToChallenge]);
+      playerToChallenge,
+      pastChallenges]);
 
 const updateUserLevel = (time) => {
 
@@ -348,25 +351,51 @@ const handleAddSuggestedItem = (index) => {
       return exampleUsernameArray.indexOf(inputUsername);
     }
 
-    
-    // Challenge a user to see who has more total study time
-    function challenge(opponent) {
-      let myTotalStudyTime = exampleTotalStudyTime[lookupUser(username)];    // my total study time
-      let oppTotalStudyTime = exampleTotalStudyTime[lookupUser(opponent)];   // opponent total study time
-      if (myTotalStudyTime > oppTotalStudyTime)
-        return "Win";
-      else if (myTotalStudyTime < oppTotalStudyTime)
-        return "Loss";
-      else
-        return "Tie";   
+
+    // Add a challenge to the list, local storage
+    function storeChallenge(newChallenge) {
+      setPastChallenges([...pastChallenges, newChallenge]);
     }
 
 
+    // Clear pastChallenges in local storage
+    const clearPastChallenges = () => {
+      setPastChallenges([]);
+    };
+
+    
+    // Challenge a user to see who has more total study time
+    function doChallenge(opponentName) {
+      let myTotalStudyTime = exampleTotalStudyTime[lookupUser(username)];    // my total study time
+      let oppTotalStudyTime = exampleTotalStudyTime[lookupUser(opponentName)];   // opponent total study time
+      let challengeResult = '';
+      let today = new Date();
+      if (myTotalStudyTime > oppTotalStudyTime)
+        challengeResult = "Win";
+      else if (myTotalStudyTime < oppTotalStudyTime)
+        challengeResult = "Loss";
+      else
+        challengeResult = "Tie";   
+      
+      // Return challenge object with three things stored in table
+      let challenge = {
+        opponent: opponentName,
+        result: `(${myTotalStudyTime} - ${oppTotalStudyTime}): ${challengeResult}`,
+        datetime: today.toLocaleString(),
+      };
+
+    return challenge;
+    }
+
+
+
+    // Submit a challenge
     const handleSubmitChallenge = async e => {
       e.preventDefault();
-      let challengeResult = document.getElementById("challenge-result");
-      challengeResult.innerHTML = "";
- 
+      
+      let resultText = document.getElementById("challenge-result");
+      resultText.innerHTML = "";
+      
       if (lookupUser(playerToChallenge) === -1) {
         alert("This player does not exist");
       }
@@ -374,37 +403,24 @@ const handleAddSuggestedItem = (index) => {
         alert("You can't compete against yourself...");
       }
       else {
+        // This stores the opponent, result, and date of the challenge
+        let challenge = doChallenge(playerToChallenge);
+        storeChallenge(challenge);
+        setPlayerToChallenge('');
+
         // Display challenge result
-        challengeResult.innerHTML = `Challenge Results:
+        resultText.innerHTML = `Challenge Results:
         You have studied for ${exampleTotalStudyTime[lookupUser(username)]} minutes.
-        ${playerToChallenge} has studied for ${exampleTotalStudyTime[lookupUser(playerToChallenge)]} minutes.`;
-        if (challenge(playerToChallenge) === "Win")
-          challengeResult.innerHTML += " You win!";
-        else if (challenge(playerToChallenge) === "Loss")
-          challengeResult.innerHTML += " You lose!";
+        ${challenge.opponent} has studied for ${exampleTotalStudyTime[lookupUser(challenge.opponent)]} minutes.`;
+        if (challenge.result === "Win")
+          resultText.innerHTML += " You win!";
+        else if (challenge.result === "Loss")
+          resultText.innerHTML += " You lose!";
         else
-          challengeResult.innerHTML += " It's a tie!";
-
-
-        // Add challenge date, opponent, and result to table
-        let pastTable = document.getElementById("pastChallenges");
-        let row = pastTable.insertRow(1);
-
-        let cell0 = row.insertCell(0);
-        let today = new Date();
-        cell0.innerHTML = today.toLocaleString();
-        cell0.className = "tableCell";
-
-        let cell1 = row.insertCell(1);
-        cell1.className = "tableCell";
-        cell1.innerHTML = playerToChallenge;
-
-        let cell2 = row.insertCell(2);
-        cell2.className = "tableCell";
-        cell2.innerHTML = challenge(playerToChallenge);
-
-        return;
+          resultText.innerHTML += " It's a tie!";
       }
+
+      return;
     };
 
 
@@ -416,11 +432,11 @@ const handleAddSuggestedItem = (index) => {
       handleTimerIsDone(20);
       handleTimerIsDone(60);
     }, [time]);
-
+    /*
     if(!token) {
       // Pass handleLoginSuccess and setUsername as props to Login component
       return <Login setToken={setToken} handleLoginSuccess={handleLoginSuccess} setUsername={setUsername} />;
-  }
+  }*/
   
     return (
       <BrowserRouter>
@@ -484,16 +500,30 @@ const handleAddSuggestedItem = (index) => {
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          See Past Challenges 
+            See Past Challenges 
         </AccordionSummary>
         <AccordionDetails>
           <div>
+              <Button onClick={clearPastChallenges} class="clear-challenges" style={{backgroundColor: 'red', float: 'right'}}>Clear All</Button>
             <table id="pastChallenges" class="challengesTable">
-              <tr>
-                <th class="tableCell">Date/Time</th>
-                <th class="tableCell">Opponent</th>
-                <th class="tableCell">Outcome</th>
-              </tr>
+              <thead>
+                <tr>
+                  <th class="tableCell">Date/Time</th>
+                  <th class="tableCell">Opponent</th>
+                  <th class="tableCell">Outcome</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  pastChallenges.map((row, i) => (
+                      <tr>
+                        <td class="tableCell">{row.datetime}</td>
+                        <td class="tableCell">{row.opponent}</td>
+                        <td class="tableCell">{row.result}</td>
+                      </tr>
+                  ))
+                }
+              </tbody>
             </table>
           </div>
         </AccordionDetails>
@@ -550,7 +580,7 @@ const handleAddSuggestedItem = (index) => {
           
           <div className="time-info">
             <div>Selected Time: {timeGUI(selectedTime)}</div>
-            <div>Time Remaining: {timeGUI(time)}</div>
+            <div data-testid="timer">Time Remaining: {timeGUI(time)}</div>
           </div>
     
           <Switch>
@@ -580,7 +610,7 @@ const handleAddSuggestedItem = (index) => {
             <DialogTitle sx={{ color: 'blue' }}>Profile Information</DialogTitle>
             <DialogContent sx={{ color: 'purple' }}>
             <p>Username: {username}</p>
-            <p>Level: {userLevel[usernameArray.indexOf(username)]}</p>
+            <p data-testid="level_test">Level: {userLevel[usernameArray.indexOf(username)]}</p>
             <p>Total Study Minutes: {totalStudyTime[usernameArray.indexOf(username)]} minutes</p>
             </DialogContent>
             <DialogActions>
