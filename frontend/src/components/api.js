@@ -1,4 +1,4 @@
-//import axios from 'axios';
+import axios from 'axios';
 //Using the axios library to help with conciseness and readibility
 async function loginUser(credentials) {
   try {
