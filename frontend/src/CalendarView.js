@@ -1,6 +1,5 @@
-// src/components/CalendarView.js
-import React from 'react';
-import { useState, useEffect } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -8,65 +7,55 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-// initializes all to 0
-function CalendarView({ open, onClose, username, totalStudyTime, usernameArray }) {
+function CalendarView({ open, onClose, userId }) {
     const [studyHours, setStudyHours] = useState({ today: 0, week: 0, month: 0, year: 0 });
 
-    const calculateStudyHours = () => {
-        // Assuming totalStudyTime[userIndex] is in minutes
-        const userIndex = usernameArray.indexOf(username);
-        if (userIndex !== -1) {
-            const minutes = totalStudyTime[userIndex];
-            const hours = Math.floor(minutes / 60);
-            const weekly = Math.floor(minutes / (60*24));
-            const monthly = Math.floor(minutes/  (60*24*30));
-            const yearly = Math.floor(minutes / (60*24*365));
-
-            // sets the hours for daily, weekly, monthly, yearly
-            setStudyHours({
-                today: hours,
-                week: weekly, 
-                month: monthly,
-                year: yearly
+    const fetchStudyHours = async (interval) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/user/focus-times`, { 
+                params: { userId, interval }
             });
+            return response.data.totalMinutes / 60; // Convert minutes to hours
+        } catch (error) {
+            console.error('Error fetching study hours:', error);
+            return 0;
         }
     };
 
+    const updateStudyHours = async () => {
+        const todayHours = await fetchStudyHours('day');
+        const weekHours = await fetchStudyHours('week');
+        const monthHours = await fetchStudyHours('month');
+        const yearHours = await fetchStudyHours('year');
+        setStudyHours({
+            today: todayHours,
+            week: weekHours,
+            month: monthHours,
+            year: yearHours
+        });
+    };
+
     useEffect(() => {
-        // resets the study hours based on the date --> resets the hours for today
-        const resetDailyStudyHours = () => {
-            const currentDate = new Date();
-            if (currentDate.getHours() === 0 && currentDate.getMinutes() === 0) {
-                setStudyHours(prevState => ({ ...prevState, today: 0 }));
-            }
-        };
-
-        const intervalId = setInterval(resetDailyStudyHours, 60000);
-
-        // calculates the study hours
-        calculateStudyHours();
-
-        return () => clearInterval(intervalId);
-    }, [open, username, totalStudyTime, usernameArray]);
+        if (open) {
+            updateStudyHours();
+        }
+    }, [open, userId]);
 
     const today = new Date().toLocaleDateString();
 
-    // creates Dialog for Calendar
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Study Calendar for {username}</DialogTitle>
+            <DialogTitle>Study Calendar for User ID: {userId}</DialogTitle>
             <DialogContent>
                 <Box>
-                    {/* Display for Date, Week, Month, Year */}
                     <p>Today's Date: {today}</p>
-                    <p>Study Hours Today: {studyHours.today}</p>
-                    <p>Study Hours This Week: {studyHours.week}</p>
-                    <p>Study Hours This Month: {studyHours.month}</p>
-                    <p>Study Hours This Year: {studyHours.year}</p>
+                    <p>Study Hours Today: {studyHours.today.toFixed(2)}</p>
+                    <p>Study Hours This Week: {studyHours.week.toFixed(2)}</p>
+                    <p>Study Hours This Month: {studyHours.month.toFixed(2)}</p>
+                    <p>Study Hours This Year: {studyHours.year.toFixed(2)}</p>
                 </Box>
             </DialogContent>
             <DialogActions>
-                {/* Closes */}
                 <Button onClick={onClose}>Close</Button>
             </DialogActions>
         </Dialog>

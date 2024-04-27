@@ -22,7 +22,7 @@ import TextField from '@mui/material/TextField';
 import CalendarView from './CalendarView';
 
 //API imports
-import {updateUserStudyTimeByEmail} from './components/api'; 
+import {updateUserStudyTimeByEmail, logStudySession, fetchUserIdByEmail} from './components/api'; 
 
 function App() {
     const { token, setToken } = useToken();
@@ -36,6 +36,7 @@ function App() {
     const [showChallenges, setShowChallenges] = useState(false);
     const [username, setUsername] = useState(localStorage.getItem('username') || '');
     const [email, setEmail] = useState("");
+    const [userId, setUserId] = useState(null);
 
     //array that we use to match the levels and other user stats up with each individual user 
     const [usernameArray, setUsernameArray] = useState(["Noah", "Asya", "Maisoon", "Hart", "Caio", "Profsegovia"]); 
@@ -175,12 +176,20 @@ const handleAddSuggestedItem = (index) => {
 
 
 
-  // Example of setting the username on successful login
-  const handleLoginSuccess = (username, email, token) => {
-  setUsername(username);  // Store the username
-  setEmail(email);
-  setToken(token);        // Set the authentication token
-  };
+  const handleLoginSuccess = async (username, email, token) => {
+    setUsername(username);  // Store the username in state
+    setEmail(email);        // Store the email in state
+    setToken(token);        // Store the token in state
+
+    // Directly use the 'email' parameter to fetch the user ID
+    try {
+        const id = await fetchUserIdByEmail(email);
+        setUserId(id); // Update the user ID state
+    } catch (error) {
+        console.error('Failed to fetch user ID:', error);
+        // Handle errors appropriately, possibly setting user ID to null or showing an error message
+    }
+};
 
     const handleOpenDialog = () => {
       setUserDialog(true); // Open the dialog
@@ -319,12 +328,24 @@ const handleAddSuggestedItem = (index) => {
       return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; 
     }; 
 
+    const handleEndStudySession = async (duration) => {
+      const startTime = new Date().getTime() - selectedTime; // Assuming selectedTime is the duration in ms when the timer started
+      const endTime = new Date().getTime(); 
+
+      try {
+          await logStudySession(userId, startTime, endTime, duration);
+      } catch (error) {
+          console.error('Failed to log study session:', error);
+      }
+  };
+
     // Handler to check when time is over and update user details using email
     const handleTimerIsDone = async (duration) => { // duration * 60 = time in seconds
       if (time === 0 && selectedTime === duration * 60 * 1000) {
         sound.play();
         try {
-          const updateResponse = await updateUserStudyTimeByEmail(email, duration * 10);
+          const updateResponse = await updateUserStudyTimeByEmail(email, duration);
+          await handleEndStudySession(duration * 10);
 
           // Calculate new total study time
           const newTotalTime = updateResponse.totalFocusTime;
@@ -336,7 +357,7 @@ const handleAddSuggestedItem = (index) => {
           const oldLevel = Math.floor(oldTotalTime);
           console.log("New level: " + newLevel)
           setUserLevel(updateResponse.newLevel);
-          setCurrUserLevel(updateResponse.newLevel);
+          setCurrUserLevel(newLevel);
           updateUserLevel(time); 
           updateStudyTime(time,duration); 
           setCurrStudyTime(newTotalTime);

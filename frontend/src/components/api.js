@@ -68,4 +68,32 @@ async function checkUser(email) {
   }
 }
 
-export {loginUser, createUser, updateUserLevel, checkUser, updateUserStudyTimeByEmail, fetchUserDetailsByEmail};
+// Function to log a study session
+const logStudySession = async (userId, startTime, endTime, duration) => {
+  try {
+    const response = await axios.post('http://localhost:8080/api/log-study-session', {
+      user_id: userId,
+      start_time: new Date(startTime),
+      end_time: new Date(endTime),
+      duration: duration
+    });
+    console.log('Study session logged successfully:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error logging study session:', error);
+    throw error;  // Rethrow or handle error appropriately
+  }
+};
+
+
+const fetchUserIdByEmail = async (email) => {
+  try {
+      const response = await axios.get(`http://localhost:8080/api/get-user-id`, { params: { email } });
+      return response.data.userId; // Assuming the backend sends back an object with a userId property
+  } catch (error) {
+      console.error('Error fetching user ID:', error);
+      throw error;  // Consider how you want to handle errors - maybe return null or a specific code
+  }
+};
+
+export {loginUser, createUser, updateUserLevel, checkUser, updateUserStudyTimeByEmail, fetchUserDetailsByEmail, logStudySession, fetchUserIdByEmail};
