@@ -247,6 +247,7 @@ input[type="text"] {
 
 /* Ensure the rest of your CSS from previous snippets is here */
 
+
 /* Container for the calendar dialog */
 .calendar-dialog-content {
   background: white;
@@ -272,6 +273,23 @@ input[type="text"] {
 /* Style for the calendar button that opens the dialog */
 .calendar-button {
   margin-bottom: 20px;
+
+.cat-svg {
+  /* Add your desired styles here */
+  max-width: 200px; /* Example size, adjust as needed */
+  margin: 20px; /* Example margin, adjust as needed */
+}
+
+.cat-svg {
+  animation-name: shrink-to-small;
+  animation-duration: var(--timer-duration);
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes shrink-to-small {
+  from { transform: scale(1.5); }
+  to { transform: scale(1); }
 }
 
 /* Additional styles to override the react-calendar default styles */
@@ -320,4 +338,4 @@ input[type="text"] {
   color: 'white';
   border-radius: 5px;
   margin-bottom: 10px;
-}
+}}

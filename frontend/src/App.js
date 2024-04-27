@@ -1,4 +1,5 @@
 import './App.css';
+import 'animate.css';
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -20,6 +21,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import TextField from '@mui/material/TextField'; 
 import CalendarView from './CalendarView';
+import { ReactComponent as CatIcon } from './components/CAT.svg';
 
 //API imports
 import {updateUserStudyTimeByEmail, logStudySession, fetchUserIdByEmail} from './components/api'; 
@@ -30,6 +32,13 @@ function App() {
     const [selectedTime, setSelectedTime] = useState(0)
     const [isPaused, setIsPaused] = useState(true);
     const [time, setTime] = useState(0);
+    const [numClicks, setNumClicks] = useState(1);
+    const [levelTracker, setLevelTracker] = useState(1);
+    const [customTime, setCustomTime] = useState(0); 
+    const [catSize, setCatSize] = useState('small');
+    const [catShrinkDuration, setCatShrinkDuration] = useState(0); 
+
+
     const [userDialog, setUserDialog] = useState("false"); 
     const sound = new Audio(soundFile);
     // Challenges info
@@ -288,6 +297,8 @@ const handleAddSuggestedItem = (index) => {
     }, [totalStudyTime]);
     // End of reseting times for calendar
  
+
+    //timer
     useEffect(() => {
       let interval = null;
 
@@ -303,15 +314,59 @@ const handleAddSuggestedItem = (index) => {
       }; 
     }, [isCounting, isPaused, time]);
 
+
+    //start timer
+    const handleStart = () => {
+      if (isPaused || !isCounting) {
+        setCatShrinkDuration(selectedTime); //ensure duration is set when timer starts
+        setIsPaused(false);
+        setIsCounting(true);
+      }
+    };
+    
+
+    //pause timer
     const handlePause = () => {
       setIsPaused(!isPaused);
     };
     
+    
+
+    //reset timer
     const resetHandler = () => {
       setIsCounting(false);
       setIsPaused(true);
       setTime(selectedTime);
     };
+
+
+
+
+
+    // handles cat sizing
+    //const startCatShrinking = (duration) => {
+
+    //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //handles the gui portion that counts up 20 mins 
 
     const howMuchTime = (minutes) => {
       const newTime = minutes * 60 * 1000; // Convert minutes to milliseconds
@@ -321,6 +376,7 @@ const handleAddSuggestedItem = (index) => {
         setIsPaused(false); // Ensure timer is not paused
         if (!isCounting) {
           setIsCounting(true); // Start counting only if it wasn't already started
+          setCatShrinkDuration(newTime); //set cat for shrinking
         }
       }
     };
@@ -647,6 +703,9 @@ const handleAddSuggestedItem = (index) => {
           </Switch>
     
           <div className="wrapper">
+            <div className="cat-container">
+            <CatIcon className="cat-svg" style={{ '--timer-duration': `${catShrinkDuration}ms` }} />
+            </div>
             {/* Your time options and other content here */}
             <div className="time-options">
               <Box className="time-option-box"><Button onClick={() => howMuchTime(60)}>60 Minutes</Button></Box>
