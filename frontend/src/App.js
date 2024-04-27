@@ -184,7 +184,10 @@ const handleAddSuggestedItem = (index) => {
     // Directly use the 'email' parameter to fetch the user ID
     try {
         const id = await fetchUserIdByEmail(email);
+        const time = await updateUserStudyTimeByEmail(email, 0);
+        setCurrStudyTime(time.totalFocusTime);
         setUserId(id); // Update the user ID state
+        setCurrUserLevel(time.totalFocusTime);
     } catch (error) {
         console.error('Failed to fetch user ID:', error);
         // Handle errors appropriately, possibly setting user ID to null or showing an error message
@@ -344,7 +347,7 @@ const handleAddSuggestedItem = (index) => {
       if (time === 0 && selectedTime === duration * 60 * 1000) {
         sound.play();
         try {
-          const updateResponse = await updateUserStudyTimeByEmail(email, duration);
+          const updateResponse = await updateUserStudyTimeByEmail(email, duration * 10);
           await handleEndStudySession(duration * 10);
 
           // Calculate new total study time
@@ -413,7 +416,7 @@ const handleAddSuggestedItem = (index) => {
     
     // Challenge a user to see who has more total study time
     function doChallenge(opponentName) {
-      let myTotalStudyTime = exampleTotalStudyTime[lookupUser(username)];    // my total study time
+      let myTotalStudyTime = currStudyTime;    // my total study time
       let oppTotalStudyTime = exampleTotalStudyTime[lookupUser(opponentName)];   // opponent total study time
       let challengeResult = '';
       let today = new Date();
@@ -457,11 +460,11 @@ const handleAddSuggestedItem = (index) => {
 
         // Display challenge result
         resultText.innerHTML = `Challenge Results:
-        You have studied for ${exampleTotalStudyTime[lookupUser(username)]} minutes.
+        You have studied for ${currStudyTime} minutes.
         ${challenge.opponent} has studied for ${exampleTotalStudyTime[lookupUser(challenge.opponent)]} minutes.`;
-        if (challenge.result === "Win")
+        if (currStudyTime > exampleTotalStudyTime[lookupUser(challenge.opponent)])
           resultText.innerHTML += " You win!";
-        else if (challenge.result === "Loss")
+        else if (currStudyTime < exampleTotalStudyTime[lookupUser(challenge.opponent)])
           resultText.innerHTML += " You lose!";
         else
           resultText.innerHTML += " It's a tie!";

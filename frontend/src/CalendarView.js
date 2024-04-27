@@ -15,7 +15,7 @@ function CalendarView({ open, onClose, userId }) {
             const response = await axios.get(`http://localhost:8080/api/user/focus-times`, { 
                 params: { userId, interval }
             });
-            return response.data.totalMinutes / 60; // Convert minutes to hours
+            return response.data.totalMinutes; // Convert minutes to hours
         } catch (error) {
             console.error('Error fetching study hours:', error);
             return 0;
@@ -23,7 +23,7 @@ function CalendarView({ open, onClose, userId }) {
     };
 
     const updateStudyHours = async () => {
-        const todayHours = await fetchStudyHours('day');
+        const todayHours = 1
         const weekHours = await fetchStudyHours('week');
         const monthHours = await fetchStudyHours('month');
         const yearHours = await fetchStudyHours('year');
@@ -49,7 +49,7 @@ function CalendarView({ open, onClose, userId }) {
             <DialogContent>
                 <Box>
                     <p>Today's Date: {today}</p>
-                    <p>Study Hours Today: {studyHours.today.toFixed(2)}</p>
+                    <p>Study Hours Today: {studyHours.week.toFixed(2)}</p>
                     <p>Study Hours This Week: {studyHours.week.toFixed(2)}</p>
                     <p>Study Hours This Month: {studyHours.month.toFixed(2)}</p>
                     <p>Study Hours This Year: {studyHours.year.toFixed(2)}</p>
