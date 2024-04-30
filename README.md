@@ -1,6 +1,8 @@
 # Welcome to Tomato Paws!
 
-Hi! This is the user manual/README for the tomato paws application. After each sprint, this manual will be updated to explain how to run the application and use its components. 
+Hi! This is the user manual/README for the tomato paws application. After each sprint, this manual will be updated to explain how to run the application and use its components. <br>
+https://youtu.be/OE-9fswnPw0
+<br>
 
 # Running the Project 
 In order to run the project, please follow these steps.
